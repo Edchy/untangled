@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { slideComponents } from "@/lib/slide-components";
+import { slideComponents, interactiveComponents } from "@/lib/slide-components";
 
 export type SlideType = "text" | "interactive" | "visual";
 
@@ -11,6 +11,9 @@ export type Slide = {
   concept: string;
   order: number;
   type: SlideType;
+  component: string | null;
+  plainText: string;
+  html: string;
   moduleSlug: string;
   conceptSlug: string;
   slideSlug: string;
@@ -59,9 +62,36 @@ function readMdxFiles(dir: string): string[] {
     .sort();
 }
 
+function extractPlainText(mdxBody: string): string {
+  return mdxBody
+    .replace(/^import\s.+$/gm, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/\*(.+?)\*/g, "$1")
+    .replace(/`(.+?)`/g, "$1")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function toHtml(mdxBody: string): string {
+  const plain = extractPlainText(mdxBody);
+  return plain
+    .split(/\n\n+/)
+    .filter(Boolean)
+    .map((para) => {
+      const escaped = para
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return `<p class="mt-5 text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
+    })
+    .join("\n");
+}
+
 function toSlide(filePath: string): Slide {
   const source = fs.readFileSync(filePath, "utf8");
-  const { data } = matter(source);
+  const { data, content } = matter(source);
   const relative = path.relative(contentRoot, filePath);
   const [moduleSlug, conceptSlug, fileName] = relative.split(path.sep);
   const slideSlug = fileName.replace(/\.mdx$/, "");
@@ -73,11 +103,14 @@ function toSlide(filePath: string): Slide {
     concept: String(data.concept),
     order: Number(data.order),
     type: data.type as SlideType,
+    component: data.component ? String(data.component) : null,
+    plainText: extractPlainText(content),
+    html: toHtml(content),
     moduleSlug,
     conceptSlug,
     slideSlug,
     key,
-    href: `/learn/${moduleSlug}/${conceptSlug}/${slideSlug}`,
+    href: `/${moduleSlug}/${conceptSlug}/${slideSlug}`,
   };
 }
 
@@ -116,6 +149,10 @@ export function getSlide(moduleSlug: string, conceptSlug: string, slideSlug: str
 
 export function getSlideComponent(key: string) {
   return slideComponents[key];
+}
+
+export function getInteractiveComponent(componentKey: string) {
+  return interactiveComponents[componentKey];
 }
 
 export function getAdjacentSlides(current: Slide) {

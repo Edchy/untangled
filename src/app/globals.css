@@ -40,6 +40,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
+  transition: background-color 400ms ease, color 400ms ease;
 }
 
 a {
@@ -48,4 +49,18 @@ a {
 
 ::selection {
   background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+html[data-theme="dark"] {
+  --background: #1a1614;
+  --foreground: #fafafa;
+  --muted: #a3a3a3;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --background: #f5f0e8;
+  --foreground: #1a1614;
+  --muted: #737373;
+  color-scheme: light;
 }

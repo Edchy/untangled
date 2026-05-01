@@ -52,7 +52,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
         id="toc-trigger"
         onClick={() => setOpen((o) => !o)}
         aria-label="Open table of contents"
-        className="fixed left-4 top-4 z-40 flex flex-col items-start rounded-[8px] bg-background px-3 py-2 text-left shadow-sm ring-1 ring-foreground/10 transition-colors hover:ring-foreground/20"
+        className="fixed left-4 top-4 z-40 flex flex-col items-start border border-foreground/12 bg-background px-3 py-2 text-left transition-colors hover:border-foreground/24"
       >
         <span className="text-[10px] font-medium tabular-nums text-foreground/36">
           {currentModule?.title ?? "Contents"}
@@ -65,7 +65,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
       {/* Floating panel — vertically centered, fixed size */}
       <div
         className={[
-          "fixed left-4 top-1/2 z-50 flex h-[70svh] w-72 -translate-y-1/2 flex-col rounded-[8px] bg-background shadow-lg ring-1 ring-foreground/10 transition-opacity duration-150",
+          "fixed left-4 top-1/2 z-50 flex h-[70svh] w-72 -translate-y-1/2 flex-col border border-foreground/12 bg-background transition-opacity duration-150",
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
         ].join(" ")}
         id="toc-panel"
