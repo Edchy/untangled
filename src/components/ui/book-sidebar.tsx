@@ -42,6 +42,8 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
     m.slides.some((s) => s.key === currentSlideKey)
   );
   const currentSlide = currentModule?.slides.find((s) => s.key === currentSlideKey);
+  const lessonIndex = currentModule?.slides.findIndex((s) => s.key === currentSlideKey) ?? -1;
+  const lessonNumber = lessonIndex >= 0 ? String(lessonIndex + 1).padStart(2, "0") : null;
 
   return (
     <>
@@ -50,13 +52,13 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
         id="toc-trigger"
         onClick={() => setOpen((o) => !o)}
         aria-label="Open table of contents"
-        className="fixed left-4 top-4 z-40 flex items-center gap-2 rounded-[8px] bg-background px-3 py-2 text-xs font-medium text-foreground/50 shadow-sm ring-1 ring-foreground/10 transition-colors hover:text-foreground"
+        className="fixed left-4 top-4 z-40 flex flex-col items-start rounded-[8px] bg-background px-3 py-2 text-left shadow-sm ring-1 ring-foreground/10 transition-colors hover:ring-foreground/20"
       >
-        <span className="font-semibold tabular-nums text-accent">
-          {currentModule?.number ?? "—"}
+        <span className="text-[10px] font-medium tabular-nums text-foreground/36">
+          {currentModule?.title ?? "Contents"}
         </span>
-        <span className="max-w-[140px] truncate text-foreground/50">
-          {currentSlide?.title ?? "Contents"}
+        <span className="max-w-[160px] truncate text-xs font-medium text-foreground/70">
+          {lessonNumber && <span className="tabular-nums text-accent">{lessonNumber} </span>}{currentSlide?.title ?? ""}
         </span>
       </button>
 
@@ -102,11 +104,11 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
               <>
                 <div className="flex-1 overflow-y-auto px-2 py-3">
                   <p className="px-3 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30">
-                    {module.number} — {module.title}
+                    {module.title}
                   </p>
                   <ol>
                     {module.slides.length > 0 ? (
-                      module.slides.map((slide) => {
+                      module.slides.map((slide, i) => {
                         const isActive = slide.key === currentSlideKey;
                         return (
                           <li key={slide.key}>
@@ -114,12 +116,18 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                               href={slide.href}
                               onClick={() => setOpen(false)}
                               className={[
-                                "block rounded-[8px] px-3 py-2 text-xs leading-5 transition-colors",
+                                "flex items-baseline gap-3 rounded-[8px] px-3 py-2 text-xs leading-5 transition-colors",
                                 isActive
                                   ? "font-medium text-accent"
                                   : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
                               ].join(" ")}
                             >
+                              <span className={[
+                                "shrink-0 text-[10px] tabular-nums",
+                                isActive ? "text-accent" : "text-foreground/28",
+                              ].join(" ")}>
+                                {String(i + 1).padStart(2, "0")}
+                              </span>
                               {slide.title}
                             </Link>
                           </li>
@@ -147,12 +155,6 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                         hasActive ? "text-foreground" : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
                       ].join(" ")}
                     >
-                      <span className={[
-                        "shrink-0 text-[10px] font-semibold tabular-nums",
-                        hasActive ? "text-accent" : "text-foreground/28",
-                      ].join(" ")}>
-                        {module.number}
-                      </span>
                       <span className="text-xs font-medium leading-5">
                         {module.title}
                       </span>

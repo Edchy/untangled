@@ -47,6 +47,10 @@ export default async function SlidePage({ params }: SlidePageProps) {
   const modules = getModuleList();
   const { previous, next } = getAdjacentSlides(current);
 
+  const currentModule = modules.find((m) => m.slug === current.moduleSlug);
+  const lessonIndex = currentModule?.slides.findIndex((s) => s.key === current.key) ?? -1;
+  const lessonNumber = lessonIndex >= 0 ? String(lessonIndex + 1).padStart(2, "0") : null;
+
   return (
     <div>
       <BookSidebar modules={modules} currentSlideKey={current.key} />
@@ -55,9 +59,11 @@ export default async function SlidePage({ params }: SlidePageProps) {
         <article className="w-full max-w-2xl px-8 py-20 sm:px-12">
           {/* Slide heading */}
           <header className="mb-10">
-            <p className="text-xs font-medium tracking-[0.12em] text-foreground/36 uppercase">
-              {current.type}
-            </p>
+            {lessonNumber && (
+              <p className="text-xs font-medium tabular-nums text-foreground/36">
+                {lessonNumber}
+              </p>
+            )}
             <h1 className="mt-3 text-xl font-semibold leading-snug text-foreground">
               {current.title}
             </h1>
