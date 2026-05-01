@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Untangled
 
-## Getting Started
+A free, nonprofit, interactive "learn AI" experience that helps people with no technical background build a real mental model of how AI works.
 
-First, run the development server:
+## What It Is
+
+Untangled is a linear narrative learning experience: closer to a beautifully illustrated book than a course platform. It starts with the earliest computers and builds toward modern large language models through short, clear units, warm illustration, and interactive demos.
+
+## How To Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js App Router
+- TypeScript
+- MDX for slide content
+- Tailwind CSS
+- Framer Motion
+- Rough.js for hand-drawn interactive diagrams
+- PWA web target
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+- Deployment target: Vercel
+- CI/CD approach: Not defined yet
+- Branch rule: Never commit directly to main
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content Direction
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The learning path is organized chronologically across ten modules:
 
-## Deploy on Vercel
+1. The Machine
+2. Can Machines Think?
+3. The Long Winter
+4. Learning from Data
+5. Going Deeper
+6. The Meaning of Words
+7. Paying Attention
+8. Scale
+9. What It Actually Does
+10. The Honest Questions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Each slide maps to one MDX file with frontmatter. Interactive slides can import React components directly.

@@ -1,5 +1,74 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Untangled — Agent Context
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+## 1. Think Before Coding
+Don't assume. Don't hide confusion. Surface tradeoffs.
+- State assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+Minimum code that solves the problem. Nothing speculative.
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- If 200 lines could be 50, rewrite it.
+Ask: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+Touch only what you must. Clean up only your own mess.
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- Every changed line should trace directly to the request.
+
+## 4. Goal-Driven Execution
+Define success criteria. Loop until verified.
+- Transform tasks into verifiable goals before starting.
+- For multi-step tasks, write a brief plan and confirm before executing.
+- "Add validation" → "Write tests for invalid inputs, then make them pass."
+
+## Red Lines
+Require explicit approval — never do these autonomously:
+- `rm -rf` or any recursive delete
+- Force push (`--force`, `-f`)
+- Direct commits or merges to `main`/`master`
+- Secrets in version control
+- Bypassing pre-commit hooks (`--no-verify`)
+
+## Planning
+- Plan before any task with 3+ steps or architectural impact.
+- Write the plan out. Confirm before executing.
+- If something breaks: stop, re-plan, then continue.
+- Log mistakes and lessons in `gotchas.md`.
+
+## Task Loop
+Plan → Verify inputs → Execute → Explain changes → Capture lessons
+
+## Quality
+- Root-cause every bug. Symptoms are not solutions.
+- Verify before done: tests pass, build succeeds, UI looks correct.
+
+## Styling
+- This is a hardcore Tailwind project.
+- Prefer Tailwind utilities and Tailwind v4 theme variables in `src/app/globals.css`.
+- Keep custom CSS small and limited to global primitives, theme variables, and genuinely reusable selectors.
+- When styling components, reach for Tailwind classes first.
+
+
+## Tools & Docs
+Before implementing anything with a library or framework, look up the docs first.
+- Use Context7 for general library docs: resolve the library ID, then fetch docs.
+- If a dedicated MCP exists for a library in this stack, prefer it over Context7.
+- Never guess at API shapes or configuration — look it up.
+- For Next.js work, read the relevant guide in `node_modules/next/dist/docs/` before writing code. This project may use a Next.js version with breaking changes from older conventions.
+
+**MCPs available for this project:**
+- MCP registry search was unavailable during project init.
+- No connected MCP resources were reported by the local MCP listing.
+
+## This Project
+- **Name:** Untangled
+- **What it is:** A free, nonprofit, interactive "learn AI" experience that uses narrative, illustration, and hands-on moments to help non-technical people build a real mental model of AI.
+- **Tier:** Public
+- **Stack:** Next.js App Router, TypeScript, MDX, Tailwind CSS, Framer Motion, Rough.js, Vercel, PWA
