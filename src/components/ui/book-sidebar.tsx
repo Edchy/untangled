@@ -98,17 +98,17 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
         {/* Module list / slide list */}
         <nav className="flex flex-1 flex-col overflow-hidden">
           {openModule ? (() => {
-            const module = modules.find((m) => m.slug === openModule);
-            if (!module) return null;
+            const chapter = modules.find((m) => m.slug === openModule);
+            if (!chapter) return null;
             return (
               <>
                 <div className="flex-1 overflow-y-auto px-2 py-3">
                   <p className="px-3 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30">
-                    {module.title}
+                    {chapter.title}
                   </p>
                   <ol>
-                    {module.slides.length > 0 ? (
-                      module.slides.map((slide, i) => {
+                    {chapter.slides.length > 0 ? (
+                      chapter.slides.map((slide, i) => {
                         const isActive = slide.key === currentSlideKey;
                         return (
                           <li key={slide.key}>
@@ -144,19 +144,19 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
             );
           })() : (
             <ol className="flex-1 overflow-y-auto px-2 py-3">
-              {modules.map((module) => {
-                const hasActive = module.slides.some((s) => s.key === currentSlideKey);
+              {modules.map((chapter) => {
+                const hasActive = chapter.slides.some((s) => s.key === currentSlideKey);
                 return (
-                  <li key={module.slug}>
+                  <li key={chapter.slug}>
                     <button
-                      onClick={() => setOpenModule(module.slug)}
+                      onClick={() => setOpenModule(chapter.slug)}
                       className={[
                         "flex w-full items-baseline gap-3 rounded-[8px] px-3 py-2.5 text-left transition-colors",
                         hasActive ? "text-foreground" : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
                       ].join(" ")}
                     >
                       <span className="text-xs font-medium leading-5">
-                        {module.title}
+                        {chapter.title}
                       </span>
                     </button>
                   </li>

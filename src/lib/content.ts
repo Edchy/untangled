@@ -11,6 +11,7 @@ export type Slide = {
   concept: string;
   order: number;
   type: SlideType;
+  cols: 1 | 2;
   component: string | null;
   plainText: string;
   html: string;
@@ -75,18 +76,46 @@ function extractPlainText(mdxBody: string): string {
 }
 
 function toHtml(mdxBody: string): string {
-  const plain = extractPlainText(mdxBody);
-  return plain
+  return mdxBody
+    .replace(/^import\s.+$/gm, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    .trim()
     .split(/\n\n+/)
     .filter(Boolean)
     .map((para) => {
-      const escaped = para
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      return `<p class="mt-5 text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
+      const lines = para.split("\n");
+      const isBlockquote = lines.every((line) => line.trim().startsWith(">"));
+
+      if (isBlockquote) {
+        const quoteLines = lines.map((line) => line.replace(/^>\s?/, "").trim());
+        const body = quoteLines.slice(0, -1).join(" ");
+        const citation = quoteLines.at(-1);
+
+        return [
+          '<blockquote class="max-w-3xl border-y border-foreground/12 py-8 font-serif text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.05] text-foreground [text-wrap:balance]">',
+          `<p>${renderInlineMarkdown(body)}</p>`,
+          citation
+            ? `<p class="mt-6 font-sans text-xs font-semibold uppercase leading-6 tracking-[0.18em] text-accent">${renderInlineMarkdown(citation)}</p>`
+            : "",
+          "</blockquote>",
+        ].join("");
+      }
+
+      const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
+      return `<p class="mt-5 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
     })
     .join("\n");
+}
+
+function renderInlineMarkdown(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong class=\"font-semibold text-foreground/90\">$1</strong>")
+    .replace(/__([^_]+)__/g, "<strong class=\"font-semibold text-foreground/90\">$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
 }
 
 function toSlide(filePath: string): Slide {
@@ -103,6 +132,7 @@ function toSlide(filePath: string): Slide {
     concept: String(data.concept),
     order: Number(data.order),
     type: data.type as SlideType,
+    cols: data.cols === 1 ? 1 : 2,
     component: data.component ? String(data.component) : null,
     plainText: extractPlainText(content),
     html: toHtml(content),
@@ -117,7 +147,6 @@ function toSlide(filePath: string): Slide {
 export function getSlides(): Slide[] {
   return readMdxFiles(contentRoot)
     .map(toSlide)
-    .filter((slide) => slide.key in slideComponents)
     .sort((a, b) => {
       if (a.moduleSlug !== b.moduleSlug) {
         return a.moduleSlug.localeCompare(b.moduleSlug);
