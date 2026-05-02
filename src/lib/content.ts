@@ -12,6 +12,7 @@ export type Slide = {
   order: number;
   type: SlideType;
   cols: 1 | 2;
+  hideTitle: boolean;
   component: string | null;
   plainText: string;
   html: string;
@@ -103,7 +104,7 @@ function toHtml(mdxBody: string): string {
 
       if (lines.length === 1 && lines[0].startsWith("?? ")) {
         const answer = renderInlineMarkdown(lines[0].slice(3).trim());
-        return `<details class="mt-5 first:mt-0"><summary class="cursor-pointer list-none text-[1.0625rem] leading-[1.85] text-foreground/30 transition-colors hover:text-foreground/60">Show answer</summary><p class="mt-2 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68">${answer}</p></details>`;
+        return `<reveal-answer data-answer="${answer.replace(/"/g, "&quot;")}"></reveal-answer>`;
       }
 
       const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
@@ -138,6 +139,7 @@ function toSlide(filePath: string): Slide {
     order: Number(data.order),
     type: data.type as SlideType,
     cols: data.cols === 1 ? 1 : 2,
+    hideTitle: Boolean(data.hide_title),
     component: data.component ? String(data.component) : null,
     plainText: extractPlainText(content),
     html: toHtml(content),

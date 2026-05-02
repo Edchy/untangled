@@ -8,6 +8,7 @@ import {
   AdaLovelaceIllustration,
   BinaryToEverythingIllustration,
   ChairIllustration,
+  CharacterMappingIllustration,
   ComplexityDissolvesIllustration,
   ComputerStackIllustration,
   EniacIllustration,
@@ -15,12 +16,13 @@ import {
   HumanComputersIllustration,
   HumanStackIllustration,
   LayersIllustration,
-  PunchCardIllustration,
   WhatJustHappenedIllustration,
 } from "@/components/interactive/chapter-one-illustrations";
 import { TransistorZoom } from "@/components/interactive/transistor-zoom";
 import { BinarySwitches, BinarySwitches3 } from "@/components/interactive/binary-switches";
 import { BinaryExplorer } from "@/components/interactive/binary-explorer";
+import { PunchCardReader } from "@/components/interactive/punch-card-reader";
+import { PunchCardIllustration } from "@/components/interactive/punch-card-illustration";
 
 export const slideComponents: Record<string, ComponentType> = {};
 
@@ -37,12 +39,14 @@ export const interactiveComponents: Record<string, ComponentType> = {
   "computer-stack-illustration": ComputerStackIllustration,
   "chair-illustration": ChairIllustration,
   "binary-to-everything-illustration": BinaryToEverythingIllustration,
+  "character-mapping-illustration": CharacterMappingIllustration,
   "transistor-zoom": TransistorZoom,
   "binary-switches": BinarySwitches,
   "binary-switches-3": BinarySwitches3,
   "binary-explorer": BinaryExplorer,
   "human-computers-illustration": HumanComputersIllustration,
   "ada-lovelace-illustration": AdaLovelaceIllustration,
-  "punch-card-illustration": PunchCardIllustration,
+  "punch-card-illustration": PunchCardReader,
+  "punch-card-static": PunchCardIllustration,
   "eniac-illustration": EniacIllustration,
 };
