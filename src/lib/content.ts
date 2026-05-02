@@ -101,6 +101,11 @@ function toHtml(mdxBody: string): string {
         ].join("");
       }
 
+      if (lines.length === 1 && lines[0].startsWith("?? ")) {
+        const answer = renderInlineMarkdown(lines[0].slice(3).trim());
+        return `<details class="mt-5 first:mt-0"><summary class="cursor-pointer list-none text-[1.0625rem] leading-[1.85] text-foreground/30 transition-colors hover:text-foreground/60">Show answer</summary><p class="mt-2 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68">${answer}</p></details>`;
+      }
+
       const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
       return `<p class="mt-5 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
     })

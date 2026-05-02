@@ -48,6 +48,10 @@ a {
   color: inherit;
 }
 
+code {
+  font-family: ui-monospace, monospace;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--accent) 20%, transparent);
 }

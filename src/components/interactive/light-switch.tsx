@@ -31,7 +31,6 @@ function withAlpha(color: string, alpha: number) {
 
 export function LightSwitch() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [touched, setTouched] = useState(false);
   const [on, setOn] = useState(() => {
     if (typeof window === "undefined") return false;
     return document.documentElement.dataset.theme === "light";
@@ -165,12 +164,11 @@ export function LightSwitch() {
 
   function toggle() {
     playClick();
-    setTouched(true);
     setOn((v) => !v);
   }
 
   return (
-    <div className="flex flex-col items-center gap-5">
+    <div className="flex flex-col items-center gap-5 opacity-75 transition-opacity duration-200 hover:opacity-100">
       <button
         type="button"
         onClick={toggle}
@@ -215,9 +213,6 @@ export function LightSwitch() {
           className="pointer-events-none absolute inset-0 block h-[196px] w-[132px]"
         />
       </button>
-      {!touched && (
-        <span className="font-serif text-sm italic text-foreground/30">try it</span>
-      )}
     </div>
   );
 }

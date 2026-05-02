@@ -19,6 +19,8 @@ import {
   WhatJustHappenedIllustration,
 } from "@/components/interactive/chapter-one-illustrations";
 import { TransistorZoom } from "@/components/interactive/transistor-zoom";
+import { BinarySwitches, BinarySwitches3 } from "@/components/interactive/binary-switches";
+import { BinaryExplorer } from "@/components/interactive/binary-explorer";
 
 export const slideComponents: Record<string, ComponentType> = {};
 
@@ -36,6 +38,9 @@ export const interactiveComponents: Record<string, ComponentType> = {
   "chair-illustration": ChairIllustration,
   "binary-to-everything-illustration": BinaryToEverythingIllustration,
   "transistor-zoom": TransistorZoom,
+  "binary-switches": BinarySwitches,
+  "binary-switches-3": BinarySwitches3,
+  "binary-explorer": BinaryExplorer,
   "human-computers-illustration": HumanComputersIllustration,
   "ada-lovelace-illustration": AdaLovelaceIllustration,
   "punch-card-illustration": PunchCardIllustration,

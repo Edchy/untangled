@@ -1,3 +1,5 @@
+end each chapter witn an interactive quiz to reinforce learning. something that makes them apply the concepts they just learned in a fun way. maybe a mini-game, a quiz or a puzzle.
+
 to understand LLMS better:
 
 understand how to work with local LLMS. raw, lmstudio, ollama. explore all this stuff in detail.
