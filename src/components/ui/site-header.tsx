@@ -14,7 +14,7 @@ export function SiteHeader() {
           <Link className="transition hover:text-foreground" href="/modules">
             Modules
           </Link>
-          <Link className="transition hover:text-foreground" href="/learn/01-the-machine/01-what-is-a-computer/01-try-it">
+          <Link className="transition hover:text-foreground" href="/01-the-machine/01-what-is-a-computer/01-try-it">
             Start
           </Link>
         </nav>

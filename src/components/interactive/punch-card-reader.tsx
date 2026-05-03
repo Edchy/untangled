@@ -94,11 +94,6 @@ export function PunchCardReader() {
   const currentLetter = bitIndex === BIT_COUNT - 1 ? currentRow.character : null;
   const sensedMaterial = currentBit ? "hole" : "no hole";
 
-  // Reader bar sits to the left of the card, at the active row's y
-  const readerY = FIRST_ROW_Y + rowIndex * ROW_SPACING;
-  // Sensor moves horizontally across the bits
-  const sensorX = FIRST_COL_X + bitIndex * COL_SPACING;
-
   useEffect(() => {
     if (!isPlaying) return;
     const timer = window.setInterval(() => {
@@ -106,6 +101,28 @@ export function PunchCardReader() {
     }, 1400);
     return () => window.clearInterval(timer);
   }, [isPlaying]);
+
+  useEffect(() => {
+    const bytes = document.querySelectorAll<HTMLElement>("[data-punch-card-byte]");
+
+    bytes.forEach((byte) => {
+      const isActiveByte = byte.dataset.punchCardByte === String(rowIndex);
+      byte.dataset.active = isActiveByte ? "true" : "false";
+
+      byte.querySelectorAll<HTMLElement>("[data-punch-card-bit]").forEach((bit) => {
+        bit.dataset.active = isActiveByte && bit.dataset.punchCardBit === String(bitIndex) ? "true" : "false";
+      });
+    });
+
+    return () => {
+      bytes.forEach((byte) => {
+        delete byte.dataset.active;
+        byte.querySelectorAll<HTMLElement>("[data-punch-card-bit]").forEach((bit) => {
+          delete bit.dataset.active;
+        });
+      });
+    };
+  }, [rowIndex, bitIndex]);
 
   function previousRead() { setPlaying(false); setStep((s) => (s - 1 + STEP_COUNT) % STEP_COUNT); }
   function nextRead() { setPlaying(false); setStep((s) => (s + 1) % STEP_COUNT); }
@@ -227,9 +244,6 @@ export function PunchCardReader() {
                 <span className="text-foreground">{partialBits}</span>
                 {missingBits > 0 && <span className="text-foreground/18">{"_".repeat(missingBits)}</span>}
               </span>
-              {currentLetter && (
-                <span className="text-lg text-accent">= {currentLetter}</span>
-              )}
             </div>
           </div>
         </div>

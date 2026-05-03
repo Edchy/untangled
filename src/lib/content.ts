@@ -13,7 +13,12 @@ export type Slide = {
   type: SlideType;
   cols: 1 | 2;
   hideTitle: boolean;
+  hideNavNext: boolean;
+  flipCols: boolean;
   component: string | null;
+  questionId: string | null;
+  skipHref: string | null;
+  backHref: string | null;
   plainText: string;
   html: string;
   moduleSlug: string;
@@ -107,6 +112,26 @@ function toHtml(mdxBody: string): string {
         return `<reveal-answer data-answer="${answer.replace(/"/g, "&quot;")}"></reveal-answer>`;
       }
 
+      if (/^[01]{8}(?:\s+[01]{8})+$/.test(para.trim())) {
+        const bytes = para.trim().split(/\s+/);
+        return [
+          '<p class="mt-5 max-w-[45ch] font-mono text-[1.0625rem] font-semibold leading-[1.85] text-foreground/36 [font-variant-numeric:tabular-nums] first:mt-0">',
+          bytes
+            .map(
+              (byte, byteIndex) =>
+                `<span data-punch-card-byte="${byteIndex}" class="inline-block rounded-[4px] px-1 text-foreground/36 transition-[background-color,color,opacity] duration-200">${byte
+                  .split("")
+                  .map(
+                    (bit, bitIndex) =>
+                      `<span data-punch-card-bit="${bitIndex}" class="rounded-[3px] transition-[background-color,color,opacity] duration-150">${bit}</span>`,
+                  )
+                  .join("")}</span>`,
+            )
+            .join(" "),
+          "</p>",
+        ].join("");
+      }
+
       const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
       return `<p class="mt-5 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
     })
@@ -128,7 +153,14 @@ function toSlide(filePath: string): Slide {
   const source = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(source);
   const relative = path.relative(contentRoot, filePath);
-  const [moduleSlug, conceptSlug, fileName] = relative.split(path.sep);
+  const segments = relative.split(path.sep);
+  const [moduleSlug, conceptSlug] = segments;
+  const fileName = segments.at(-1);
+
+  if (!moduleSlug || !conceptSlug || !fileName) {
+    throw new Error(`Invalid content path: ${relative}`);
+  }
+
   const slideSlug = fileName.replace(/\.mdx$/, "");
   const key = `${moduleSlug}/${conceptSlug}/${slideSlug}`;
 
@@ -140,7 +172,12 @@ function toSlide(filePath: string): Slide {
     type: data.type as SlideType,
     cols: data.cols === 1 ? 1 : 2,
     hideTitle: Boolean(data.hide_title),
+    hideNavNext: Boolean(data.hide_nav),
+    flipCols: Boolean(data.flip_cols),
     component: data.component ? String(data.component) : null,
+    questionId: data.question_id ? String(data.question_id) : null,
+    skipHref: data.skip_href ? String(data.skip_href) : null,
+    backHref: data.back_href ? String(data.back_href) : null,
     plainText: extractPlainText(content),
     html: toHtml(content),
     moduleSlug,
@@ -152,17 +189,30 @@ function toSlide(filePath: string): Slide {
 }
 
 export function getSlides(): Slide[] {
-  return readMdxFiles(contentRoot)
-    .map(toSlide)
-    .sort((a, b) => {
-      if (a.moduleSlug !== b.moduleSlug) {
-        return a.moduleSlug.localeCompare(b.moduleSlug);
-      }
-      if (a.conceptSlug !== b.conceptSlug) {
-        return a.conceptSlug.localeCompare(b.conceptSlug);
-      }
-      return a.order - b.order;
-    });
+  const seen = new Map<string, string>();
+  const slides = readMdxFiles(contentRoot).map((filePath) => {
+    const slide = toSlide(filePath);
+    const previousPath = seen.get(slide.key);
+
+    if (previousPath) {
+      throw new Error(
+        `Duplicate slide route "${slide.key}" found in ${previousPath} and ${filePath}`,
+      );
+    }
+
+    seen.set(slide.key, filePath);
+    return slide;
+  });
+
+  return slides.sort((a, b) => {
+    if (a.moduleSlug !== b.moduleSlug) {
+      return a.moduleSlug.localeCompare(b.moduleSlug);
+    }
+    if (a.conceptSlug !== b.conceptSlug) {
+      return a.conceptSlug.localeCompare(b.conceptSlug);
+    }
+    return a.order - b.order;
+  });
 }
 
 export function getModuleList(): Module[] {

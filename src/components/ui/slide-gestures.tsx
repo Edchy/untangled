@@ -16,9 +16,9 @@ export function SlideGestures({ previousHref, nextHref }: SlideGesturesProps) {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-        if (nextHref) router.push(nextHref);
+        if (nextHref) router.push(nextHref, { transitionTypes: ["nav-forward"] });
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        if (previousHref) router.push(previousHref);
+        if (previousHref) router.push(previousHref, { transitionTypes: ["nav-back"] });
       }
     };
 
@@ -38,8 +38,8 @@ export function SlideGestures({ previousHref, nextHref }: SlideGesturesProps) {
 
       if (Math.abs(delta) < 60) return;
 
-      if (delta < 0 && nextHref) router.push(nextHref);
-      if (delta > 0 && previousHref) router.push(previousHref);
+      if (delta < 0 && nextHref) router.push(nextHref, { transitionTypes: ["nav-forward"] });
+      if (delta > 0 && previousHref) router.push(previousHref, { transitionTypes: ["nav-back"] });
     };
 
     window.addEventListener("pointerdown", onPointerDown);

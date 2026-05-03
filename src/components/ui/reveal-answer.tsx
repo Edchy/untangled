@@ -16,21 +16,27 @@ export function RevealAnswer({ answer }: { answer: string }) {
 
   useEffect(() => {
     if (state !== "typing") return;
-    if (displayed.length >= plain.length) {
-      setState("done");
-      return;
-    }
+    if (displayed.length >= plain.length) return;
+
     const t = setTimeout(() => {
-      setDisplayed(plain.slice(0, displayed.length + 1));
+      const next = plain.slice(0, displayed.length + 1);
+      setDisplayed(next);
+      if (next.length >= plain.length) setState("done");
     }, SPEED);
+
     return () => clearTimeout(t);
   }, [state, displayed, plain]);
+
+  function handleShow() {
+    setDisplayed("");
+    setState(plain ? "typing" : "done");
+  }
 
   if (state === "hidden") {
     return (
       <button
         type="button"
-        onClick={() => setState("typing")}
+        onClick={handleShow}
         className="mt-5 cursor-pointer border-0 bg-transparent p-0 text-[1.0625rem] leading-[1.85] text-foreground/30 transition-colors hover:text-foreground/60"
       >
         Show answer

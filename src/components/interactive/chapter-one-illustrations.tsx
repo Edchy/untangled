@@ -467,3 +467,337 @@ export function EniacIllustration() {
     </RoughSvg>
   );
 }
+
+export function ComputerExplodedIllustration() {
+  return (
+    <RoughSvg viewBox="0 0 560 400">
+      <path
+        d="M74 84 H486 V314 H74 Z"
+        fill="var(--background)"
+        stroke="currentColor"
+        strokeOpacity="0.42"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M96 108 H464 V290 H96 Z"
+        fill="url(#chapter-one-sloppy-ink)"
+        stroke="currentColor"
+        strokeOpacity="0.28"
+        strokeWidth="1.4"
+      />
+
+      <g className="font-mono">
+        <g transform="translate(208 130)">
+          <rect
+            width="116"
+            height="92"
+            rx="7"
+            fill={fill.amber}
+            stroke="var(--accent)"
+            strokeOpacity="0.78"
+            strokeWidth="2.2"
+          />
+          <path d="M20 24 H96 M20 46 H78 M20 68 H90" stroke="currentColor" strokeOpacity="0.24" strokeWidth="1.4" />
+          <text x="58" y="118" textAnchor="middle" className="text-[15px] font-semibold" fill="var(--accent)" fillOpacity="0.82">
+            CPU
+          </text>
+        </g>
+
+        <g transform="translate(348 142)">
+          <rect width="84" height="68" rx="6" fill={fill.blue} stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.6" />
+          <circle cx="42" cy="34" r="18" fill="var(--background)" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.4" />
+          <path d="M30 34 H54 M42 22 V46" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="1.8" />
+          <text x="42" y="98" textAnchor="middle" className="text-[15px] font-semibold" fill="currentColor" fillOpacity="0.58">
+            GPU
+          </text>
+        </g>
+
+        <g transform="translate(128 126)">
+          {[0, 1, 2].map((stick) => (
+            <rect
+              key={stick}
+              x="0"
+              y={stick * 30}
+              width="48"
+              height="18"
+              rx="3"
+              fill={fill.sage}
+              stroke="currentColor"
+              strokeOpacity="0.5"
+              strokeWidth="1.4"
+            />
+          ))}
+          <path d="M8 9 H40 M8 39 H40 M8 69 H40" stroke="var(--accent)" strokeOpacity="0.46" strokeWidth="1.3" />
+          <text x="24" y="118" textAnchor="middle" className="text-[15px] font-semibold" fill="currentColor" fillOpacity="0.58">
+            RAM
+          </text>
+        </g>
+
+        <g transform="translate(198 250)">
+          <rect width="164" height="36" rx="5" fill={fill.rose} stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
+          <circle cx="22" cy="18" r="7" fill="var(--background)" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.2" />
+          <path d="M48 18 H142" stroke="var(--accent)" strokeOpacity="0.52" strokeWidth="1.7" />
+          <text x="82" y="64" textAnchor="middle" className="text-[15px] font-semibold" fill="currentColor" fillOpacity="0.58">
+            storage
+          </text>
+        </g>
+      </g>
+
+      <path d="M184 172 H208 M324 176 H348 M232 222 L218 250 M302 222 L336 250" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1.5" />
+      <path d="M266 130 V108 M266 222 V250 M208 176 H176 M324 176 H348" stroke="var(--accent)" strokeOpacity="0.32" strokeWidth="1.8" />
+      <path d="M112 326 C180 348 386 348 456 324" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}
+
+export function CpuIllustration() {
+  return (
+    <RoughSvg viewBox="0 0 560 400">
+      <g transform="translate(92 178)">
+        <path d="M0 20 L98 86 L124 78 L30 4 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.5" />
+        <path d="M18 24 L94 80 M34 16 L84 72 M8 38 L70 80" stroke="currentColor" strokeOpacity="0.26" strokeWidth="1.1" />
+        <path d="M96 86 H136" stroke="var(--accent)" strokeOpacity="0.54" strokeWidth="1.8" />
+        <path d="M114 88 V214 M114 150 L48 224 M114 150 L172 224" stroke="currentColor" strokeOpacity="0.58" strokeWidth="2.6" />
+      </g>
+
+      <g transform="translate(266 56)">
+        <path d="M86 6 C110 0 132 16 134 42 C136 66 122 84 102 88 C92 100 78 100 70 88 C82 80 88 66 86 48 C84 30 78 18 86 6 Z" fill="currentColor" fillOpacity="0.78" />
+        <path
+          d="M50 50 C66 40 72 16 90 12 C108 20 112 54 100 76 C90 94 68 94 58 78 C48 76 42 70 44 64 C44 58 46 54 50 50 Z"
+          fill="var(--background)"
+          stroke="currentColor"
+          strokeOpacity="0.5"
+          strokeWidth="1.4"
+        />
+        <path d="M78 96 L100 92 L108 118 L84 124 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.2" />
+        <path
+          d="M64 122 C86 106 122 110 146 130 C166 148 172 180 162 214 C150 252 134 286 116 326"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.72"
+          strokeWidth="2.2"
+        />
+        <path
+          d="M64 122 C50 158 48 196 58 232 C66 260 72 292 76 326"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.62"
+          strokeWidth="2"
+        />
+        <path d="M84 126 C102 146 126 146 146 128" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2" />
+        <path d="M96 136 L116 180 L124 124" fill="none" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.3" />
+        <path d="M66 126 C36 108 6 82 -30 46" fill="none" stroke="currentColor" strokeOpacity="0.62" strokeWidth="3" />
+        <path d="M-46 34 C-32 24 -12 28 -4 42 C-12 52 -34 54 -48 46 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.4" />
+        <path d="M-36 28 L-138 -20" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2" />
+        <path d="M78 176 C54 176 34 184 28 198 C22 212 50 212 78 194" fill="none" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2.2" />
+        <path d="M76 326 C58 342 74 350 104 338 M116 326 C104 346 122 352 150 336" fill="none" stroke="currentColor" strokeOpacity="0.62" strokeWidth="4.5" />
+      </g>
+
+      <path d="M252 156 C212 144 174 158 132 210 M344 172 C306 198 276 212 222 238" fill="none" stroke="var(--accent)" strokeOpacity="0.18" strokeWidth="1.5" />
+      <path d="M112 348 C184 370 374 370 448 348" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}
+
+export function GpuIllustration() {
+  const players = [
+    { x: 98, y: 82, active: false },
+    { x: 224, y: 74, active: true },
+    { x: 350, y: 82, active: false },
+    { x: 98, y: 214, active: false },
+    { x: 224, y: 206, active: false },
+    { x: 350, y: 214, active: false },
+  ];
+
+  return (
+    <RoughSvg viewBox="0 0 560 400">
+      <path
+        d="M82 64 C176 38 386 38 478 64 M72 196 C174 168 388 168 488 196"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.12"
+        strokeWidth="1.4"
+      />
+
+      {players.map((player, index) => (
+        <g key={index} transform={`translate(${player.x} ${player.y})`}>
+          <circle
+            cx="34"
+            cy="24"
+            r="14"
+            fill="var(--background)"
+            stroke={player.active ? "var(--accent)" : "currentColor"}
+            strokeOpacity={player.active ? 0.72 : 0.48}
+            strokeWidth={player.active ? 1.8 : 1.4}
+          />
+          <path
+            d="M18 82 C24 52 44 52 52 82 L62 128 H8 Z"
+            fill={player.active ? fill.amber : fill.blue}
+            stroke={player.active ? "var(--accent)" : "currentColor"}
+            strokeOpacity={player.active ? 0.68 : 0.44}
+            strokeWidth="1.5"
+          />
+          <path d="M22 64 C40 74 56 74 76 64" fill="none" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.5" />
+          <path
+            d="M70 62 C86 50 108 54 114 70 C104 82 82 82 68 72 Z"
+            fill="var(--background)"
+            stroke="currentColor"
+            strokeOpacity="0.48"
+            strokeWidth="1.3"
+          />
+          <path d="M82 56 L126 30" stroke={player.active ? "var(--accent)" : "currentColor"} strokeOpacity={player.active ? 0.7 : 0.34} strokeWidth="1.6" />
+          <path d="M80 72 L122 96" stroke={player.active ? "var(--accent)" : "currentColor"} strokeOpacity={player.active ? 0.7 : 0.34} strokeWidth="1.5" />
+          <path d="M30 128 L18 158 M50 128 L66 158" stroke="currentColor" strokeOpacity="0.38" strokeWidth="1.6" />
+        </g>
+      ))}
+
+      <path
+        d="M130 44 C208 26 338 26 430 44 M130 176 C208 158 338 158 430 176"
+        fill="none"
+        stroke="var(--accent)"
+        strokeOpacity="0.36"
+        strokeWidth="2"
+      />
+      <path d="M114 352 C184 372 376 372 448 350" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}
+
+export function RamIllustration() {
+  return (
+    <RoughSvg viewBox="0 0 560 400">
+      <path d="M92 132 H468 L430 286 H54 Z" fill={fill.sage} stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.7" />
+      <path d="M112 154 H444 M92 286 H430" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.3" />
+
+      <g className="font-mono">
+        <g transform="translate(126 86)">
+          <rect width="96" height="72" rx="5" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.7" strokeWidth="1.8" />
+          <path d="M16 22 H78 M16 38 H62 M16 54 H72" stroke="currentColor" strokeOpacity="0.26" strokeWidth="1.3" />
+          <text x="48" y="96" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
+            tab
+          </text>
+        </g>
+
+        <g transform="translate(246 70)">
+          <rect width="92" height="88" rx="5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
+          <circle cx="24" cy="28" r="8" fill="var(--accent)" fillOpacity="0.5" />
+          <path d="M44 26 H74 M18 52 H72 M18 68 H56" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.3" />
+          <text x="46" y="112" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
+            app
+          </text>
+        </g>
+
+        <g transform="translate(354 100)">
+          <rect width="80" height="58" rx="5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.48" strokeWidth="1.5" />
+          <path d="M16 24 C28 10 42 42 54 24 S68 10 74 24" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="1.8" />
+          <text x="40" y="82" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
+            video
+          </text>
+        </g>
+      </g>
+
+      <path d="M174 178 L150 286 M294 174 L280 286 M394 178 L366 286" stroke="var(--accent)" strokeOpacity="0.34" strokeWidth="1.8" />
+      <path d="M178 312 C226 338 340 338 390 312" fill="none" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.5" />
+      <path d="M226 312 L212 336 M334 312 L352 336" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.6" />
+      <path d="M118 330 C190 354 374 354 444 330" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}
+
+export function StorageIllustration() {
+  return (
+    <RoughSvg viewBox="0 0 560 400">
+      <g transform="translate(128 70)">
+        <path d="M0 0 H304 V278 H0 Z" fill={fill.amber} stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.8" />
+        {[0, 1, 2].map((drawer) => (
+          <g key={drawer} transform={`translate(26 ${28 + drawer * 78})`}>
+            <rect
+              width="252"
+              height="54"
+              rx="5"
+              fill="var(--background)"
+              stroke={drawer === 1 ? "var(--accent)" : "currentColor"}
+              strokeOpacity={drawer === 1 ? 0.66 : 0.42}
+              strokeWidth={drawer === 1 ? 1.8 : 1.4}
+            />
+            <path d="M92 28 H160" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.5" />
+            <circle cx="182" cy="28" r="4" fill="currentColor" fillOpacity="0.28" />
+          </g>
+        ))}
+      </g>
+
+      <g transform="translate(362 198)">
+        <path d="M0 0 C40 -14 86 -14 126 0 V82 C88 98 40 98 0 82 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.46" strokeWidth="1.5" />
+        <path d="M0 0 C38 18 88 18 126 0 M0 40 C38 58 88 58 126 40" fill="none" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.3" />
+        <path d="M24 70 H46 M58 70 H78 M90 70 H102" stroke="var(--accent)" strokeOpacity="0.52" strokeWidth="1.6" />
+      </g>
+
+      <g className="font-mono">
+        <text x="280" y="58" textAnchor="middle" className="text-[14px] font-semibold" fill="currentColor" fillOpacity="0.48">
+          files stay here
+        </text>
+        <text x="426" y="320" textAnchor="middle" className="text-[12px] font-semibold" fill="currentColor" fillOpacity="0.42">
+          bits
+        </text>
+      </g>
+
+      <path d="M96 350 C174 374 388 374 466 348" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}
+
+export function BitsRainIllustration() {
+  const streams = [
+    { x: 78, bits: "10100110", active: false },
+    { x: 132, bits: "01011001", active: false },
+    { x: 186, bits: "11100101", active: true },
+    { x: 246, bits: "00101110", active: false },
+    { x: 304, bits: "10110010", active: false },
+    { x: 362, bits: "01101011", active: true },
+    { x: 420, bits: "11001001", active: false },
+    { x: 478, bits: "00110110", active: false },
+  ];
+
+  return (
+    <RoughSvg viewBox="0 0 560 400">
+      <g className="font-mono">
+        {streams.map((stream, streamIndex) => (
+          <g key={stream.x} transform={`translate(${stream.x} ${36 + (streamIndex % 3) * 18})`}>
+            {stream.bits.split("").map((bit, bitIndex) => (
+              <text
+                key={`${stream.x}-${bitIndex}`}
+                x="0"
+                y={bitIndex * 36}
+                textAnchor="middle"
+                className="text-[24px] font-semibold"
+                fill={stream.active && bitIndex === 3 ? "var(--accent)" : "currentColor"}
+                fillOpacity={stream.active && bitIndex === 3 ? 0.82 : Math.max(0.16, 0.58 - bitIndex * 0.055)}
+              >
+                {bit}
+              </text>
+            ))}
+          </g>
+        ))}
+      </g>
+
+      <path
+        d="M112 312 C164 284 222 284 278 312 S384 340 446 306"
+        fill="none"
+        stroke="var(--accent)"
+        strokeOpacity="0.42"
+        strokeWidth="2"
+      />
+      <g stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.5">
+        <path d="M110 312 H152 M194 312 H236 M278 312 H320 M362 312 H404 M446 312 H488" />
+        <path d="M152 300 V324 M236 300 V324 M320 300 V324 M404 300 V324" />
+      </g>
+      <g fill="var(--background)" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.3">
+        <circle cx="152" cy="312" r="8" />
+        <circle cx="236" cy="312" r="8" />
+        <circle cx="320" cy="312" r="8" />
+        <circle cx="404" cy="312" r="8" />
+      </g>
+      <path d="M102 352 C178 374 382 374 458 350" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}

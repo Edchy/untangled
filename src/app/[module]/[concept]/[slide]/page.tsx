@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import { createElement } from "react";
 import { BookSidebar } from "@/components/ui/book-sidebar";
 import { RevealAnswer } from "@/components/ui/reveal-answer";
+import { SlideTransition } from "@/components/ui/slide-transition";
 import {
+  getAdjacentSlides,
   getInteractiveComponent,
   getModuleList,
   getSlide,
@@ -67,36 +69,37 @@ export default async function SlidePage({ params }: SlidePageProps) {
   const InteractiveContent = current.component
     ? getInteractiveComponent(current.component)
     : null;
+  const { next } = getAdjacentSlides(current);
   const renderedSlideContent = SlideContent
     ? createElement(SlideContent)
     : renderHtml(current.html);
   const textColumnClassName = "relative z-10";
 
-  return (
-    <div className="flex min-h-svh flex-col items-center justify-center px-8 py-16 sm:px-16 sm:py-24">
-      <BookSidebar modules={modules} currentSlideKey={current.key} />
+  const interactiveProps: Record<string, unknown> = {};
+  if (current.questionId) interactiveProps.questionId = current.questionId;
+  if (next) interactiveProps.nextHref = next.href;
+  if (current.component === "free-form-question") interactiveProps.bodyHtml = current.html;
+  if (current.skipHref) interactiveProps.skipHref = current.skipHref;
 
-      {current.cols === 1 ? (
-        <div className={`flex w-full flex-col items-center ${InteractiveContent ? "max-w-5xl" : "max-w-2xl"}`}>
-          {InteractiveContent ? (
-            createElement(InteractiveContent)
-          ) : (
-            <div className={textColumnClassName}>
-              {!current.hideTitle && (
-                <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
-                  {current.title}
-                </h1>
-              )}
-              {renderedSlideContent}
-            </div>
-          )}
-        </div>
+  const slideBody = current.cols === 1 ? (
+    <div className={`flex w-full flex-col items-center ${InteractiveContent ? "max-w-5xl" : "max-w-2xl"}`}>
+      {InteractiveContent ? (
+        createElement(InteractiveContent, interactiveProps)
       ) : (
-        <div className="grid w-full max-w-6xl gap-16 lg:grid-cols-[1fr_1fr]">
-          <div className="flex items-center justify-center">
-            {InteractiveContent && createElement(InteractiveContent)}
-          </div>
-
+        <div className={textColumnClassName}>
+          {!current.hideTitle && (
+            <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
+              {current.title}
+            </h1>
+          )}
+          {renderedSlideContent}
+        </div>
+      )}
+    </div>
+  ) : (
+    <div className="grid w-full max-w-6xl gap-16 lg:grid-cols-[1fr_1fr]">
+      {current.flipCols ? (
+        <>
           <div className={textColumnClassName}>
             {!current.hideTitle && (
               <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
@@ -105,8 +108,32 @@ export default async function SlidePage({ params }: SlidePageProps) {
             )}
             {renderedSlideContent}
           </div>
-        </div>
+          <div className="flex items-center justify-center">
+            {InteractiveContent && createElement(InteractiveContent, interactiveProps)}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex items-center justify-center">
+            {InteractiveContent && createElement(InteractiveContent, interactiveProps)}
+          </div>
+          <div className={textColumnClassName}>
+            {!current.hideTitle && (
+              <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
+                {current.title}
+              </h1>
+            )}
+            {renderedSlideContent}
+          </div>
+        </>
       )}
+    </div>
+  );
+
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center px-8 py-16 sm:px-16 sm:py-24">
+      <BookSidebar modules={modules} currentSlideKey={current.key} />
+      <SlideTransition>{slideBody}</SlideTransition>
     </div>
   );
 }

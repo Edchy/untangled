@@ -15,6 +15,7 @@ export function SlideNav({ previousHref, nextHref }: SlideNavProps) {
       {previousHref ? (
         <Link
           href={previousHref}
+          transitionTypes={["nav-back"]}
           aria-label="Previous slide"
           className="text-foreground/36 transition-colors duration-150 hover:text-foreground"
         >
@@ -26,6 +27,7 @@ export function SlideNav({ previousHref, nextHref }: SlideNavProps) {
       {nextHref ? (
         <Link
           href={nextHref}
+          transitionTypes={["nav-forward"]}
           aria-label="Next slide"
           className="text-foreground/36 transition-colors duration-150 hover:text-foreground"
         >

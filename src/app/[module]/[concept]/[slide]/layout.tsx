@@ -1,5 +1,4 @@
 import { SlideNav } from "@/components/ui/slide-nav";
-import { SlideGestures } from "@/components/ui/slide-gestures";
 import { getAdjacentSlides, getSlide } from "@/lib/content";
 
 type SlideLayoutProps = {
@@ -15,8 +14,10 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   return (
     <>
       {children}
-      <SlideNav previousHref={previous?.href} nextHref={next?.href} />
-      <SlideGestures previousHref={previous?.href} nextHref={next?.href} />
+      <SlideNav
+        previousHref={current?.backHref ?? previous?.href}
+        nextHref={current?.hideNavNext ? undefined : next?.href}
+      />
     </>
   );
 }

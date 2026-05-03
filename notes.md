@@ -3,6 +3,10 @@ end each chapter witn an interactive quiz to reinforce learning. something that 
 view-transitions?
 scroll animations?
 
+i18n? yes please.
+
+Name: Claire Obscure - we wanna shed light to the abstractions. we work alot with light and dark. the lightswitch. etc. 
+
 to understand LLMS better:
 
 understand how to work with local LLMS. raw, lmstudio, ollama. explore all this stuff in detail.

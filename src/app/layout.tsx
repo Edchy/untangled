@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const sourceCodePro = Source_Code_Pro({
   variable: "--font-body",
   subsets: ["latin"],
 });
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${sourceCodePro.variable} ${cormorant.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
