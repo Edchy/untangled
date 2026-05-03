@@ -1,6 +1,6 @@
 "use client";
 
-import { LightSwitch } from "@/components/interactive/light-switch";
+import { StandaloneLightSwitch } from "@/components/interactive/light-switch";
 
 export function AbstractionIllustration() {
   return (
@@ -113,7 +113,7 @@ export function AbstractionIllustration() {
       </svg>
 
       <div className="relative z-10">
-        <LightSwitch />
+        <StandaloneLightSwitch />
       </div>
     </div>
   );

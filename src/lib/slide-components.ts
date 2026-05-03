@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 
 import { SwitchIllustration } from "@/components/interactive/switch-illustration";
-import { LightSwitch } from "@/components/interactive/light-switch";
+import { LightSwitchScene } from "@/components/interactive/light-switch-scene";
 import { IcebergIllustration } from "@/components/interactive/iceberg-illustration";
 import { AbstractionIllustration } from "@/components/interactive/abstraction-illustration";
 import {
@@ -28,7 +28,7 @@ export const slideComponents: Record<string, ComponentType> = {};
 
 export const interactiveComponents: Record<string, ComponentType> = {
   "switch-illustration": SwitchIllustration,
-  "light-switch": LightSwitch,
+  "light-switch": LightSwitchScene,
   "iceberg-illustration": IcebergIllustration,
   "abstraction-illustration": AbstractionIllustration,
   "what-just-happened-illustration": WhatJustHappenedIllustration,
