@@ -206,7 +206,7 @@ export function BinaryExplorer() {
           autoFocus
           onBlur={() => inputRef.current?.focus()}
           onChange={(event) => handleCharacterChange(event.target.value)}
-          className="h-12 w-12 border border-foreground/18 bg-background text-center font-mono text-4xl font-semibold text-accent outline-none placeholder:text-accent focus:border-accent"
+          className="h-12 w-12 rounded-control border border-foreground/18 bg-background text-center font-mono text-4xl font-semibold text-accent outline-none placeholder:text-accent focus:border-accent"
         />
       </div>
 

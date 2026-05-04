@@ -547,6 +547,106 @@ export function EniacIllustration() {
   );
 }
 
+export function TransistorScaleIllustration() {
+  const depthLayers = Array.from({ length: 22 }, (_, index) => {
+    const depth = index / 21;
+    const scale = 0.18 + depth * depth * 1.62;
+
+    return {
+      depth,
+      y: 32 + depth * depth * 430,
+      width: 176 + scale * 470,
+      opacity: 0.05 + depth * 0.3,
+      scale,
+    };
+  });
+
+  const perspectiveDots = Array.from({ length: 56 * 44 }, (_, index) => ({
+    column: index % 56,
+    row: Math.floor(index / 56),
+  }));
+
+  return (
+    <div className="relative flex w-full min-w-0 items-center justify-center overflow-visible" aria-hidden>
+      <svg
+        viewBox="0 0 760 620"
+        xmlns="http://www.w3.org/2000/svg"
+        className="pointer-events-none w-full max-w-lg scale-[1.55] overflow-visible text-foreground sm:scale-[1.7] lg:scale-[1.85]"
+      >
+        <defs>
+          <pattern id="transistor-scale-dot-field-tight" width="5" height="5" patternUnits="userSpaceOnUse">
+            <circle cx="0.9" cy="0.9" r="0.42" fill="currentColor" fillOpacity="0.36" />
+            <circle cx="3.4" cy="2.2" r="0.34" fill="currentColor" fillOpacity="0.22" />
+            <circle cx="1.8" cy="4.2" r="0.3" fill="currentColor" fillOpacity="0.17" />
+          </pattern>
+          <pattern id="transistor-scale-dot-field-wide" width="8" height="8" patternUnits="userSpaceOnUse">
+            <circle cx="1.1" cy="1.2" r="0.56" fill="currentColor" fillOpacity="0.42" />
+            <circle cx="5.7" cy="2.8" r="0.45" fill="currentColor" fillOpacity="0.25" />
+            <circle cx="3.6" cy="6.2" r="0.4" fill="currentColor" fillOpacity="0.2" />
+          </pattern>
+          <radialGradient id="transistor-scale-vignette" cx="50%" cy="54%" r="68%">
+            <stop offset="0%" stopColor="var(--background)" stopOpacity="0" />
+            <stop offset="74%" stopColor="var(--background)" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="var(--background)" stopOpacity="0.64" />
+          </radialGradient>
+        </defs>
+
+        <g transform="translate(380 82)">
+          {depthLayers.map((plane, index) => (
+            <g key={plane.y} transform={`translate(${-plane.width / 2} ${plane.y}) scale(${plane.scale} 1)`}>
+              <path
+                d={`M${plane.width * 0.42} 0 H${plane.width * 0.58} L${plane.width} ${10 + plane.depth * 28} H0 Z`}
+                fill={index < 11 ? "url(#transistor-scale-dot-field-tight)" : "url(#transistor-scale-dot-field-wide)"}
+                opacity={plane.opacity}
+              />
+              <path
+                d={`M${plane.width * 0.42} 0 H${plane.width * 0.58} L${plane.width} ${10 + plane.depth * 28} H0 Z`}
+                fill="none"
+                stroke="currentColor"
+                strokeOpacity={0.018 + plane.depth * 0.07}
+                strokeWidth="0.8"
+              />
+            </g>
+          ))}
+        </g>
+
+        <g transform="translate(380 96)" opacity="0.74">
+          {perspectiveDots.map((dot) => {
+              const depth = dot.row / 43;
+              const easedDepth = depth * depth * depth;
+              const spread = 44 + easedDepth * 650;
+              const x = (dot.column / 55 - 0.5) * spread;
+              const y = depth * depth * 454;
+              const stagger = dot.column % 2 === 0 ? depth * 5.2 : 0;
+              const r = 0.22 + easedDepth * 1.28;
+              const opacity = 0.045 + easedDepth * 0.42;
+
+              return (
+                <circle
+                  key={`${dot.row}-${dot.column}`}
+                  cx={x}
+                  cy={y + stagger}
+                  r={r}
+                  fill="currentColor"
+                  fillOpacity={opacity}
+                />
+              );
+            })}
+        </g>
+
+        <path
+          d="M58 536 C190 622 576 622 704 530"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.08"
+          strokeWidth="1.5"
+        />
+        <rect x="0" y="0" width="760" height="620" fill="url(#transistor-scale-vignette)" />
+      </svg>
+    </div>
+  );
+}
+
 export function ComputerExplodedIllustration() {
   return (
     <RoughSvg viewBox="0 0 560 400">

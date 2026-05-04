@@ -89,7 +89,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
           <button
             onClick={() => setOpen(false)}
             aria-label="Close"
-            className="flex h-7 w-7 items-center justify-center rounded-[8px] text-foreground/36 transition-colors hover:bg-foreground/6 hover:text-foreground"
+            className="flex h-7 w-7 items-center justify-center rounded-control text-foreground/36 transition-colors hover:bg-foreground/6 hover:text-foreground"
           >
             <X size={14} />
           </button>
@@ -115,7 +115,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                         return (
                           <li key={slide.key}>
                             {isQuizLocked ? (
-                              <span className="flex cursor-default items-baseline gap-3 rounded-[8px] px-3 py-2 text-xs leading-5 text-foreground/30 select-none">
+                              <span className="flex cursor-default items-baseline gap-3 rounded-control px-3 py-2 text-xs leading-5 text-foreground/30 select-none">
                                 <span className="shrink-0 text-[10px] tabular-nums">
                                   {String(i + 1).padStart(2, "0")}
                                 </span>
@@ -126,7 +126,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                               href={slide.href}
                               onClick={() => setOpen(false)}
                               className={[
-                                "flex items-baseline gap-3 rounded-[8px] px-3 py-2 text-xs leading-5 transition-colors",
+                                "flex items-baseline gap-3 rounded-control px-3 py-2 text-xs leading-5 transition-colors",
                                 isActive
                                   ? "font-medium text-accent"
                                   : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
@@ -162,7 +162,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                     <button
                       onClick={() => setOpenModule(chapter.slug)}
                       className={[
-                        "flex w-full items-baseline gap-3 rounded-[8px] px-3 py-2.5 text-left transition-colors",
+                        "flex w-full items-baseline gap-3 rounded-control px-3 py-2.5 text-left transition-colors",
                         hasActive ? "text-foreground" : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
                       ].join(" ")}
                     >

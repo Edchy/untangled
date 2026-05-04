@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useChapterAnswers } from "./chapter-answers-context";
+import { Button } from "@/components/ui/button";
 
 const QUESTION_SEQUENCE = ["transistor", "abstraction", "binary"] as const;
 const MIN_CHARS = 10;
@@ -105,7 +106,7 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
             maxLength={MAX_CHARS}
             rows={4}
             spellCheck={false}
-            className="w-full resize-none rounded-[var(--radius)] border border-foreground/12 bg-transparent px-4 py-3 pr-24 text-[1.0625rem] leading-[1.85] text-foreground/80 placeholder:text-foreground/28 focus:border-foreground/24 focus:outline-none"
+            className="w-full resize-none rounded-control border border-foreground/12 bg-transparent px-4 py-3 pr-24 text-body leading-[var(--ds-leading-body)] text-foreground/80 placeholder:text-foreground/28 focus:border-foreground/24 focus:outline-none"
             style={{ overflow: "hidden" }}
           />
           <span className="pointer-events-none absolute right-3 top-3 font-mono text-[0.75rem] tabular-nums text-foreground/32">
@@ -114,20 +115,24 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
         </div>
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
+            <Button
               onClick={handleSkip}
-              className="text-[0.8125rem] text-foreground/52 transition-colors duration-150 hover:text-foreground/80"
+              variant="quiet"
+              size="sm"
+              className="px-0"
             >
               Skip
-            </button>
+            </Button>
           </div>
-          <button
+          <Button
             onClick={handleSubmit}
             disabled={!isReady}
-            className="text-[0.875rem] font-semibold tracking-wide text-foreground/80 transition-opacity duration-150 disabled:cursor-default disabled:opacity-28 enabled:hover:text-foreground"
+            variant="quiet"
+            size="sm"
+            className="px-0 tracking-wide text-foreground/80 enabled:hover:text-foreground"
           >
             {isLast ? "Submit →" : "Save & continue →"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

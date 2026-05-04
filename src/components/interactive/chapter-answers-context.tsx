@@ -28,15 +28,24 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
 
   // Restore from localStorage on mount
   useEffect(() => {
+    let cancelled = false;
+
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
         const { answers: a, feedback: f, feedbackState: fs } = JSON.parse(saved);
-        if (a) { setAnswers(a); answersRef.current = a; }
-        if (f) setFeedback(f);
-        if (fs && fs !== "loading" && fs !== "streaming") setFeedbackState(fs);
+        window.setTimeout(() => {
+          if (cancelled) return;
+          if (a) { setAnswers(a); answersRef.current = a; }
+          if (f) setFeedback(f);
+          if (fs && fs !== "loading" && fs !== "streaming") setFeedbackState(fs);
+        }, 0);
       }
     } catch {}
+
+    return () => {
+      cancelled = true;
+    };
   }, [storageKey]);
 
   // Persist feedback state changes to localStorage

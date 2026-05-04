@@ -117,7 +117,7 @@ function toHtml(mdxBody: string): string {
       if (/^[01]{8}(?:\s+[01]{8})+$/.test(para.trim())) {
         const bytes = para.trim().split(/\s+/);
         return [
-          '<p class="mt-5 max-w-[60ch] font-mono text-[1.0625rem] font-semibold leading-[1.85] text-foreground/36 [font-variant-numeric:tabular-nums] first:mt-0">',
+          '<p class="mt-prose-block max-w-[60ch] font-mono text-body font-semibold leading-[var(--ds-leading-body)] text-foreground/36 [font-variant-numeric:tabular-nums] first:mt-0">',
           bytes
             .map(
               (byte, byteIndex) =>
@@ -135,7 +135,7 @@ function toHtml(mdxBody: string): string {
       }
 
       const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
-      return `<p class="mt-5 max-w-[60ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
+      return `<p class="mt-prose-block max-w-[60ch] text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
     })
     .join("\n");
 }

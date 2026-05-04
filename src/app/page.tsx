@@ -1,25 +1,23 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getSlides } from "@/lib/content";
+import { LinkButton } from "@/components/ui/button";
+import { Heading, Text } from "@/components/ui/typography";
 
 export default function Home() {
   const firstSlide = getSlides()[0];
 
   return (
-    <main className="min-h-svh bg-[oklch(12%_0.008_38)] px-8 py-24 sm:px-16 sm:py-32">
+    <main className="min-h-svh bg-background px-8 py-24 sm:px-16 sm:py-32">
       <div className="mx-auto max-w-[52ch]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[oklch(55%_0.17_38)]">
+        <Text variant="label" className="text-[11px]">
           Untangled
-        </p>
+        </Text>
 
-        <h1
-          className="mt-10 font-serif font-semibold leading-[0.95] text-[oklch(96%_0.005_38)] [text-wrap:balance]"
-          style={{ fontSize: "clamp(3.5rem, 10vw, 6rem)" }}
-        >
+        <Heading as="h1" variant="display" className="mt-10">
           AI, from the beginning. Byte-sized micro-lessons.
-        </h1>
+        </Heading>
 
-        <div className="mt-12 space-y-5 text-[1.0625rem] leading-[1.9] text-[oklch(68%_0.005_38)]">
+        <div className="mt-12 space-y-5 text-body leading-[var(--ds-leading-body)] text-foreground/68">
           <p>
             Untangled is a free, self-paced journey through artificial
             intelligence — not the hype, but the real thing. No technical
@@ -42,16 +40,18 @@ export default function Home() {
         </div>
 
         {firstSlide && (
-          <Link
+          <LinkButton
             href={firstSlide.href}
-            className="group mt-14 inline-flex items-center gap-2.5 border border-[oklch(32%_0.005_38)] px-5 py-3 text-sm font-medium text-[oklch(72%_0.005_38)] transition-colors duration-150 hover:border-[oklch(55%_0.17_38)] hover:text-[oklch(55%_0.17_38)]"
+            variant="ghost"
+            size="lg"
+            className="group mt-14 gap-2.5"
           >
             Begin from the start
             <ArrowRight
               size={14}
               className="transition-transform duration-150 group-hover:translate-x-0.5"
             />
-          </Link>
+          </LinkButton>
         )}
       </div>
     </main>

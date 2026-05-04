@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { createElement } from "react";
 import { BookSidebar } from "@/components/ui/book-sidebar";
+import { Heading } from "@/components/ui/typography";
 import { RevealAnswer } from "@/components/ui/reveal-answer";
+import { SlideColumns, SlideShell } from "@/components/ui/slide-shell";
 import { SlideTransition } from "@/components/ui/slide-transition";
 import {
   getAdjacentSlides,
@@ -100,23 +102,23 @@ export default async function SlidePage({ params }: SlidePageProps) {
       ) : (
         <div className={textColumnClassName}>
           {!current.hideTitle && (
-            <h1 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.2] text-foreground/68 [text-wrap:balance]">
+            <Heading as="h1" variant="headline" className="mb-heading-after">
               {current.title}
-            </h1>
+            </Heading>
           )}
           {renderedSlideContent}
         </div>
       )}
     </div>
   ) : (
-    <div className="grid w-full max-w-6xl gap-16 lg:grid-cols-[1fr_1fr]">
+    <SlideColumns>
       {current.flipCols ? (
         <>
           <div className={textColumnClassName}>
             {!current.hideTitle && (
-              <h1 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.2] text-foreground/68 [text-wrap:balance]">
+              <Heading as="h1" variant="headline" className="mb-heading-after">
                 {current.title}
-              </h1>
+              </Heading>
             )}
             {renderedSlideContent}
           </div>
@@ -131,21 +133,21 @@ export default async function SlidePage({ params }: SlidePageProps) {
           </div>
           <div className={textColumnClassName}>
             {!current.hideTitle && (
-              <h1 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.2] text-foreground/68 [text-wrap:balance]">
+              <Heading as="h1" variant="headline" className="mb-heading-after">
                 {current.title}
-              </h1>
+              </Heading>
             )}
             {renderedSlideContent}
           </div>
         </>
       )}
-    </div>
+    </SlideColumns>
   );
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center px-8 py-16 sm:px-16 sm:py-24">
+    <SlideShell>
       <BookSidebar modules={modules} currentSlideKey={current.key} />
       <SlideTransition>{slideBody}</SlideTransition>
-    </div>
+    </SlideShell>
   );
 }

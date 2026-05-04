@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Text } from "@/components/ui/typography";
 
 export function SiteHeader() {
   return (
@@ -10,14 +11,14 @@ export function SiteHeader() {
         >
           Untangled
         </Link>
-        <nav className="flex items-center gap-5 text-sm text-foreground/70">
+        <Text as="nav" variant="caption" className="flex items-center gap-5 text-sm text-foreground/70">
           <Link className="transition hover:text-foreground" href="/modules">
             Modules
           </Link>
           <Link className="transition hover:text-foreground" href="/01-the-machine/01-what-is-a-computer/01-try-it">
             Start
           </Link>
-        </nav>
+        </Text>
       </div>
     </header>
   );

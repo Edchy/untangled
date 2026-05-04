@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/typography";
 
 interface Props {
   nextHref?: string;
@@ -11,22 +13,24 @@ export function QuizGate({ nextHref }: Props) {
 
   return (
     <div className="w-full max-w-2xl">
-      <p className="max-w-[60ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty]">
+      <Text>
         Three questions.
-      </p>
-      <p className="mt-5 max-w-[60ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty]">
+      </Text>
+      <Text className="mt-prose-block">
         Write what you actually think — in your own words.
         There&apos;s no score.
-      </p>
+      </Text>
 
       <div className="mt-10 flex items-center justify-end gap-8">
         {nextHref && (
-          <button
+          <Button
             onClick={() => router.push(nextHref, { transitionTypes: ["nav-forward"] })}
-            className="text-[0.875rem] font-semibold tracking-wide text-foreground/80 transition-colors duration-150 hover:text-foreground"
+            variant="quiet"
+            size="sm"
+            className="px-0 tracking-wide text-foreground/80 hover:text-foreground"
           >
             Start →
-          </button>
+          </Button>
         )}
       </div>
     </div>

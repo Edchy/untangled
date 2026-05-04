@@ -3,12 +3,36 @@
 import { StandaloneLightSwitch } from "@/components/interactive/light-switch";
 
 export function AbstractionIllustration() {
+  const cableRows = Array.from({ length: 18 }, (_, index) => {
+    const depth = index / 17;
+    const y = 26 + depth * depth * 314;
+    const amplitude = 16 + depth * 30;
+    const opacity = 0.06 + depth * 0.18;
+    const strokeWidth = 1 + depth * 1.1;
+
+    return { depth, y, amplitude, opacity, strokeWidth };
+  });
+
+  const nodes = Array.from({ length: 150 }, (_, index) => {
+    const row = Math.floor(index / 15);
+    const column = index % 15;
+    const depth = row / 9;
+    const spread = 210 + depth * depth * 560;
+
+    return {
+      x: 460 + (column / 14 - 0.5) * spread,
+      y: 56 + depth * depth * 248 + (column % 2) * depth * 10,
+      radius: 1.6 + depth * 2.8,
+      opacity: 0.06 + depth * 0.2,
+    };
+  });
+
   return (
-    <div className="relative isolate flex h-[360px] w-full items-center justify-center overflow-visible">
+    <div className="relative isolate flex h-[360px] w-full min-w-0 items-center justify-center overflow-visible">
       <svg
         viewBox="0 0 920 360"
         xmlns="http://www.w3.org/2000/svg"
-        className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-[120vw] max-w-none -translate-x-1/2 -translate-y-1/2 text-foreground lg:w-[92vw]"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 scale-[1.5] overflow-visible text-foreground sm:scale-[1.7] lg:scale-[1.95]"
         aria-hidden
       >
         <defs>
@@ -28,130 +52,79 @@ export function AbstractionIllustration() {
               yChannelSelector="G"
             />
           </filter>
+          <pattern id="switch-cords-pin-field" width="18" height="18" patternUnits="userSpaceOnUse">
+            <circle cx="2.5" cy="3" r="0.8" fill="currentColor" fillOpacity="0.18" />
+            <circle cx="12" cy="8" r="0.55" fill="currentColor" fillOpacity="0.1" />
+            <circle cx="6" cy="15" r="0.5" fill="currentColor" fillOpacity="0.08" />
+          </pattern>
+          <radialGradient id="switch-cords-veil" cx="50%" cy="50%" r="64%">
+            <stop offset="0%" stopColor="var(--background)" stopOpacity="0" />
+            <stop offset="72%" stopColor="var(--background)" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="var(--background)" stopOpacity="0.58" />
+          </radialGradient>
         </defs>
 
-        <g filter="url(#switch-cords-roughen)" opacity="0.25" strokeLinecap="round" strokeLinejoin="round">
+        <g filter="url(#switch-cords-roughen)" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M88 40 H832 L906 318 H14 Z" fill="url(#switch-cords-pin-field)" opacity="0.45" />
+
+          {cableRows.map((row, index) => {
+            const edge = 42 + row.depth * row.depth * 210;
+            const centerPull = 82 - row.depth * 28;
+            const y = row.y;
+
+            return (
+              <g key={row.y}>
+                <path
+                  d={`M${edge - 250} ${y - row.amplitude} C${edge + 90} ${y + row.amplitude} ${460 - centerPull} ${y - row.amplitude} 460 ${178 - row.depth * 18}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeOpacity={row.opacity}
+                  strokeWidth={row.strokeWidth}
+                />
+                <path
+                  d={`M${920 - edge + 250} ${y + row.amplitude} C${920 - edge - 90} ${y - row.amplitude} ${460 + centerPull} ${y + row.amplitude} 460 ${178 + row.depth * 18}`}
+                  fill="none"
+                  stroke={index % 5 === 2 ? "var(--accent)" : "currentColor"}
+                  strokeOpacity={index % 5 === 2 ? 0.34 + row.depth * 0.28 : row.opacity}
+                  strokeWidth={index % 5 === 2 ? row.strokeWidth + 0.6 : row.strokeWidth}
+                />
+              </g>
+            );
+          })}
+
           <path
-            d="M0 78 C74 48 132 72 198 48 C272 21 335 40 382 82 C407 104 425 112 448 115"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.16"
-            strokeWidth="2"
-          />
-          <path
-            d="M0 170 C66 139 132 151 190 179 C257 211 318 194 382 154 C407 138 429 132 452 134"
-            fill="none"
-            stroke="var(--accent)"
-            strokeOpacity="0.72"
-            strokeWidth="2.6"
-          />
-          <path
-            d="M0 262 C74 232 132 238 196 269 C258 300 329 290 390 246 C414 229 432 224 451 226"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.16"
-            strokeWidth="2"
-          />
-          <path
-            d="M920 48 C859 78 812 88 754 57 C692 24 629 27 570 70 C538 94 514 106 486 112"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.16"
-            strokeWidth="2"
-          />
-          <path
-            d="M920 151 C870 123 814 121 762 163 C704 209 638 217 574 164 C545 140 518 129 488 133"
-            fill="none"
-            stroke="var(--accent)"
-            strokeOpacity="0.72"
-            strokeWidth="2.6"
-          />
-          <path
-            d="M920 245 C867 218 813 214 764 260 C708 312 639 313 575 256 C546 230 518 222 489 226"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.16"
-            strokeWidth="2"
-          />
-          <path
-            d="M116 10 C152 60 184 79 236 76 C306 72 334 114 328 178 C322 244 363 280 430 277"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.22"
-            strokeWidth="1.9"
-          />
-          <path
-            d="M782 4 C748 51 711 70 653 62 C579 51 544 88 552 155 C559 214 526 246 480 243"
+            d="M-42 184 C126 120 266 140 364 170 C418 187 444 186 460 178 C478 168 506 164 568 188 C684 232 808 218 962 146"
             fill="none"
             stroke="var(--accent)"
-            strokeOpacity="0.48"
-            strokeWidth="1.9"
-          />
-          <path
-            d="M430 91 C444 100 453 105 462 111 M430 153 C442 146 452 141 462 138 M430 246 C441 237 451 232 462 229"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.2"
-            strokeWidth="2.2"
-          />
-          <path
-            d="M490 111 C500 104 509 99 522 94 M490 138 C501 134 512 135 524 142 M490 229 C501 232 512 239 524 250"
-            fill="none"
-            stroke="var(--accent)"
-            strokeOpacity="0.5"
-            strokeWidth="2.2"
-          />
-          <path
-            d="M522 105 C588 89 634 113 674 157 C721 209 785 209 920 190"
-            fill="none"
-            stroke="var(--accent)"
-            strokeOpacity="0.5"
-            strokeWidth="1.8"
-          />
-          <path
-            d="M522 286 C590 258 642 279 704 308 C768 338 830 328 920 298"
-            fill="none"
-            stroke="var(--accent)"
-            strokeOpacity="0.44"
-            strokeWidth="1.7"
-          />
-          <path
-            d="M438 106 H457 M438 132 H457 M438 224 H457 M486 106 H505 M486 132 H505 M486 224 H505"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.28"
-            strokeWidth="2.4"
+            strokeOpacity="0.76"
+            strokeWidth="3"
           />
 
-          <circle cx="198" cy="55" r="14" fill="var(--background)" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.8" />
-          <circle cx="328" cy="178" r="13" fill="var(--background)" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.7" />
-          <circle cx="552" cy="155" r="13" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.42" strokeWidth="1.7" />
-          <circle cx="754" cy="57" r="14" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.44" strokeWidth="1.8" />
-          <circle cx="196" cy="269" r="12" fill="var(--background)" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.6" />
-          <circle cx="573" cy="334" r="11" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.38" strokeWidth="1.5" />
-          <circle cx="314" cy="330" r="11" fill="var(--background)" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.5" />
-          <path
-            d="M184 55 H212 M198 41 V69 M315 178 H341 M328 165 V191 M539 155 H565 M552 142 V168 M740 57 H768 M754 43 V71 M184 269 H208 M196 257 V281 M562 334 H584 M573 323 V345 M303 330 H325 M314 319 V341"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.24"
-            strokeWidth="1.4"
-          />
-          <path
-            d="M692 20 L804 20 M724 44 L842 44 M662 306 L830 306 M706 332 L852 332"
-            fill="none"
-            stroke="var(--accent)"
-            strokeOpacity="0.24"
-            strokeWidth="1.4"
-          />
-          <path
-            d="M100 34 L176 34 M124 58 L210 58 M72 316 L176 316 M110 338 L232 338"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.12"
-            strokeWidth="1.4"
-          />
+          {nodes.map((node) => (
+            <circle
+              key={`${node.x}-${node.y}`}
+              cx={node.x}
+              cy={node.y}
+              r={node.radius}
+              fill="var(--background)"
+              stroke="currentColor"
+              strokeOpacity={node.opacity}
+              strokeWidth="1.2"
+            />
+          ))}
+
+          <g stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.3">
+            <path d="M212 62 L318 132 M262 286 L376 218 M642 72 L548 142 M704 292 L570 226" />
+            <path d="M122 86 H238 M124 112 H282 M690 64 H820 M648 92 H776 M96 294 H232 M650 320 H842" />
+          </g>
+
+          <g stroke="var(--accent)" strokeOpacity="0.34" strokeWidth="1.5">
+            <path d="M330 172 H448 M472 178 H586" />
+            <path d="M444 162 L458 178 L444 194 M476 160 L462 178 L476 196" />
+          </g>
         </g>
+
+        <rect x="0" y="0" width="920" height="360" fill="url(#switch-cords-veil)" />
       </svg>
 
       <div className="relative z-10">

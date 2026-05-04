@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/typography";
 
 const SPEED = 28;
 
@@ -34,20 +36,21 @@ export function RevealAnswer({ answer }: { answer: string }) {
 
   if (state === "hidden") {
     return (
-      <button
-        type="button"
+      <Button
         onClick={handleShow}
-        className="mt-5 cursor-pointer border-0 bg-transparent p-0 text-[1.0625rem] leading-[1.85] text-foreground/30 transition-colors hover:text-foreground/60"
+        variant="quiet"
+        size="sm"
+        className="mt-prose-block px-0 text-body font-normal leading-[var(--ds-leading-body)] text-foreground/30 hover:text-foreground/60"
       >
         Show answer
-      </button>
+      </Button>
     );
   }
 
   return (
-    <p className="mt-5 max-w-[60ch] text-[1.0625rem] leading-[1.85] text-foreground/68">
+    <Text className="mt-prose-block">
       {displayed}
       <span className={state === "typing" ? "animate-pulse" : "invisible"}>▎</span>
-    </p>
+    </Text>
   );
 }

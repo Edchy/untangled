@@ -54,11 +54,18 @@ Plan → Verify inputs → Execute → Explain changes → Capture lessons
 - Prefer Tailwind utilities and Tailwind v4 theme variables in `src/app/globals.css`.
 - Keep custom CSS small and limited to global primitives, theme variables, and genuinely reusable selectors.
 - When styling components, reach for Tailwind classes first.
+- `DESIGN.md` is mandatory context before any UI work.
+- `src/app/globals.css` is the code source of truth for design tokens. Change token values there before changing component styling.
+- Use reusable primitives from `src/components/ui` before writing one-off UI: `Button`, `LinkButton`, `Text`, `Heading`, `Surface`, `Prose`, `SlideShell`, and `SlideColumns`.
+- Add or extend a primitive when a button, link, surface, text style, or layout pattern appears more than once.
+- Use token-backed utilities such as `rounded-control`, `rounded-surface`, `text-body`, `text-headline`, and `bg-background`. Do not hardcode radii, shadows, or colors in reusable UI.
+- Run `npm run design:check` for UI changes.
 
 
 ## Tools & Docs
 Before implementing anything with a library or framework, look up the docs first.
 - Use Context7 for general library docs: resolve the library ID, then fetch docs.
+- Load the dedicated vercel and react skills for any react or vercel-specific questions.
 - If a dedicated MCP exists for a library in this stack, prefer it over Context7.
 - Never guess at API shapes or configuration — look it up.
 - For Next.js work, read the relevant guide in `node_modules/next/dist/docs/` before writing code. This project may use a Next.js version with breaking changes from older conventions.

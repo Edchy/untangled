@@ -22,6 +22,7 @@ import {
   LayersIllustration,
   RamIllustration,
   StorageIllustration,
+  TransistorScaleIllustration,
   WhatJustHappenedIllustration,
 } from "@/components/interactive/chapter-one-illustrations";
 import { TransistorZoom } from "@/components/interactive/transistor-zoom";
@@ -60,6 +61,7 @@ export const interactiveComponents: Record<string, ComponentType<any>> = {
   "chair-illustration": ChairIllustration,
   "binary-to-everything-illustration": BinaryToEverythingIllustration,
   "character-mapping-illustration": CharacterMappingIllustration,
+  "transistor-scale-illustration": TransistorScaleIllustration,
   "transistor-zoom": TransistorZoom,
   "binary-switches": BinarySwitches,
   "binary-switches-3": BinarySwitches3,

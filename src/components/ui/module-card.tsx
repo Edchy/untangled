@@ -1,5 +1,6 @@
-import Link from "next/link";
 import type { Module } from "@/lib/content";
+import { LinkButton } from "@/components/ui/button";
+import { Heading, Text } from "@/components/ui/typography";
 
 type ModuleCardProps = {
   module: Module;
@@ -12,21 +13,20 @@ export function ModuleCard({ module }: ModuleCardProps) {
     <article className="border-t border-foreground/12 py-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-muted">{module.number}</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold leading-tight">
+          <Text variant="caption" className="font-semibold text-muted">
+            {module.number}
+          </Text>
+          <Heading as="h2" variant="title" className="mt-2">
             {module.title}
-          </h2>
-          <p className="mt-2 max-w-xl text-base leading-7 text-foreground/70">
+          </Heading>
+          <Text variant="muted" className="mt-2 max-w-xl text-base leading-7">
             {module.theme}
-          </p>
+          </Text>
         </div>
         {firstSlide ? (
-          <Link
-            href={firstSlide.href}
-            className="inline-flex h-11 shrink-0 items-center justify-center border border-foreground px-4 text-sm font-semibold transition hover:border-accent hover:text-accent"
-          >
+          <LinkButton href={firstSlide.href} variant="ghost" size="md">
             Open module
-          </Link>
+          </LinkButton>
         ) : (
           <span className="inline-flex h-11 shrink-0 items-center justify-center border border-foreground/15 px-4 text-sm text-muted">
             Planned

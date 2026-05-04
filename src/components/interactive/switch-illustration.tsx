@@ -47,7 +47,7 @@ export function SwitchIllustration() {
         type="button"
         onClick={() => setSwitchIllustrationOn(!on)}
         aria-label={on ? "Turn switch off" : "Turn switch on"}
-        className="group block w-full cursor-pointer border-0 bg-transparent p-0 text-left"
+        className="group flex cursor-pointer flex-col items-center gap-3 border-0 bg-transparent p-0"
       >
         <svg
           viewBox="0 0 400 180"
@@ -135,6 +135,13 @@ export function SwitchIllustration() {
             />
           </g>
         </svg>
+
+        <span
+          className="font-mono text-6xl font-semibold transition-colors duration-150"
+          style={{ color: on ? accentColor : inkColor, opacity: on ? 1 : 0.4 }}
+        >
+          {on ? "1" : "0"}
+        </span>
       </button>
     </div>
   );
