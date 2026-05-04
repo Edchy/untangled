@@ -37,7 +37,7 @@ import { QuizGate } from "@/components/interactive/quiz-gate";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const slideComponents: Record<string, ComponentType<any>> = {
-  "01-the-machine/01-what-is-a-computer/11-instructions": InstructionsBody,
+  "01-the-machine/01-what-is-a-computer/13-instructions": InstructionsBody,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
