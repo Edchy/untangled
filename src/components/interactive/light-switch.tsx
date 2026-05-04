@@ -1,13 +1,32 @@
 "use client";
 
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import rough from "roughjs";
 
 const WIDTH = 132;
 const HEIGHT = 196;
 const DRAG_RANGE = 36;
 const SNAP_THRESHOLD = 0.18;
+const THEME_CHANGE_EVENT = "untangled-themechange";
+
+function getThemeSnapshot() {
+  return document.documentElement.dataset.theme === "light";
+}
+
+function getServerThemeSnapshot() {
+  return false;
+}
+
+function subscribeToThemeChange(callback: () => void) {
+  window.addEventListener(THEME_CHANGE_EVENT, callback);
+  window.addEventListener("storage", callback);
+
+  return () => {
+    window.removeEventListener(THEME_CHANGE_EVENT, callback);
+    window.removeEventListener("storage", callback);
+  };
+}
 
 function withAlpha(color: string, alpha: number) {
   const value = color.trim();
@@ -424,16 +443,18 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
 }
 
 export function StandaloneLightSwitch() {
-  const [on, setOn] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return document.documentElement.dataset.theme === "light";
-  });
+  const on = useSyncExternalStore(
+    subscribeToThemeChange,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
 
-  useEffect(() => {
-    const theme = on ? "light" : "dark";
+  function handleToggle(nextOn: boolean) {
+    const theme = nextOn ? "light" : "dark";
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("theme", theme);
-  }, [on]);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+  }
 
-  return <LightSwitch on={on} onToggle={setOn} />;
+  return <LightSwitch on={on} onToggle={handleToggle} />;
 }

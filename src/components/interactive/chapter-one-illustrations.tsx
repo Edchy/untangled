@@ -94,17 +94,53 @@ export function WhatJustHappenedIllustration() {
 
 export function EverydayObjectsIllustration() {
   return (
-    <RoughSvg>
-      <circle cx="128" cy="148" r="54" fill="url(#chapter-one-sloppy-blue)" stroke="currentColor" strokeWidth="2" />
-      <line x1="104" y1="148" x2="152" y2="148" stroke="var(--accent)" strokeOpacity="0.72" strokeWidth="2.8" />
-      <rect x="238" y="94" width="74" height="118" rx="12" fill="url(#chapter-one-sloppy-ink)" stroke="currentColor" strokeWidth="2" />
-      <circle cx="275" cy="186" r="5" fill="var(--accent)" fillOpacity="0.75" />
-      <path d="M372 184 L390 128 H452 L474 184 Z" fill="url(#chapter-one-sloppy-clay)" stroke="currentColor" strokeWidth="2" />
-      <circle cx="404" cy="190" r="12" fill="var(--background)" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1.6" />
-      <circle cx="456" cy="190" r="12" fill="var(--background)" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1.6" />
-      <path d="M86 280 C138 246 190 246 242 280 S346 314 434 270" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.6" />
-      <circle cx="198" cy="282" r="16" fill={fill.amber} stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
-      <circle cx="322" cy="284" r="16" fill={fill.sage} stroke="var(--accent)" strokeOpacity="0.62" strokeWidth="1.7" />
+    <RoughSvg viewBox="0 0 560 420">
+      <path d="M42 190 C142 212 230 210 302 190 S432 166 518 190" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.6" />
+      <path d="M42 294 C146 324 236 318 306 294 S426 266 518 294" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.6" />
+
+      <g transform="translate(56 58)">
+        <rect x="10" y="4" width="64" height="104" rx="7" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
+        <line x1="26" y1="52" x2="58" y2="52" stroke="var(--accent)" strokeOpacity="0.74" strokeWidth="2.8" />
+        <circle cx="42" cy="22" r="5" fill="currentColor" fillOpacity="0.25" />
+        <path d="M42 108 V142 M20 142 H64 M28 160 H56" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.5" />
+        <path d="M26 132 C34 122 50 122 58 132" fill="none" stroke="var(--accent)" strokeOpacity="0.34" strokeWidth="1.7" />
+      </g>
+
+      <g transform="translate(214 52)">
+        <rect x="20" y="4" width="72" height="122" rx="13" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
+        <circle cx="56" cy="106" r="5" fill="var(--accent)" fillOpacity="0.75" />
+        <path d="M38 34 H74 M38 58 H74 M38 82 H58" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.4" />
+        <path d="M56 126 V158 M20 158 C36 144 76 144 92 158" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.5" />
+        <path d="M38 150 L74 150 M44 166 L68 166" stroke="var(--accent)" strokeOpacity="0.32" strokeWidth="1.6" />
+      </g>
+
+      <g transform="translate(374 70)">
+        <path d="M6 72 L28 20 H92 L116 72 Z" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
+        <circle cx="38" cy="78" r="13" fill="var(--background)" stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.7" />
+        <circle cx="96" cy="78" r="13" fill="var(--background)" stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.7" />
+        <path d="M56 48 H82" stroke="var(--accent)" strokeOpacity="0.7" strokeWidth="2.5" />
+        <path d="M62 92 V134 M32 134 H104 M48 150 H88" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.5" />
+        <path d="M54 124 C62 112 78 112 86 124" fill="none" stroke="var(--accent)" strokeOpacity="0.3" strokeWidth="1.6" />
+      </g>
+
+      <g transform="translate(66 252)">
+        <path d="M16 34 H76 V72 C76 102 56 118 34 108 C18 100 16 84 16 72 Z" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
+        <path d="M22 34 C30 16 62 16 74 34" fill="none" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.8" />
+        <path d="M70 24 H94" stroke="var(--accent)" strokeOpacity="0.72" strokeWidth="2.6" />
+        <path d="M46 108 V140 M22 140 H78 M30 156 H70" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.5" />
+      </g>
+
+      <g transform="translate(222 258)">
+        <path d="M8 26 C28 6 72 8 92 30 C112 56 82 84 48 78 L18 98 L28 72 C4 62 -8 42 8 26 Z" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
+        <path d="M32 42 H74 M30 58 H60" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2.2" />
+        <path d="M50 82 V122 M22 122 H88 M34 138 H76" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.5" />
+      </g>
+
+      <g transform="translate(386 252)">
+        <path d="M24 52 C12 50 6 40 12 28 C18 16 32 18 38 26 C46 8 74 8 82 28 C100 26 112 40 104 56 C96 72 66 66 54 66 C42 66 34 58 24 52 Z" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
+        <path d="M54 66 V102 M22 102 H90 M34 118 H78 M44 134 H68" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.5" />
+        <path d="M34 42 H82" stroke="var(--accent)" strokeOpacity="0.7" strokeWidth="2.4" />
+      </g>
     </RoughSvg>
   );
 }
@@ -133,13 +169,35 @@ export function LayersIllustration() {
 
 export function ComplexityDissolvesIllustration() {
   return (
-    <RoughSvg>
-      <circle cx="152" cy="186" r="86" fill="url(#chapter-one-sloppy-ink)" stroke="currentColor" strokeOpacity="0.52" strokeWidth="2" />
-      <path d="M94 156 C148 82 198 258 252 150 M92 214 C144 300 194 104 252 226" fill="none" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.8" />
-      <path d="M248 188 C286 188 302 188 340 188" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
-      <rect x="340" y="92" width="118" height="42" rx="4" fill="url(#chapter-one-sloppy-blue)" stroke="currentColor" strokeOpacity="0.62" strokeWidth="1.7" />
-      <rect x="340" y="166" width="118" height="42" rx="4" fill="url(#chapter-one-sloppy-clay)" stroke="currentColor" strokeOpacity="0.62" strokeWidth="1.7" />
-      <rect x="340" y="240" width="118" height="42" rx="4" fill="url(#chapter-one-sloppy-grid)" stroke="currentColor" strokeOpacity="0.62" strokeWidth="1.7" />
+    <RoughSvg viewBox="0 0 560 420">
+      <g opacity="0.9">
+        <circle cx="138" cy="202" r="86" fill="var(--background)" stroke="currentColor" strokeOpacity="0.46" strokeWidth="2" />
+        <path d="M80 170 C126 74 196 296 250 154 M76 218 C138 318 184 80 252 238 M94 256 C128 138 214 146 222 268 M68 194 C148 246 190 126 254 192" fill="none" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.8" />
+        <path d="M88 230 C126 176 164 172 196 202 C218 224 232 224 254 204" fill="none" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2.7" />
+      </g>
+
+      <path d="M248 204 C292 184 306 164 330 130" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
+      <path d="M252 204 C300 204 312 204 340 204" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
+      <path d="M248 204 C292 224 306 244 330 278" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
+
+      <g transform="translate(330 80)">
+        <path d="M0 36 C44 22 108 22 160 36 L146 86 C98 76 46 76 0 88 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.62" strokeWidth="1.8" />
+        <path d="M30 58 C62 50 98 50 130 58" fill="none" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2.2" />
+        <path d="M18 74 C54 66 98 66 140 74" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
+      </g>
+      <g transform="translate(342 166)">
+        <path d="M0 34 C42 22 102 22 150 34 L136 82 C92 74 44 74 0 84 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.8" />
+        <path d="M28 56 H120" stroke="var(--accent)" strokeOpacity="0.64" strokeWidth="2.2" />
+        <path d="M22 70 H132" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
+      </g>
+      <g transform="translate(330 250)">
+        <path d="M0 34 C44 22 108 22 160 34 L146 84 C96 74 44 74 0 86 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.8" />
+        <path d="M34 54 C60 68 100 68 126 54" fill="none" stroke="var(--accent)" strokeOpacity="0.64" strokeWidth="2.2" />
+        <path d="M20 70 C56 78 104 78 142 70" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
+      </g>
+
+      <path d="M354 58 C394 40 456 40 502 58" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+      <path d="M322 342 C378 370 454 368 512 338" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
     </RoughSvg>
   );
 }
@@ -164,13 +222,34 @@ export function HumanStackIllustration() {
 
 export function ComputerStackIllustration() {
   return (
-    <RoughSvg>
-      <rect x="154" y="54" width="212" height="122" rx="10" fill="url(#chapter-one-sloppy-blue)" stroke="currentColor" strokeWidth="2" />
-      <path d="M206 110 H314" stroke="var(--accent)" strokeOpacity="0.72" strokeWidth="2.6" />
-      <path d="M238 176 L220 210 H302 L284 176" fill={fill.blue} stroke="currentColor" strokeOpacity="0.48" strokeWidth="1.6" />
-      <rect x="116" y="230" width="288" height="42" rx="5" fill="url(#chapter-one-sloppy-grid)" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1.7" />
-      <rect x="146" y="286" width="228" height="42" rx="5" fill="url(#chapter-one-sloppy-clay)" stroke="var(--accent)" strokeOpacity="0.66" strokeWidth="1.8" />
-      <MiniSwitch x={198} y={316} active />
+    <RoughSvg viewBox="0 0 560 420">
+      <g opacity="0.42">
+        <MiniSwitch x={218} y={322} active />
+        <path d="M204 356 H356" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.4" />
+      </g>
+
+      <path d="M112 276 C180 254 374 254 448 276 L418 340 C312 318 214 318 92 342 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.8" />
+      <path d="M152 304 C218 292 330 292 394 304" fill="none" stroke="currentColor" strokeOpacity="0.14" strokeWidth="1.4" />
+
+      <path d="M96 222 C176 196 386 196 468 222 L438 286 C326 262 218 262 76 288 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.44" strokeWidth="1.8" />
+      <path d="M146 250 C218 236 340 236 410 250" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
+
+      <path d="M84 166 C176 136 398 136 482 166 L452 232 C336 206 216 206 64 234 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.54" strokeWidth="1.9" />
+      <path d="M144 194 C226 178 354 178 426 194" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.5" />
+
+      <path d="M70 108 C174 74 408 74 498 108 L466 178 C342 148 214 148 48 180 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.66" strokeWidth="2" />
+      <path d="M158 136 C238 118 360 118 432 136" fill="none" stroke="var(--accent)" strokeOpacity="0.42" strokeWidth="2" />
+
+      <g>
+        <path d="M170 54 H390 L424 92 C338 72 222 72 136 92 Z" fill="var(--background)" stroke="currentColor" strokeWidth="2.1" />
+        <path d="M224 74 H336" stroke="var(--accent)" strokeOpacity="0.76" strokeWidth="2.8" />
+        <path d="M208 42 L202 26 M250 34 L248 18 M352 42 L360 26 M392 68 L412 56" stroke="var(--accent)" strokeOpacity="0.38" strokeWidth="1.7" />
+        <circle cx="320" cy="36" r="4" fill="var(--accent)" fillOpacity="0.34" />
+      </g>
+
+      <path d="M280 98 V326" fill="none" stroke="var(--accent)" strokeOpacity="0.52" strokeWidth="2.4" strokeDasharray="4 10" />
+      <path d="M268 314 L280 330 L292 314" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
+      <path d="M78 360 C180 394 382 394 482 356" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.6" />
     </RoughSvg>
   );
 }

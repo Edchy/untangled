@@ -1,4 +1,5 @@
 import { SlideNav } from "@/components/ui/slide-nav";
+import { SlideGestures } from "@/components/ui/slide-gestures";
 import { getAdjacentSlides, getSlide } from "@/lib/content";
 
 type SlideLayoutProps = {
@@ -14,9 +15,15 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   return (
     <>
       {children}
+      <SlideGestures
+        previousHref={current?.backHref ?? previous?.href}
+        nextHref={current?.hideNavNext ? current?.skipHref ?? undefined : next?.href}
+        disableNext={current?.hideNavNext && !!current?.skipHref}
+      />
       <SlideNav
         previousHref={current?.backHref ?? previous?.href}
-        nextHref={current?.hideNavNext ? undefined : next?.href}
+        nextHref={current?.hideNavNext ? current?.skipHref ?? undefined : next?.href}
+        nextLabel={current?.hideNavNext && current?.skipHref ? "skip quiz" : undefined}
       />
     </>
   );

@@ -45,7 +45,7 @@ export function RevealAnswer({ answer }: { answer: string }) {
   }
 
   return (
-    <p className="mt-5 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68">
+    <p className="mt-5 max-w-[60ch] text-[1.0625rem] leading-[1.85] text-foreground/68">
       {displayed}
       <span className={state === "typing" ? "animate-pulse" : "invisible"}>▎</span>
     </p>

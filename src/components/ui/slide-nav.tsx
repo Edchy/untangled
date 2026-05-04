@@ -4,9 +4,10 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 type SlideNavProps = {
   previousHref?: string;
   nextHref?: string;
+  nextLabel?: string;
 };
 
-export function SlideNav({ previousHref, nextHref }: SlideNavProps) {
+export function SlideNav({ previousHref, nextHref, nextLabel }: SlideNavProps) {
   return (
     <nav
       aria-label="Slide navigation"
@@ -29,9 +30,10 @@ export function SlideNav({ previousHref, nextHref }: SlideNavProps) {
           href={nextHref}
           transitionTypes={["nav-forward"]}
           aria-label="Next slide"
-          className="text-foreground/36 transition-colors duration-150 hover:text-foreground"
+          className="flex items-center gap-2 text-foreground/36 transition-colors duration-150 hover:text-foreground"
         >
           <ArrowRight size={16} />
+          {nextLabel && <span className="text-xs text-foreground/36">({nextLabel})</span>}
         </Link>
       ) : null}
     </nav>

@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState, useEffect } from "react";
 
 type Answers = Record<string, string>;
 type FeedbackState = "idle" | "loading" | "streaming" | "done" | "error";
 
 interface ChapterAnswersContextValue {
   answers: Answers;
+  storageKey: string;
   saveAnswer: (id: string, text: string) => void;
   feedbackState: FeedbackState;
   feedback: string;
@@ -15,13 +16,47 @@ interface ChapterAnswersContextValue {
 
 const ChapterAnswersContext = createContext<ChapterAnswersContextValue | null>(null);
 
-export function ChapterAnswersProvider({ children }: { children: React.ReactNode }) {
+export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug: string; children: React.ReactNode }) {
+  const storageKey = `untangled-answers-${conceptSlug}`;
+
   const [answers, setAnswers] = useState<Answers>({});
   const [feedbackState, setFeedbackState] = useState<FeedbackState>("idle");
   const [feedback, setFeedback] = useState("");
 
+  // Keep a ref to answers so saveAnswer can write to localStorage synchronously
+  const answersRef = useRef<Answers>({});
+
+  // Restore from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const { answers: a, feedback: f, feedbackState: fs } = JSON.parse(saved);
+        if (a) { setAnswers(a); answersRef.current = a; }
+        if (f) setFeedback(f);
+        if (fs && fs !== "loading" && fs !== "streaming") setFeedbackState(fs);
+      }
+    } catch {}
+  }, [storageKey]);
+
+  // Persist feedback state changes to localStorage
+  useEffect(() => {
+    if (Object.keys(answersRef.current).length === 0 && !feedback) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ answers: answersRef.current, feedback, feedbackState }));
+    } catch {}
+  }, [feedback, feedbackState, storageKey]);
+
   function saveAnswer(id: string, text: string) {
-    setAnswers((prev) => ({ ...prev, [id]: text }));
+    const next = { ...answersRef.current, [id]: text };
+    answersRef.current = next;
+    setAnswers(next);
+    // Write synchronously so a refresh never loses in-progress text
+    try {
+      const existing = localStorage.getItem(storageKey);
+      const parsed = existing ? JSON.parse(existing) : {};
+      localStorage.setItem(storageKey, JSON.stringify({ ...parsed, answers: next }));
+    } catch {}
   }
 
   async function submitAnswers(finalId: string, finalText: string) {
@@ -29,8 +64,6 @@ export function ChapterAnswersProvider({ children }: { children: React.ReactNode
     setAnswers(allAnswers);
     setFeedbackState("loading");
     setFeedback("");
-
-    console.log("Submitting answers:", allAnswers);
 
     try {
       const res = await fetch("/api/evaluate", {
@@ -59,7 +92,7 @@ export function ChapterAnswersProvider({ children }: { children: React.ReactNode
   }
 
   return (
-    <ChapterAnswersContext.Provider value={{ answers, saveAnswer, feedbackState, feedback, submitAnswers }}>
+    <ChapterAnswersContext.Provider value={{ answers, storageKey, saveAnswer, feedbackState, feedback, submitAnswers }}>
       {children}
     </ChapterAnswersContext.Provider>
   );

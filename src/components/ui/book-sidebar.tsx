@@ -110,8 +110,18 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                     {chapter.slides.length > 0 ? (
                       chapter.slides.map((slide, i) => {
                         const isActive = slide.key === currentSlideKey;
+                        const conceptSlides = chapter.slides.filter((s) => s.subConceptSlug === slide.subConceptSlug && s.subConceptSlug !== null);
+                        const isQuizLocked = slide.subConceptSlug?.includes("quiz") && slide.key !== conceptSlides[0]?.key;
                         return (
                           <li key={slide.key}>
+                            {isQuizLocked ? (
+                              <span className="flex cursor-default items-baseline gap-3 rounded-[8px] px-3 py-2 text-xs leading-5 text-foreground/30 select-none">
+                                <span className="shrink-0 text-[10px] tabular-nums">
+                                  {String(i + 1).padStart(2, "0")}
+                                </span>
+                                {slide.title}
+                              </span>
+                            ) : (
                             <Link
                               href={slide.href}
                               onClick={() => setOpen(false)}
@@ -130,6 +140,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                               </span>
                               {slide.title}
                             </Link>
+                            )}
                           </li>
                         );
                       })

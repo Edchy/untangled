@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Code_Pro } from "next/font/google";
+import { Cormorant_Garamond, Fira_Sans } from "next/font/google";
 import "./globals.css";
 
-const sourceCodePro = Source_Code_Pro({
+const firaSans = Fira_Sans({
   variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const cormorant = Cormorant_Garamond({
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceCodePro.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${firaSans.variable} ${cormorant.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

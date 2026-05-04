@@ -29,12 +29,15 @@ import { BinarySwitches, BinarySwitches3 } from "@/components/interactive/binary
 import { BinaryExplorer } from "@/components/interactive/binary-explorer";
 import { PunchCardReader } from "@/components/interactive/punch-card-reader";
 import { PunchCardIllustration } from "@/components/interactive/punch-card-illustration";
+import { InstructionsBody } from "@/components/interactive/instructions-body";
 import { FreeFormQuestion } from "@/components/interactive/free-form-question";
 import { QuestionResponse } from "@/components/interactive/question-response";
 import { QuizGate } from "@/components/interactive/quiz-gate";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const slideComponents: Record<string, ComponentType<any>> = {};
+export const slideComponents: Record<string, ComponentType<any>> = {
+  "01-the-machine/01-what-is-a-computer/11-instructions": InstructionsBody,
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const interactiveComponents: Record<string, ComponentType<any>> = {

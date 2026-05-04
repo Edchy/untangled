@@ -6,6 +6,7 @@ import { useChapterAnswers } from "./chapter-answers-context";
 
 const QUESTION_SEQUENCE = ["transistor", "abstraction", "binary"] as const;
 const MIN_CHARS = 10;
+const MAX_CHARS = 500;
 
 interface Props {
   questionId: string;
@@ -16,10 +17,10 @@ interface Props {
 
 export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: Props) {
   const router = useRouter();
-  const { answers, saveAnswer, submitAnswers } = useChapterAnswers();
+  const { answers, storageKey, saveAnswer, submitAnswers } = useChapterAnswers();
 
   const isLast = QUESTION_SEQUENCE[QUESTION_SEQUENCE.length - 1] === questionId;
-  const [text, setText] = useState(answers[questionId] ?? "");
+  const [text, setText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const isReady = text.trim().length >= MIN_CHARS;
@@ -29,6 +30,26 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
     textRef.current = text;
   }, [text]);
 
+  // Restore saved answer from localStorage after hydration
+  useEffect(() => {
+    let cancelled = false;
+
+    try {
+      const saved = localStorage.getItem(storageKey);
+      const savedText = saved ? JSON.parse(saved)?.answers?.[questionId] : null;
+      if (savedText) {
+        window.setTimeout(() => {
+          if (!cancelled) setText(String(savedText).slice(0, MAX_CHARS));
+        }, 0);
+      }
+    } catch {}
+
+    return () => {
+      cancelled = true;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     return () => {
       if (textRef.current.trim()) saveAnswer(questionId, textRef.current);
@@ -37,7 +58,9 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
   }, []);
 
   function handleInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setText(e.target.value);
+    const val = e.target.value;
+    setText(val);
+    saveAnswer(questionId, val);
     const el = e.target;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
@@ -53,28 +76,51 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
     router.push(nextHref, { transitionTypes: ["nav-forward"] });
   }
 
+  function handleSkip() {
+    const hasAnyAnswer = Object.entries({ ...answers, [questionId]: text }).some(
+      ([, answer]) => answer.trim().length > 0,
+    );
+
+    if (isLast && hasAnyAnswer && nextHref) {
+      submitAnswers(questionId, text.trim() ? text : "");
+      router.push(nextHref, { transitionTypes: ["nav-forward"] });
+      return;
+    }
+
+    const dest = isLast ? skipHref ?? nextHref : nextHref ?? skipHref;
+    if (dest) router.push(dest, { transitionTypes: ["nav-forward"] });
+  }
+
   return (
     <div className="w-full max-w-2xl">
       {bodyHtml && <div dangerouslySetInnerHTML={{ __html: bodyHtml }} />}
 
       <div className="mt-8">
-        <textarea
-          ref={textareaRef}
-          value={text}
-          onChange={handleInput}
-          placeholder="Write your answer here..."
-          rows={4}
-          spellCheck={false}
-          className="w-full resize-none rounded-[var(--radius)] border border-foreground/12 bg-transparent px-4 py-3 text-[1.0625rem] leading-[1.85] text-foreground/80 placeholder:text-foreground/28 focus:border-foreground/24 focus:outline-none"
-          style={{ overflow: "hidden" }}
-        />
+        <div className="relative">
+          <textarea
+            ref={textareaRef}
+            value={text}
+            onChange={handleInput}
+            placeholder="Write your answer here..."
+            maxLength={MAX_CHARS}
+            rows={4}
+            spellCheck={false}
+            className="w-full resize-none rounded-[var(--radius)] border border-foreground/12 bg-transparent px-4 py-3 pr-24 text-[1.0625rem] leading-[1.85] text-foreground/80 placeholder:text-foreground/28 focus:border-foreground/24 focus:outline-none"
+            style={{ overflow: "hidden" }}
+          />
+          <span className="pointer-events-none absolute right-3 top-3 font-mono text-[0.75rem] tabular-nums text-foreground/32">
+            {text.length}/{MAX_CHARS}
+          </span>
+        </div>
         <div className="mt-3 flex items-center justify-between">
-          <button
-            onClick={() => { const dest = skipHref ?? nextHref; if (dest) router.push(dest, { transitionTypes: ["nav-forward"] }); }}
-            className="text-[0.8125rem] text-foreground/52 transition-colors duration-150 hover:text-foreground/80"
-          >
-            Skip
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleSkip}
+              className="text-[0.8125rem] text-foreground/52 transition-colors duration-150 hover:text-foreground/80"
+            >
+              Skip
+            </button>
+          </div>
           <button
             onClick={handleSubmit}
             disabled={!isReady}

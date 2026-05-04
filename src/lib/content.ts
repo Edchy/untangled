@@ -19,10 +19,12 @@ export type Slide = {
   questionId: string | null;
   skipHref: string | null;
   backHref: string | null;
+  redirectHref: string | null;
   plainText: string;
   html: string;
   moduleSlug: string;
   conceptSlug: string;
+  subConceptSlug: string | null;
   slideSlug: string;
   href: string;
   key: string;
@@ -98,7 +100,7 @@ function toHtml(mdxBody: string): string {
         const citation = quoteLines.at(-1);
 
         return [
-          '<blockquote class="max-w-3xl border-y border-foreground/12 py-8 font-serif text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.05] text-foreground [text-wrap:balance]">',
+          '<blockquote class="max-w-3xl py-8 font-serif text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.05] text-foreground [text-wrap:balance]">',
           `<p>${renderInlineMarkdown(body)}</p>`,
           citation
             ? `<p class="mt-6 font-sans text-xs font-semibold uppercase leading-6 tracking-[0.18em] text-accent">${renderInlineMarkdown(citation)}</p>`
@@ -115,7 +117,7 @@ function toHtml(mdxBody: string): string {
       if (/^[01]{8}(?:\s+[01]{8})+$/.test(para.trim())) {
         const bytes = para.trim().split(/\s+/);
         return [
-          '<p class="mt-5 max-w-[45ch] font-mono text-[1.0625rem] font-semibold leading-[1.85] text-foreground/36 [font-variant-numeric:tabular-nums] first:mt-0">',
+          '<p class="mt-5 max-w-[60ch] font-mono text-[1.0625rem] font-semibold leading-[1.85] text-foreground/36 [font-variant-numeric:tabular-nums] first:mt-0">',
           bytes
             .map(
               (byte, byteIndex) =>
@@ -133,7 +135,7 @@ function toHtml(mdxBody: string): string {
       }
 
       const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
-      return `<p class="mt-5 max-w-[45ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
+      return `<p class="mt-5 max-w-[60ch] text-[1.0625rem] leading-[1.85] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
     })
     .join("\n");
 }
@@ -161,6 +163,7 @@ function toSlide(filePath: string): Slide {
     throw new Error(`Invalid content path: ${relative}`);
   }
 
+  const subConceptSlug = segments.length === 4 ? segments[2] : null;
   const slideSlug = fileName.replace(/\.mdx$/, "");
   const key = `${moduleSlug}/${conceptSlug}/${slideSlug}`;
 
@@ -178,10 +181,12 @@ function toSlide(filePath: string): Slide {
     questionId: data.question_id ? String(data.question_id) : null,
     skipHref: data.skip_href ? String(data.skip_href) : null,
     backHref: data.back_href ? String(data.back_href) : null,
+    redirectHref: data.redirect_href ? String(data.redirect_href) : null,
     plainText: extractPlainText(content),
     html: toHtml(content),
     moduleSlug,
     conceptSlug,
+    subConceptSlug,
     slideSlug,
     key,
     href: `/${moduleSlug}/${conceptSlug}/${slideSlug}`,

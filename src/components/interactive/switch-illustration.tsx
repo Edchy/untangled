@@ -1,9 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const SWITCH_CHANGE_EVENT = "untangled-switch-illustration-change";
+let switchIllustrationOn = false;
+
+function subscribeToSwitchChange(callback: () => void) {
+  window.addEventListener(SWITCH_CHANGE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener(SWITCH_CHANGE_EVENT, callback);
+  };
+}
+
+function getSwitchSnapshot() {
+  return switchIllustrationOn;
+}
+
+function getServerSwitchSnapshot() {
+  return false;
+}
+
+export function useSwitchIllustrationOn() {
+  return useSyncExternalStore(
+    subscribeToSwitchChange,
+    getSwitchSnapshot,
+    getServerSwitchSnapshot,
+  );
+}
+
+export function setSwitchIllustrationOn(nextOn: boolean) {
+  switchIllustrationOn = nextOn;
+  window.dispatchEvent(new Event(SWITCH_CHANGE_EVENT));
+}
 
 export function SwitchIllustration() {
-  const [on, setOn] = useState(false);
+  const on = useSwitchIllustrationOn();
 
   const inkColor = "var(--foreground)";
   const accentColor = "#d85a30";
@@ -13,7 +45,7 @@ export function SwitchIllustration() {
     <div className="mt-10">
       <button
         type="button"
-        onClick={() => setOn((v) => !v)}
+        onClick={() => setSwitchIllustrationOn(!on)}
         aria-label={on ? "Turn switch off" : "Turn switch on"}
         className="group block w-full cursor-pointer border-0 bg-transparent p-0 text-left"
       >
@@ -103,19 +135,7 @@ export function SwitchIllustration() {
             />
           </g>
         </svg>
-
-        {/* State label */}
-        <p
-          className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-200"
-          style={{ color: on ? accentColor : "var(--foreground)", opacity: on ? 1 : 0.36 }}
-        >
-          {on ? "On — 1" : "Off — 0"}
-        </p>
       </button>
-
-      <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/28">
-        Click to toggle
-      </p>
     </div>
   );
 }

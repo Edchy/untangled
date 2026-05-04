@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createElement } from "react";
 import { BookSidebar } from "@/components/ui/book-sidebar";
 import { RevealAnswer } from "@/components/ui/reveal-answer";
@@ -63,6 +63,17 @@ export default async function SlidePage({ params }: SlidePageProps) {
 
   if (!current) notFound();
 
+  if (current.subConceptSlug?.includes("quiz")) {
+    const allSlides = getSlides();
+    const conceptSlides = allSlides.filter(
+      (s) => s.moduleSlug === current.moduleSlug && s.subConceptSlug === current.subConceptSlug
+    );
+    const entrySlide = conceptSlides[0];
+    if (entrySlide && entrySlide.key !== current.key) {
+      redirect(entrySlide.href);
+    }
+  }
+
   const SlideContent = getSlideComponent(current.key);
 
   const modules = getModuleList();
@@ -80,6 +91,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
   if (next) interactiveProps.nextHref = next.href;
   if (current.component === "free-form-question") interactiveProps.bodyHtml = current.html;
   if (current.skipHref) interactiveProps.skipHref = current.skipHref;
+  if (current.redirectHref) interactiveProps.redirectHref = current.redirectHref;
 
   const slideBody = current.cols === 1 ? (
     <div className={`flex w-full flex-col items-center ${InteractiveContent ? "max-w-5xl" : "max-w-2xl"}`}>
@@ -88,7 +100,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
       ) : (
         <div className={textColumnClassName}>
           {!current.hideTitle && (
-            <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
+            <h1 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.2] text-foreground/68 [text-wrap:balance]">
               {current.title}
             </h1>
           )}
@@ -102,7 +114,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
         <>
           <div className={textColumnClassName}>
             {!current.hideTitle && (
-              <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
+              <h1 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.2] text-foreground/68 [text-wrap:balance]">
                 {current.title}
               </h1>
             )}
@@ -119,7 +131,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
           </div>
           <div className={textColumnClassName}>
             {!current.hideTitle && (
-              <h1 className="mb-3 text-[1.0625rem] font-semibold leading-[1.85] text-foreground/40">
+              <h1 className="mb-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.2] text-foreground/68 [text-wrap:balance]">
                 {current.title}
               </h1>
             )}
