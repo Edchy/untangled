@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createElement } from "react";
 import { BookSidebar } from "@/components/ui/book-sidebar";
 import { Heading } from "@/components/ui/typography";
@@ -64,17 +64,6 @@ export default async function SlidePage({ params }: SlidePageProps) {
   const current = getSlide(module, concept, slide);
 
   if (!current) notFound();
-
-  if (current.subConceptSlug?.includes("quiz")) {
-    const allSlides = getSlides();
-    const conceptSlides = allSlides.filter(
-      (s) => s.moduleSlug === current.moduleSlug && s.subConceptSlug === current.subConceptSlug
-    );
-    const entrySlide = conceptSlides[0];
-    if (entrySlide && entrySlide.key !== current.key) {
-      redirect(entrySlide.href);
-    }
-  }
 
   const SlideContent = getSlideComponent(current.key);
 

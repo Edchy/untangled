@@ -11,19 +11,30 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   const { module, concept, slide } = await params;
   const current = getSlide(module, concept, slide);
   const { previous, next } = current ? getAdjacentSlides(current) : { previous: undefined, next: undefined };
+  const isQuizQuestion = current?.component === "free-form-question";
+  const nextHref = isQuizQuestion
+    ? current?.skipHref ?? next?.href
+    : current?.hideNavNext
+      ? current?.skipHref ?? undefined
+      : next?.href;
+  const nextLabel = isQuizQuestion
+    ? "skip question"
+    : current?.hideNavNext && current?.skipHref
+      ? "skip quiz"
+      : undefined;
 
   return (
     <>
       {children}
       <SlideGestures
         previousHref={current?.backHref ?? previous?.href}
-        nextHref={current?.hideNavNext ? current?.skipHref ?? undefined : next?.href}
-        disableNext={current?.hideNavNext && !!current?.skipHref}
+        nextHref={nextHref}
+        disableNext={!isQuizQuestion && current?.hideNavNext && !!current?.skipHref}
       />
       <SlideNav
         previousHref={current?.backHref ?? previous?.href}
-        nextHref={current?.hideNavNext ? current?.skipHref ?? undefined : next?.href}
-        nextLabel={current?.hideNavNext && current?.skipHref ? "skip quiz" : undefined}
+        nextHref={nextHref}
+        nextLabel={nextLabel}
       />
     </>
   );

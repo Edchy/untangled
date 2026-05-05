@@ -18,7 +18,7 @@ export function SlideNav({ previousHref, nextHref, nextLabel }: SlideNavProps) {
           href={previousHref}
           transitionTypes={["nav-back"]}
           aria-label="Previous slide"
-          className="text-foreground/36 transition-colors duration-150 hover:text-foreground"
+          className="text-foreground/36 transition-colors duration-150 hover:text-accent"
         >
           <ArrowLeft size={16} />
         </Link>
@@ -30,10 +30,14 @@ export function SlideNav({ previousHref, nextHref, nextLabel }: SlideNavProps) {
           href={nextHref}
           transitionTypes={["nav-forward"]}
           aria-label="Next slide"
-          className="flex items-center gap-2 text-foreground/36 transition-colors duration-150 hover:text-foreground"
+          className="group relative flex h-4 w-4 items-center text-foreground/36 transition-colors duration-150 hover:text-accent"
         >
           <ArrowRight size={16} />
-          {nextLabel && <span className="text-xs text-foreground/36">({nextLabel})</span>}
+          {nextLabel && (
+            <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs text-foreground/36 transition-colors duration-150 group-hover:text-accent">
+              ({nextLabel})
+            </span>
+          )}
         </Link>
       ) : null}
     </nav>

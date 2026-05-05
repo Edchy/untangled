@@ -103,6 +103,16 @@ Recommended opacity ranges:
 - Do not rely on color alone. The active path should also differ by weight, placement, or motion.
 - Honor reduced-motion preferences when adding animation.
 
+## Illustrate the Idea, Not the Object
+
+When a slide has a strong textual metaphor — a desk, a chef, a relay race — the illustration should inhabit that metaphor, not draw the technical thing the metaphor describes.
+
+A CPU slide should not show a chip. It should show a conductor mid-beat, or a chef reading one ticket at a time. A GPU slide should not show a circuit board. It should show an ant colony. The object is the lesson. The metaphor is the illustration.
+
+Ask: *what is the concept doing, not what does it look like?*
+
+Illustrations that show the real thing (chip, card, cabinet) are often doing less work than illustrations that show what the thing *is like*. Prefer the latter.
+
 ## Common Patterns
 
 ### Interface Over Hidden System
@@ -120,6 +130,29 @@ Use for “underneath” moments. Keep the outer object recognizable, then expos
 ### Scale Field
 
 Use for “many tiny things” moments. Repeat simple marks with low opacity, then highlight one or two examples.
+
+### Paired Contrast
+
+Use when two things differ by one dimension — speed, permanence, access, quantity. Show both objects side by side at the same scale. The spatial relationship between them carries the lesson. Used for RAM vs. storage (desk vs. filing cabinet), CPU vs. GPU (one chef vs. colony), and abstraction vs. implementation (switch face vs. wiring behind wall).
+
+### Collapse to Substrate
+
+Use for “it's all the same stuff” moments. Show several different objects — a letter, a color swatch, a waveform, a pixel — and overlay them with the same underlying pattern (binary stream, transistor grid). The overlay reveals that the diversity above is an illusion; the substrate is always the same.
+
+## Motif Vocabulary
+
+These motifs are part of the shared visual language for Untangled Chapter 1. Reuse them rather than inventing new ones for the same concept.
+
+### Established
+
+| Motif | Concept | Component |
+|---|---|---|
+| Light switch (interactive) | Decision, on/off, transistor | `light-switch` |
+| Iceberg | Abstraction, hidden complexity | `iceberg-illustration` |
+| Ant colony | GPU, parallel workers, emergent intelligence | `GpuIllustration` |
+| Stacked tilted planes | Abstraction layers | `LayersIllustration` |
+| Perspective dot field (zoom tunnel) | Transistor scale, many tiny things | `TransistorScaleIllustration` |
+
 
 ## Before Shipping
 

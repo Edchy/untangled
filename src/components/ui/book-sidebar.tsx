@@ -52,7 +52,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
         id="toc-trigger"
         onClick={() => setOpen((o) => !o)}
         aria-label="Open table of contents"
-        className="fixed left-4 top-4 z-40 flex flex-col items-start border border-foreground/12 bg-background px-3 py-2 text-left transition-colors hover:border-foreground/24"
+        className="fixed left-4 top-4 z-40 flex flex-col items-start border border-foreground/12 bg-background px-3 py-2 text-left transition-colors hover:border-accent/40"
       >
         <span className="text-[10px] font-medium tabular-nums text-foreground/36">
           {currentModule?.title ?? "Contents"}
@@ -78,7 +78,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
           {openModule ? (
             <button
               onClick={() => setOpenModule(null)}
-              className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-foreground"
+              className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-accent"
             >
               <span aria-hidden>←</span>
               All chapters
@@ -89,7 +89,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
           <button
             onClick={() => setOpen(false)}
             aria-label="Close"
-            className="flex h-7 w-7 items-center justify-center rounded-control text-foreground/36 transition-colors hover:bg-foreground/6 hover:text-foreground"
+            className="flex h-7 w-7 items-center justify-center rounded-control text-foreground/36 transition-colors hover:bg-foreground/6 hover:text-accent"
           >
             <X size={14} />
           </button>
@@ -129,7 +129,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                                 "flex items-baseline gap-3 rounded-control px-3 py-2 text-xs leading-5 transition-colors",
                                 isActive
                                   ? "font-medium text-accent"
-                                  : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
+                                  : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
                               ].join(" ")}
                             >
                               <span className={[
@@ -163,7 +163,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                       onClick={() => setOpenModule(chapter.slug)}
                       className={[
                         "flex w-full items-baseline gap-3 rounded-control px-3 py-2.5 text-left transition-colors",
-                        hasActive ? "text-foreground" : "text-foreground/44 hover:bg-foreground/4 hover:text-foreground/80",
+                        hasActive ? "text-foreground" : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
                       ].join(" ")}
                     >
                       <span className="text-xs font-medium leading-5">

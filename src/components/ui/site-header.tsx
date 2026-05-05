@@ -12,10 +12,10 @@ export function SiteHeader() {
           Untangled
         </Link>
         <Text as="nav" variant="caption" className="flex items-center gap-5 text-sm text-foreground/70">
-          <Link className="transition hover:text-foreground" href="/modules">
+          <Link className="hover:text-accent" href="/modules">
             Modules
           </Link>
-          <Link className="transition hover:text-foreground" href="/01-the-machine/01-what-is-a-computer/01-try-it">
+          <Link className="hover:text-accent" href="/01-the-machine/01-what-is-a-computer/01-try-it">
             Start
           </Link>
         </Text>

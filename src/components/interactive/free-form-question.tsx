@@ -12,13 +12,12 @@ const MAX_CHARS = 500;
 interface Props {
   questionId: string;
   nextHref?: string;
-  skipHref?: string;
   bodyHtml?: string;
 }
 
-export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: Props) {
+export function FreeFormQuestion({ questionId, nextHref, bodyHtml }: Props) {
   const router = useRouter();
-  const { answers, storageKey, saveAnswer, submitAnswers } = useChapterAnswers();
+  const { storageKey, saveAnswer, submitAnswers } = useChapterAnswers();
 
   const isLast = QUESTION_SEQUENCE[QUESTION_SEQUENCE.length - 1] === questionId;
   const [text, setText] = useState("");
@@ -77,21 +76,6 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
     router.push(nextHref, { transitionTypes: ["nav-forward"] });
   }
 
-  function handleSkip() {
-    const hasAnyAnswer = Object.entries({ ...answers, [questionId]: text }).some(
-      ([, answer]) => answer.trim().length > 0,
-    );
-
-    if (isLast && hasAnyAnswer && nextHref) {
-      submitAnswers(questionId, text.trim() ? text : "");
-      router.push(nextHref, { transitionTypes: ["nav-forward"] });
-      return;
-    }
-
-    const dest = isLast ? skipHref ?? nextHref : nextHref ?? skipHref;
-    if (dest) router.push(dest, { transitionTypes: ["nav-forward"] });
-  }
-
   return (
     <div className="w-full max-w-2xl">
       {bodyHtml && <div dangerouslySetInnerHTML={{ __html: bodyHtml }} />}
@@ -113,17 +97,7 @@ export function FreeFormQuestion({ questionId, nextHref, skipHref, bodyHtml }: P
             {text.length}/{MAX_CHARS}
           </span>
         </div>
-        <div className="mt-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              onClick={handleSkip}
-              variant="quiet"
-              size="sm"
-              className="px-0"
-            >
-              Skip
-            </Button>
-          </div>
+        <div className="mt-3 flex items-center justify-end">
           <Button
             onClick={handleSubmit}
             disabled={!isReady}

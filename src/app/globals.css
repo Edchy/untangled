@@ -127,8 +127,14 @@ body {
     color 400ms ease;
 }
 
+a,
+button {
+  cursor: pointer;
+}
+
 a {
   color: inherit;
+  transition: color 150ms;
 }
 
 code {
@@ -217,5 +223,34 @@ html[data-theme="light"] {
   ::view-transition-group(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
+  }
+}
+
+/* Landing page */
+.landing-nav-link {
+  font-size: var(--ds-step--2);
+  font-weight: 600;
+  letter-spacing: var(--ds-tracking-label);
+  text-transform: uppercase;
+  color: var(--foreground) !important;
+  transition: color var(--ds-duration-fast) var(--ds-ease-standard);
+}
+
+.landing-nav-link:hover {
+  color: var(--accent);
+}
+
+/* SVG logos have fill="white" — invert on light backgrounds so they read as dark ink */
+.logo-adaptive {
+  filter: invert(1);
+}
+
+html[data-theme="dark"] .logo-adaptive {
+  filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .logo-adaptive {
+    filter: none;
   }
 }

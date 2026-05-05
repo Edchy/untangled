@@ -7,11 +7,11 @@ type ButtonVariant = "primary" | "ghost" | "quiet" | "toggle" | "icon";
 type ButtonSize = "sm" | "md" | "lg";
 
 const baseClassName =
-  "inline-flex shrink-0 items-center justify-center rounded-control font-sans font-semibold transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-default disabled:opacity-28";
+  "inline-flex shrink-0 cursor-pointer items-center justify-center rounded-control font-sans font-semibold transition-transform duration-150 active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-default disabled:opacity-28";
 
 const variantClassNames: Record<ButtonVariant, string> = {
   primary:
-    "border border-foreground bg-foreground text-background hover:border-accent hover:bg-accent hover:text-background",
+    "border border-foreground bg-foreground !text-background hover:border-accent hover:bg-accent",
   ghost:
     "border border-foreground bg-transparent text-foreground hover:border-accent hover:text-accent",
   quiet:

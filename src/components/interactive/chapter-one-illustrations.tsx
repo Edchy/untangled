@@ -167,37 +167,76 @@ export function LayersIllustration() {
   );
 }
 
+// Knotted string → taut parallel lines.
+// Left: a dense tangle — the same complexity, before anyone has taken it apart.
+// Right: the same string pulled into ordered, readable lines.
+// The knot didn't disappear. It was organized. One thread at a time.
 export function ComplexityDissolvesIllustration() {
+  // The taut lines on the right — each one a strand that was in the knot
+  const strands = [
+    { y: 132, wobble: "C370 128 400 134 440 130", accent: false },
+    { y: 158, wobble: "C372 154 402 160 440 157", accent: false },
+    { y: 184, wobble: "C368 180 398 186 440 183", accent: true  },
+    { y: 210, wobble: "C374 206 404 212 440 209", accent: false },
+    { y: 236, wobble: "C370 232 400 238 440 235", accent: false },
+    { y: 262, wobble: "C372 258 402 264 440 261", accent: false },
+    { y: 288, wobble: "C368 284 398 290 440 287", accent: false },
+  ];
+
   return (
     <RoughSvg viewBox="0 0 560 420">
-      <g opacity="0.9">
-        <circle cx="138" cy="202" r="86" fill="var(--background)" stroke="currentColor" strokeOpacity="0.46" strokeWidth="2" />
-        <path d="M80 170 C126 74 196 296 250 154 M76 218 C138 318 184 80 252 238 M94 256 C128 138 214 146 222 268 M68 194 C148 246 190 126 254 192" fill="none" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.8" />
-        <path d="M88 230 C126 176 164 172 196 202 C218 224 232 224 254 204" fill="none" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2.7" />
-      </g>
+      {/* === LEFT: the knot === */}
+      {/* Outer mass of the knot — filled tangle */}
+      <path
+        d="M58 196 C62 132 96 100 138 108 C178 116 198 148 194 196 C198 244 178 278 138 284 C96 292 60 264 58 196 Z"
+        fill="var(--background)"
+        stroke="currentColor"
+        strokeOpacity="0.44"
+        strokeWidth="1.8"
+      />
 
-      <path d="M248 204 C292 184 306 164 330 130" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
-      <path d="M252 204 C300 204 312 204 340 204" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
-      <path d="M248 204 C292 224 306 244 330 278" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.4" />
+      {/* Tangled strands inside the knot — dense, directionless */}
+      <path d="M80 160 C110 140 160 180 140 200 C120 220 80 200 100 170 C122 140 160 160 148 190 C136 220 90 210 86 186 C82 162 118 148 136 168 C154 188 148 216 126 220 C104 224 82 204 88 182" fill="none" stroke="currentColor" strokeOpacity="0.38" strokeWidth="1.6" />
+      <path d="M96 240 C130 220 168 244 152 262 C136 278 100 260 112 242 C126 224 158 238 150 256 C142 272 112 268 104 252" fill="none" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.5" />
+      <path d="M156 148 C172 164 168 190 150 196 M106 224 C118 238 136 234 144 220" fill="none" stroke="currentColor" strokeOpacity="0.24" strokeWidth="1.4" />
 
-      <g transform="translate(330 80)">
-        <path d="M0 36 C44 22 108 22 160 36 L146 86 C98 76 46 76 0 88 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.62" strokeWidth="1.8" />
-        <path d="M30 58 C62 50 98 50 130 58" fill="none" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2.2" />
-        <path d="M18 74 C54 66 98 66 140 74" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
-      </g>
-      <g transform="translate(342 166)">
-        <path d="M0 34 C42 22 102 22 150 34 L136 82 C92 74 44 74 0 84 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.8" />
-        <path d="M28 56 H120" stroke="var(--accent)" strokeOpacity="0.64" strokeWidth="2.2" />
-        <path d="M22 70 H132" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
-      </g>
-      <g transform="translate(330 250)">
-        <path d="M0 34 C44 22 108 22 160 34 L146 84 C96 74 44 74 0 86 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.8" />
-        <path d="M34 54 C60 68 100 68 126 54" fill="none" stroke="var(--accent)" strokeOpacity="0.64" strokeWidth="2.2" />
-        <path d="M20 70 C56 78 104 78 142 70" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
-      </g>
+      {/* One accent strand — the thread being pulled out, leaving the knot */}
+      <path
+        d="M148 192 C172 188 200 186 234 184"
+        fill="none"
+        stroke="var(--accent)"
+        strokeOpacity="0.72"
+        strokeWidth="2.4"
+      />
 
-      <path d="M354 58 C394 40 456 40 502 58" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
-      <path d="M322 342 C378 370 454 368 512 338" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+      {/* === ARROW — the act of pulling taut === */}
+      <path
+        d="M230 210 H302"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.22"
+        strokeWidth="1.6"
+      />
+      <path d="M294 204 L308 210 L294 216" fill="none" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.6" />
+
+      {/* === RIGHT: the taut lines === */}
+      {strands.map((s) => (
+        <path
+          key={s.y}
+          d={`M316 ${s.y} ${s.wobble}`}
+          fill="none"
+          stroke={s.accent ? "var(--accent)" : "currentColor"}
+          strokeOpacity={s.accent ? 0.8 : 0.38}
+          strokeWidth={s.accent ? 2.2 : 1.5}
+        />
+      ))}
+
+      {/* Anchor points left and right of the taut section */}
+      <circle cx="316" cy="210" r="5" fill="currentColor" fillOpacity="0.22" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1.3" />
+      <circle cx="440" cy="209" r="5" fill="currentColor" fillOpacity="0.22" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1.3" />
+
+      {/* Ground shadow */}
+      <path d="M72 340 C150 360 410 360 488 340" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.4" />
     </RoughSvg>
   );
 }
@@ -1090,6 +1129,354 @@ export function BitsRainIllustration() {
         <circle cx="404" cy="312" r="8" />
       </g>
       <path d="M102 352 C178 374 382 374 458 350" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
+    </RoughSvg>
+  );
+}
+
+// Conductor — CPU metaphor.
+// One figure, baton raised, commanding the full orchestra.
+// The conductor only moves one beat at a time; the music feels simultaneous.
+export function ConductorIllustration() {
+  return (
+    <RoughSvg viewBox="0 0 560 420">
+      {/* Orchestra pit arc — faint, wide, subordinate */}
+      <path
+        d="M54 330 C160 410 400 410 506 330"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.1"
+        strokeWidth="1.4"
+      />
+
+      {/* Orchestra players — ghostly, peripheral */}
+      {[
+        { x: 78, y: 302 }, { x: 126, y: 318 }, { x: 174, y: 326 },
+        { x: 222, y: 332 }, { x: 270, y: 334 }, { x: 318, y: 332 },
+        { x: 366, y: 326 }, { x: 414, y: 318 }, { x: 462, y: 302 },
+      ].map((p, i) => (
+        <g key={i} transform={`translate(${p.x} ${p.y})`}>
+          <circle cx="0" cy="-16" r="8" fill="var(--background)" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.2" />
+          <path d="M-10 0 C-8 -12 8 -12 10 0 Z" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.2" />
+          {/* Instrument suggestion */}
+          <path d="M-6 -8 L-14 4 M6 -8 L14 4" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1.1" />
+        </g>
+      ))}
+
+      {/* Conductor — central, sharp */}
+      <g transform="translate(280 120)">
+        {/* Head */}
+        <circle cx="0" cy="-18" r="16" fill="var(--background)" stroke="currentColor" strokeOpacity="0.72" strokeWidth="1.8" />
+
+        {/* Body */}
+        <path d="M-22 10 C-18 -4 18 -4 22 10 L18 72 H-18 Z" fill={fill.blue} stroke="currentColor" strokeOpacity="0.58" strokeWidth="1.7" />
+
+        {/* Left arm — held out for balance */}
+        <path d="M-22 18 C-42 24 -58 34 -72 44" fill="none" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.8" />
+
+        {/* Right arm — raised, baton extended upward */}
+        <path d="M22 18 C38 8 52 -8 62 -28" fill="none" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.8" />
+
+        {/* Baton — the active element */}
+        <line x1="58" y1="-22" x2="102" y2="-76" stroke="var(--accent)" strokeOpacity="0.82" strokeWidth="2.4" strokeLinecap="round" />
+        <circle cx="104" cy="-78" r="4" fill="var(--accent)" fillOpacity="0.72" />
+
+        {/* Legs */}
+        <path d="M-10 72 L-14 118 M10 72 L14 118" fill="none" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.7" />
+        <path d="M-20 118 H-8 M8 118 H20" stroke="currentColor" strokeOpacity="0.44" strokeWidth="1.6" />
+
+        {/* Podium */}
+        <path d="M-34 124 H34 L28 140 H-28 Z" fill={fill.amber} stroke="currentColor" strokeOpacity="0.46" strokeWidth="1.5" />
+      </g>
+
+      {/* Beat arc — one beat at a time, accent color */}
+      <path
+        d="M310 76 C340 56 370 68 374 92"
+        fill="none"
+        stroke="var(--accent)"
+        strokeOpacity="0.38"
+        strokeWidth="1.8"
+        strokeDasharray="4 8"
+      />
+
+      {/* Sound lines radiating to orchestra — faint */}
+      {[
+        "M280 240 C220 278 170 290 132 296",
+        "M280 240 C280 286 280 296 280 304",
+        "M280 240 C340 278 390 290 428 296",
+      ].map((d, i) => (
+        <path key={i} d={d} fill="none" stroke="var(--accent)" strokeOpacity="0.18" strokeWidth="1.5" />
+      ))}
+
+      {/* Ground shadow */}
+      <path d="M112 358 C186 380 374 380 448 356" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.4" />
+    </RoughSvg>
+  );
+}
+
+// Pipe organ — processor metaphor.
+// Each pipe does one simple thing (one pitch). Wire enough together under one console
+// and you can play any piece of music ever written. Same as the processor:
+// simple operations, organized, producing anything.
+export function ChefIllustration() {
+  // Pipes: varying heights, grouped in a bank. Tallest = lowest note. Simple.
+  const pipes = [
+    { x: 88,  h: 260, w: 28, label: "add" },
+    { x: 126, h: 214, w: 26, label: "compare" },
+    { x: 162, h: 174, w: 26, label: "move" },
+    { x: 198, h: 142, w: 24, label: "" },
+    { x: 230, h: 118, w: 24, label: "" },
+    { x: 260, h: 98,  w: 22, label: "" },
+    { x: 288, h: 82,  w: 22, label: "" },
+    { x: 314, h: 70,  w: 20, label: "" },
+    { x: 338, h: 60,  w: 20, label: "" },
+    { x: 360, h: 52,  w: 18, label: "" },
+    { x: 382, h: 46,  w: 18, label: "" },
+    { x: 402, h: 40,  w: 16, label: "" },
+    { x: 420, h: 36,  w: 16, label: "" },
+    { x: 438, h: 32,  w: 14, label: "" },
+  ];
+
+  // Accent on first three — the named operations, the ones the slide mentions
+  const accentPipes = new Set([0, 1, 2]);
+
+  return (
+    <RoughSvg viewBox="0 0 560 420">
+      {/* Wind chest / base — the console that ties them all together */}
+      <path d="M68 318 H472 L460 354 H80 Z" fill={fill.amber} stroke="currentColor" strokeOpacity="0.54" strokeWidth="1.8" />
+      <path d="M80 354 H460 L450 376 H90 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.4" />
+
+      {/* Keys — a simple keyboard strip suggesting "any program" */}
+      {Array.from({ length: 18 }).map((_, i) => (
+        <rect
+          key={i}
+          x={112 + i * 18}
+          y={358}
+          width="14"
+          height="22"
+          rx="2"
+          fill="var(--background)"
+          stroke="currentColor"
+          strokeOpacity={i === 4 ? 0.72 : 0.3}
+          strokeWidth={i === 4 ? 1.6 : 1.1}
+        />
+      ))}
+      {/* One key pressed — accent */}
+      <rect x="184" y="360" width="14" height="18" rx="2" fill="var(--accent)" fillOpacity="0.28" stroke="var(--accent)" strokeOpacity="0.64" strokeWidth="1.4" />
+
+      {/* Pipes */}
+      {pipes.map((pipe, i) => {
+        const isAccent = accentPipes.has(i);
+        const top = 318 - pipe.h;
+        return (
+          <g key={pipe.x}>
+            <rect
+              x={pipe.x}
+              y={top}
+              width={pipe.w}
+              height={pipe.h}
+              rx="3"
+              fill={isAccent ? fill.blue : "var(--background)"}
+              stroke={isAccent ? "var(--accent)" : "currentColor"}
+              strokeOpacity={isAccent ? 0.72 : 0.36}
+              strokeWidth={isAccent ? 1.9 : 1.3}
+            />
+            {/* Opening slit at top of each pipe */}
+            <path
+              d={`M${pipe.x + 4} ${top + 8} H${pipe.x + pipe.w - 4}`}
+              stroke={isAccent ? "var(--accent)" : "currentColor"}
+              strokeOpacity={isAccent ? 0.6 : 0.28}
+              strokeWidth="1.4"
+            />
+          </g>
+        );
+      })}
+
+      {/* Labels on the three named pipes */}
+      {pipes.slice(0, 3).map((pipe) => (
+        <text
+          key={pipe.x}
+          x={pipe.x + pipe.w / 2}
+          y={318 - pipe.h - 10}
+          textAnchor="middle"
+          className="font-mono text-[11px] font-semibold"
+          fill="var(--accent)"
+          fillOpacity="0.72"
+        >
+          {pipe.label}
+        </text>
+      ))}
+
+      {/* Sound lines rising from accent pipes — active path */}
+      {[88 + 14, 126 + 13, 162 + 13].map((cx, i) => (
+        <path
+          key={i}
+          d={`M${cx} ${318 - pipes[i].h - 8} C${cx - 8} ${318 - pipes[i].h - 36} ${cx + 8} ${318 - pipes[i].h - 56} ${cx} ${318 - pipes[i].h - 72}`}
+          fill="none"
+          stroke="var(--accent)"
+          strokeOpacity="0.36"
+          strokeWidth="1.6"
+          strokeDasharray="3 6"
+        />
+      ))}
+
+      {/* Brace — ties all pipes together visually */}
+      <path
+        d="M82 318 C82 290 86 270 88 260 C90 250 90 240 88 220 C92 224 96 224 100 220 C98 240 98 250 100 260 C102 270 106 290 106 318"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.22"
+        strokeWidth="1.4"
+      />
+
+      <path d="M112 388 C190 404 370 404 448 388" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.4" />
+    </RoughSvg>
+  );
+}
+
+// Desk — RAM metaphor.
+// Things fanned out on a surface. One is active (accent). Everything within arm's reach.
+// The idea: fast, right there, but gone when you leave.
+export function DeskIllustration() {
+  // Papers / objects spread across the desk surface, slightly overlapping
+  const items = [
+    { x: 92,  y: 188, w: 96,  h: 124, r: -6,  active: false, fill: fill.sage },
+    { x: 168, y: 164, w: 112, h: 138, r: 3,   active: true,  fill: fill.blue },
+    { x: 278, y: 178, w: 100, h: 128, r: -2,  active: false, fill: fill.amber },
+    { x: 362, y: 194, w: 88,  h: 112, r: 7,   active: false, fill: "var(--background)" },
+  ];
+
+  return (
+    <RoughSvg viewBox="0 0 560 420">
+      {/* Desk surface — wide, flat, dominant */}
+      <path
+        d="M48 286 H512 L496 332 H32 Z"
+        fill={fill.sage}
+        stroke="currentColor"
+        strokeOpacity="0.5"
+        strokeWidth="1.8"
+      />
+      {/* Desk front face */}
+      <path
+        d="M32 332 H496 L484 362 H22 Z"
+        fill="var(--background)"
+        stroke="currentColor"
+        strokeOpacity="0.3"
+        strokeWidth="1.4"
+      />
+      {/* Desk legs */}
+      <path
+        d="M58 362 L52 400 M484 362 L490 400 M160 360 L156 396 M400 360 L404 396"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.38"
+        strokeWidth="1.7"
+      />
+
+      {/* Items spread across the desk */}
+      {items.map((item, i) => (
+        <g key={i} transform={`translate(${item.x} ${item.y}) rotate(${item.r} ${item.w / 2} ${item.h / 2})`}>
+          <rect
+            width={item.w}
+            height={item.h}
+            rx="4"
+            fill={item.fill}
+            stroke={item.active ? "var(--accent)" : "currentColor"}
+            strokeOpacity={item.active ? 0.78 : 0.4}
+            strokeWidth={item.active ? 2.1 : 1.4}
+          />
+          {/* Simple lines suggesting content */}
+          <path
+            d={`M14 28 H${item.w - 14} M14 46 H${item.w - 22} M14 64 H${item.w - 18}`}
+            stroke={item.active ? "var(--accent)" : "currentColor"}
+            strokeOpacity={item.active ? 0.38 : 0.18}
+            strokeWidth="1.2"
+          />
+        </g>
+      ))}
+
+      {/* Hand reaching for the active item — gesture of immediacy */}
+      <path
+        d="M266 118 C258 142 240 168 224 188"
+        fill="none"
+        stroke="var(--accent)"
+        strokeOpacity="0.52"
+        strokeWidth="2"
+      />
+      {/* Fingertip */}
+      <circle cx="222" cy="190" r="5" fill="var(--accent)" fillOpacity="0.44" />
+
+      {/* Ground shadow */}
+      <path d="M96 400 C190 412 370 412 466 400" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.4" />
+    </RoughSvg>
+  );
+}
+
+// Stone tablet — storage metaphor.
+// Carved into stone: survives when the power goes off.
+// The inscription is the data. The medium is permanent.
+// Contrast with DeskIllustration: that is volatile, immediate; this is durable, slow.
+export function FilingCabinetIllustration() {
+  // Lines of carved text — suggest files/data without being literal
+  const lines = [
+    { y: 148, w: 188, accent: false },
+    { y: 172, w: 156, accent: false },
+    { y: 196, w: 174, accent: true  },
+    { y: 220, w: 164, accent: false },
+    { y: 244, w: 142, accent: false },
+    { y: 268, w: 168, accent: false },
+  ];
+
+  return (
+    <RoughSvg viewBox="0 0 560 420">
+      {/* Stone block — heavy, slightly irregular */}
+      <path
+        d="M118 88 C166 74 394 74 442 88 L448 328 C394 344 166 346 112 330 Z"
+        fill={fill.amber}
+        stroke="currentColor"
+        strokeOpacity="0.62"
+        strokeWidth="2"
+      />
+
+      {/* Stone texture — subtle diagonal grain */}
+      <path
+        d="M132 108 C200 104 340 106 428 110 M128 140 C196 136 344 138 430 142 M126 200 C194 196 346 198 432 202 M124 260 C192 256 348 258 434 262 M122 310 C190 306 350 308 436 312"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.08"
+        strokeWidth="1.2"
+      />
+
+      {/* Carved inscriptions — grooves cut into the stone */}
+      {lines.map((line) => (
+        <path
+          key={line.y}
+          d={`M${280 - line.w / 2} ${line.y} H${280 + line.w / 2}`}
+          stroke={line.accent ? "var(--accent)" : "currentColor"}
+          strokeOpacity={line.accent ? 0.74 : 0.34}
+          strokeWidth={line.accent ? 2.4 : 1.6}
+        />
+      ))}
+
+      {/* Chisel mark at the active line — tool mid-stroke */}
+      <g transform="translate(378 188)">
+        {/* Chisel body */}
+        <path d="M0 0 L32 -48" stroke="currentColor" strokeOpacity="0.56" strokeWidth="2.2" />
+        {/* Chisel blade */}
+        <path d="M-6 4 L6 -4 L0 0 Z" fill="var(--accent)" fillOpacity="0.6" stroke="var(--accent)" strokeOpacity="0.72" strokeWidth="1.4" />
+      </g>
+
+      {/* Crack — suggestion of age, permanence */}
+      <path
+        d="M346 96 C350 134 344 158 348 196 C352 218 348 238 350 268"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.14"
+        strokeWidth="1.2"
+      />
+
+      {/* Ground shadow */}
+      <path d="M112 340 C190 366 370 366 448 340" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.4" />
+      <path d="M130 354 C200 374 362 374 432 354" fill="none" stroke="currentColor" strokeOpacity="0.07" strokeWidth="1.4" />
     </RoughSvg>
   );
 }

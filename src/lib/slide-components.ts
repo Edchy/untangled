@@ -10,12 +10,16 @@ import {
   BinaryToEverythingIllustration,
   ChairIllustration,
   CharacterMappingIllustration,
+  ChefIllustration,
   ComplexityDissolvesIllustration,
   ComputerExplodedIllustration,
   ComputerStackIllustration,
+  ConductorIllustration,
   CpuIllustration,
+  DeskIllustration,
   EniacIllustration,
   EverydayObjectsIllustration,
+  FilingCabinetIllustration,
   GpuIllustration,
   HumanComputersIllustration,
   HumanStackIllustration,
@@ -31,6 +35,7 @@ import { BinaryExplorer } from "@/components/interactive/binary-explorer";
 import { PunchCardReader } from "@/components/interactive/punch-card-reader";
 import { PunchCardIllustration } from "@/components/interactive/punch-card-illustration";
 import { InstructionsBody } from "@/components/interactive/instructions-body";
+import { ChapterEndScene } from "@/components/interactive/chapter-end-scene";
 import { FreeFormQuestion } from "@/components/interactive/free-form-question";
 import { QuestionResponse } from "@/components/interactive/question-response";
 import { QuizGate } from "@/components/interactive/quiz-gate";
@@ -38,6 +43,7 @@ import { QuizGate } from "@/components/interactive/quiz-gate";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const slideComponents: Record<string, ComponentType<any>> = {
   "01-the-machine/01-what-is-a-computer/13-instructions": InstructionsBody,
+  "01-the-machine/01-what-is-a-computer/41-final-switch": ChapterEndScene,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,8 +58,12 @@ export const interactiveComponents: Record<string, ComponentType<any>> = {
   "complexity-dissolves-illustration": ComplexityDissolvesIllustration,
   "human-stack-illustration": HumanStackIllustration,
   "computer-stack-illustration": ComputerStackIllustration,
+  "chef-illustration": ChefIllustration,
+  "conductor-illustration": ConductorIllustration,
   "computer-exploded-illustration": ComputerExplodedIllustration,
   "cpu-illustration": CpuIllustration,
+  "desk-illustration": DeskIllustration,
+  "filing-cabinet-illustration": FilingCabinetIllustration,
   "gpu-illustration": GpuIllustration,
   "ram-illustration": RamIllustration,
   "storage-illustration": StorageIllustration,

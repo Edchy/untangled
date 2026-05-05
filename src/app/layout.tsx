@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Untangled",
   description:
     "A warm, interactive path for understanding how artificial intelligence actually works.",
+  icons: {
+    icon: [{ url: "/un.svg", type: "image/svg+xml", sizes: "any" }],
+  },
 };
 
 export default function RootLayout({
