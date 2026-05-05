@@ -5,6 +5,7 @@ import { Heading } from "@/components/ui/typography";
 import { RevealAnswer } from "@/components/ui/reveal-answer";
 import { SlideColumns, SlideShell } from "@/components/ui/slide-shell";
 import { SlideTransition } from "@/components/ui/slide-transition";
+import { DevToolbar } from "@/components/ui/dev-toolbar";
 import {
   getAdjacentSlides,
   getInteractiveComponent,
@@ -137,6 +138,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
     <SlideShell>
       <BookSidebar modules={modules} currentSlideKey={current.key} />
       <SlideTransition>{slideBody}</SlideTransition>
+      <DevToolbar conceptSlug={concept} />
     </SlideShell>
   );
 }

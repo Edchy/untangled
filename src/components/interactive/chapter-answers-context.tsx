@@ -11,6 +11,7 @@ interface ChapterAnswersContextValue {
   saveAnswer: (id: string, text: string) => void;
   feedbackState: FeedbackState;
   feedback: string;
+  fullFeedback: string;
   submitAnswers: (finalId: string, finalText: string) => void;
 }
 
@@ -22,6 +23,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
   const [answers, setAnswers] = useState<Answers>({});
   const [feedbackState, setFeedbackState] = useState<FeedbackState>("idle");
   const [feedback, setFeedback] = useState("");
+  const [fullFeedback, setFullFeedback] = useState("");
 
   // Keep a ref to answers so saveAnswer can write to localStorage synchronously
   const answersRef = useRef<Answers>({});
@@ -37,7 +39,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
         window.setTimeout(() => {
           if (cancelled) return;
           if (a) { setAnswers(a); answersRef.current = a; }
-          if (f) setFeedback(f);
+          if (f) { setFeedback(f); setFullFeedback(f); }
           if (fs && fs !== "loading" && fs !== "streaming") setFeedbackState(fs);
         }, 0);
       }
@@ -69,6 +71,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
   }
 
   async function submitAnswers(finalId: string, finalText: string) {
+    if (feedbackState === "done" || feedbackState === "streaming" || feedbackState === "loading") return;
     const allAnswers = { ...answers, [finalId]: finalText };
     setAnswers(allAnswers);
     setFeedbackState("loading");
@@ -82,6 +85,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
       });
 
       const responseText = await res.text();
+      setFullFeedback(responseText);
       setFeedbackState("streaming");
 
       let i = 0;
@@ -101,7 +105,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
   }
 
   return (
-    <ChapterAnswersContext.Provider value={{ answers, storageKey, saveAnswer, feedbackState, feedback, submitAnswers }}>
+    <ChapterAnswersContext.Provider value={{ answers, storageKey, saveAnswer, feedbackState, feedback, fullFeedback, submitAnswers }}>
       {children}
     </ChapterAnswersContext.Provider>
   );

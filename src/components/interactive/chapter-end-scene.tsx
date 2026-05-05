@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { LightSwitchScene } from "@/components/interactive/light-switch-scene";
 import { Button, LinkButton } from "@/components/ui/button";
 import { proseParagraphClassName } from "@/components/ui/prose";
@@ -18,7 +17,7 @@ const CONCEPTS = [
 ];
 
 const SHARE_URL = "https://untangled.ai";
-const SHARE_TEXT = "I just finished Chapter 1 of Untangled — a free interactive course on how AI actually works. Worth it.";
+const SHARE_TEXT = "I just finished 01: The Machine in Untangled — a free interactive course on how AI actually works. Worth it.";
 
 async function share() {
   if (typeof navigator !== "undefined" && navigator.share) {
@@ -86,8 +85,8 @@ export function ChapterEndScene() {
       {/* Recap panel */}
       {recapOpen && (
         <div className="w-full border-t border-foreground/12 pt-8">
-          <p className="mb-6 font-mono text-xs font-semibold uppercase tracking-widest text-foreground/36">
-            Chapter 1 — Key concepts
+          <p className="mb-6 font-mono text-xs font-semibold uppercase tracking-widest text-foreground/36 tabular-nums">
+            01: The Machine — Key concepts
           </p>
           <dl className="flex flex-col gap-5">
             {CONCEPTS.map(({ term, def }) => (

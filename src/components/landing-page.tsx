@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
-import { Heading, Text } from "@/components/ui/typography";
+import { Text } from "@/components/ui/typography";
 import { BinaryExplorer } from "@/components/interactive/binary-explorer";
 import { PunchCardReader } from "@/components/interactive/punch-card-reader";
 import {
@@ -44,21 +44,18 @@ function Reveal({
 
 const CHAPTERS = [
   {
-    label: "Chapter 1",
-    title: "The Machine",
+    title: "01: The Machine",
     teaser: "Before AI, there was a switch. Everything flows from that.",
     Illustration: ComputerStackIllustration,
   },
   {
-    label: "Chapter 2",
-    title: "The Language",
-    teaser: "How a computer learned to speak — and what it's actually saying.",
+    title: "02: Can Machines Think?",
+    teaser: "Turing's question, the 1956 Dartmouth workshop, and the birth of the word \"AI\".",
     Illustration: LayersIllustration,
   },
   {
-    label: "Chapter 3",
-    title: "The Model",
-    teaser: "What a neural network is, what it isn't, and why it matters.",
+    title: "03: The Long Winter",
+    teaser: "When AI failed, what went wrong, and why the field froze.",
     Illustration: CpuIllustration,
   },
 ];
@@ -197,7 +194,7 @@ export function LandingPage({ firstSlideHref }: { firstSlideHref: string }) {
                   No progress bars. No points. No accounts. Just a carefully paced narrative that respects your intelligence and your time.
                 </Text>
                 <Text variant="body">
-                  Finish it and you'll be able to explain how a language model works to a friend — in your own words, with the whole picture.
+                  Finish it and you&apos;ll be able to explain how a language model works to a friend — in your own words, with the whole picture.
                 </Text>
               </div>
             </Reveal>
@@ -255,10 +252,7 @@ export function LandingPage({ firstSlideHref }: { firstSlideHref: string }) {
                   <div className="mb-[var(--ds-space-6)] max-w-[240px] opacity-60">
                     <chapter.Illustration />
                   </div>
-                  <p className="text-label font-semibold uppercase leading-[var(--ds-leading-label)] tracking-[var(--ds-tracking-label)] text-accent mb-[var(--ds-space-3)]">
-                    {chapter.label}
-                  </p>
-                  <h3 className="font-serif text-title font-semibold leading-[var(--ds-leading-title)] text-[var(--ds-color-paper)] mb-[var(--ds-space-3)]">
+                  <h3 className="font-serif text-title font-semibold leading-[var(--ds-leading-title)] text-[var(--ds-color-paper)] mb-[var(--ds-space-3)] tabular-nums">
                     {chapter.title}
                   </h3>
                   <p className="text-body leading-[var(--ds-leading-body)] text-[var(--ds-color-paper)] opacity-52 max-w-[32ch] [text-wrap:pretty]">

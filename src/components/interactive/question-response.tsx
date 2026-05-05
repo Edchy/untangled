@@ -13,7 +13,7 @@ interface Props {
 
 export function QuestionResponse({ nextHref, redirectHref }: Props) {
   const router = useRouter();
-  const { feedbackState, feedback } = useChapterAnswers();
+  const { feedbackState, feedback, fullFeedback } = useChapterAnswers();
 
   useEffect(() => {
     if (feedbackState === "idle" && redirectHref) {
@@ -33,12 +33,18 @@ export function QuestionResponse({ nextHref, redirectHref }: Props) {
       )}
 
       {(feedbackState === "streaming" || feedbackState === "done" || feedbackState === "error") && feedback && (
-        <Text className="max-w-[65ch] whitespace-pre-line">
-          {feedback}
-          {feedbackState === "streaming" && (
-            <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[1px] animate-pulse bg-foreground/36" />
-          )}
-        </Text>
+        <div className="relative max-w-[65ch]">
+          {/* Ghost holds the full final text from word 1 — reserves exact height so streaming never reflows */}
+          <Text className="whitespace-pre-line opacity-0 select-none" aria-hidden>
+            {fullFeedback || feedback}
+          </Text>
+          <Text className="absolute inset-0 whitespace-pre-line">
+            {feedback}
+            {feedbackState === "streaming" && (
+              <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[1px] animate-pulse bg-foreground/36" />
+            )}
+          </Text>
+        </div>
       )}
 
       {feedbackState === "done" && nextHref && (

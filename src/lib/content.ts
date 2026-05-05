@@ -40,16 +40,16 @@ export type Module = {
 };
 
 export const modules: Omit<Module, "slides">[] = [
-  { slug: "01-the-machine",           number: "01", title: "Chapter 1",  theme: "", accent: "#8E8E8E" },
-  { slug: "02-can-machines-think",    number: "02", title: "Chapter 2",  theme: "", accent: "#9A7B6D" },
-  { slug: "03-the-long-winter",       number: "03", title: "Chapter 3",  theme: "", accent: "#A57F68" },
-  { slug: "04-learning-from-data",    number: "04", title: "Chapter 4",  theme: "", accent: "#B27A5F" },
-  { slug: "05-going-deeper",          number: "05", title: "Chapter 5",  theme: "", accent: "#BE744F" },
-  { slug: "06-the-meaning-of-words",  number: "06", title: "Chapter 6",  theme: "", accent: "#C66B45" },
-  { slug: "07-paying-attention",      number: "07", title: "Chapter 7",  theme: "", accent: "#D06439" },
-  { slug: "08-scale",                 number: "08", title: "Chapter 8",  theme: "", accent: "#D85A30" },
-  { slug: "09-what-it-actually-does", number: "09", title: "Chapter 9",  theme: "", accent: "#D85A30" },
-  { slug: "10-the-honest-questions",  number: "10", title: "Chapter 10", theme: "", accent: "#D85A30" },
+  { slug: "01-the-machine",           number: "01", title: "01: The Machine",              theme: "What a computer actually is. Binary, logic, the first mechanical calculators.", accent: "#8E8E8E" },
+  { slug: "02-can-machines-think",    number: "02", title: "02: Can Machines Think?",      theme: "Turing's question, the 1956 Dartmouth workshop, the birth of the word \"AI\".", accent: "#9A7B6D" },
+  { slug: "03-the-long-winter",       number: "03", title: "03: The Long Winter",          theme: "When AI failed. The AI winters, what went wrong, and why.", accent: "#A57F68" },
+  { slug: "04-learning-from-data",    number: "04", title: "04: Learning from Data",       theme: "Neural networks, backpropagation, the shift from rules to patterns.", accent: "#B27A5F" },
+  { slug: "05-going-deeper",          number: "05", title: "05: Going Deeper",             theme: "Deep learning, GPUs, ImageNet 2012, the moment everything changed.", accent: "#BE744F" },
+  { slug: "06-the-meaning-of-words",  number: "06", title: "06: The Meaning of Words",     theme: "How computers deal with language. Word embeddings, tokens, the problem of meaning.", accent: "#C66B45" },
+  { slug: "07-paying-attention",      number: "07", title: "07: Paying Attention",         theme: "The transformer. \"Attention Is All You Need\" (2017). Why it changed everything.", accent: "#D06439" },
+  { slug: "08-scale",                 number: "08", title: "08: Scale",                    theme: "What happens when you make a model very, very large. Emergent behavior.", accent: "#D85A30" },
+  { slug: "09-what-it-actually-does", number: "09", title: "09: What It Actually Does",    theme: "How an LLM generates a response. Tokens, probabilities, the live tokenizer.", accent: "#D85A30" },
+  { slug: "10-the-honest-questions",  number: "10", title: "10: The Honest Questions",     theme: "What AI can and can't do. Hallucinations, bias, what to actually worry about.", accent: "#D85A30" },
 ];
 
 const contentRoot = path.join(process.cwd(), "content");

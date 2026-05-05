@@ -13,10 +13,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
     <article className="border-t border-foreground/12 py-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <Text variant="caption" className="font-semibold text-muted">
-            {module.number}
-          </Text>
-          <Heading as="h2" variant="title" className="mt-2">
+          <Heading as="h2" variant="title" className="tabular-nums">
             {module.title}
           </Heading>
           <Text variant="muted" className="mt-2 max-w-xl text-base leading-7">

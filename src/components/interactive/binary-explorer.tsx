@@ -150,7 +150,6 @@ function BinarySwitch({
 }
 
 export function BinaryExplorer() {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [bits, setBits] = useState(() => valueToBits(65));
   const [typedCharacter, setTypedCharacter] = useState("A");
   const value = bitsToValue(bits, BIT_VALUES);
@@ -197,14 +196,11 @@ export function BinaryExplorer() {
         <span className="text-4xl font-semibold text-accent">{value}</span>
         <span className="text-2xl text-foreground/24">=</span>
         <input
-          ref={inputRef}
           type="text"
           value={typedCharacter}
           maxLength={1}
           placeholder="?"
           aria-label="Character to convert to binary"
-          autoFocus
-          onBlur={() => inputRef.current?.focus()}
           onChange={(event) => handleCharacterChange(event.target.value)}
           className="h-12 w-12 rounded-control border border-foreground/18 bg-background text-center font-mono text-4xl font-semibold text-accent outline-none placeholder:text-accent focus:border-accent"
         />
