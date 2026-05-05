@@ -524,25 +524,90 @@ export function PunchCardIllustration() {
 }
 
 export function EniacIllustration() {
-  const panelFills = [fill.blue, fill.sage, fill.amber];
+  const cabinetX = [132, 224, 316, 408];
+  const patchPanels = [138, 230, 322, 414];
+  const tubeBanks = [154, 258, 362, 462];
 
   return (
-    <RoughSvg>
-      <path d="M42 84 H340 V280 H42 Z" fill={fill.rose} stroke="currentColor" strokeWidth="2" />
-      {[0, 1, 2].map((col) => (
-        <g key={col} transform={`translate(${70 + col * 86} 112)`}>
-          <rect width="58" height="132" rx="4" fill={panelFills[col]} stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
-          {[0, 1, 2, 3].map((row) => (
-            <circle key={row} cx="29" cy={22 + row * 28} r="7" fill="var(--background)" stroke={row === col ? "var(--accent)" : "currentColor"} strokeOpacity={row === col ? 0.7 : 0.32} strokeWidth="1.5" />
-          ))}
+    <RoughSvg viewBox="0 0 600 420">
+      <path d="M122 54 H520 V328 H122 Z" fill={fill.rose} stroke="currentColor" strokeWidth="2" />
+      <path d="M114 318 H544 V354 H114 Z" fill={fill.amber} stroke="currentColor" strokeOpacity="0.48" strokeWidth="1.5" />
+      <path d="M120 336 H542 M120 346 H542" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.3" />
+
+      {cabinetX.map((x, index) => (
+        <g key={x}>
+          <rect x={x} y="62" width="84" height="170" fill={index === 1 ? fill.sage : fill.blue} stroke="currentColor" strokeOpacity="0.58" strokeWidth="1.5" />
+          <path d={`M${x + 8} 72 H${x + 76} V214 H${x + 8} Z`} fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1.2" />
+          <rect x={x - 4} y="48" width="8" height="252" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.4" />
+          {index === 1 ? (
+            <>
+              {Array.from({ length: 9 }).map((_, row) =>
+                Array.from({ length: 8 }).map((__, col) => (
+                  <circle key={`${row}-${col}`} cx={x + 16 + col * 8} cy={82 + row * 8} r="2.3" fill="var(--background)" stroke="currentColor" strokeOpacity="0.42" strokeWidth="0.9" />
+                )),
+              )}
+              <rect x={x + 24} y="146" width="42" height="24" fill="var(--background)" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.2" />
+            </>
+          ) : (
+            <>
+              <rect x={x + 28} y={index === 2 ? 116 : 136} width="42" height="8" fill="var(--background)" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1" />
+              <path d={`M${x + 28} ${index === 3 ? 154 : 166} H${x + 66}`} stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.4" />
+              <path d={`M${x + 47} ${index === 2 ? 168 : 126} c-9 13 -9 21 0 29 c9 -8 9 -16 0 -29 Z`} fill={fill.amber} stroke="currentColor" strokeOpacity="0.44" strokeWidth="1.2" />
+            </>
+          )}
         </g>
       ))}
-      <path d="M342 184 C380 184 396 220 414 250" fill="none" stroke="var(--accent)" strokeOpacity="0.62" strokeWidth="2.2" />
-      <rect x="390" y="234" width="54" height="42" rx="5" fill={fill.blue} stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
-      <path d="M404 250 H430" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.4" />
-      <rect x="456" y="214" width="32" height="62" rx="6" fill={fill.clay} stroke="var(--accent)" strokeOpacity="0.62" strokeWidth="1.6" />
-      <circle cx="472" cy="264" r="3" fill="var(--accent)" fillOpacity="0.6" />
-      <path d="M74 304 H468" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.4" />
+      <rect x="516" y="62" width="8" height="238" fill="var(--background)" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.4" />
+
+      <g>
+        <path d="M32 176 H116 V330 H32 Z" fill={fill.sage} stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="56" cy="214" r="10" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.3" />
+        <circle cx="90" cy="214" r="10" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.3" />
+        <circle cx="73" cy="236" r="5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" />
+        <rect x="54" y="252" width="44" height="14" fill="var(--background)" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.1" />
+        {Array.from({ length: 5 }).map((_, row) =>
+          Array.from({ length: 5 }).map((__, col) => (
+            <circle key={`${row}-${col}`} cx={48 + col * 14} cy={284 + row * 10} r="3" fill="var(--background)" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1" />
+          )),
+        )}
+      </g>
+
+      {patchPanels.map((x, panelIndex) => (
+        <g key={x}>
+          <rect x={x} y="238" width="76" height="68" fill={fill.clay} stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.5" />
+          {Array.from({ length: 3 }).map((_, row) =>
+            Array.from({ length: 7 }).map((__, col) => (
+              <circle key={`${row}-${col}`} cx={x + 12 + col * 9} cy={252 + row * 15} r="2.8" fill="var(--background)" stroke={row === panelIndex % 3 ? "var(--accent)" : "currentColor"} strokeOpacity={row === panelIndex % 3 ? 0.6 : 0.3} strokeWidth="1" />
+            )),
+          )}
+          <path d={`M${x + 8} 298 H${x + 68}`} stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.2" />
+        </g>
+      ))}
+
+      <g fill="none" stroke="var(--accent)" strokeLinecap="round" strokeOpacity="0.58" strokeWidth="2">
+        <path d="M116 260 C134 224 152 224 168 250" />
+        <path d="M188 236 C206 284 242 280 258 248" />
+        <path d="M280 238 C304 292 356 292 374 252" />
+        <path d="M386 238 C418 316 454 318 486 250" />
+        <path d="M60 326 C84 380 152 366 164 306" />
+      </g>
+      <g stroke="currentColor" strokeOpacity="0.24" strokeWidth="1.3">
+        {[150, 170, 190, 248, 268, 288, 350, 370, 390, 456, 476, 496].map((x) => (
+          <path key={x} d={`M${x} 306 C${x - 18} 340 ${x + 14} 362 ${x - 4} 386`} fill="none" />
+        ))}
+      </g>
+
+      {tubeBanks.map((x) => (
+        <g key={x}>
+          <rect x={x} y="340" width="66" height="48" fill={fill.blue} stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.2" />
+          {Array.from({ length: 5 }).map((_, row) =>
+            Array.from({ length: 6 }).map((__, col) => (
+              <circle key={`${row}-${col}`} cx={x + 8 + col * 10} cy={348 + row * 8} r="2.5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.34" strokeWidth="0.9" />
+            )),
+          )}
+        </g>
+      ))}
+      <path d="M46 392 H544" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.4" />
     </RoughSvg>
   );
 }
@@ -730,114 +795,149 @@ export function ComputerExplodedIllustration() {
 }
 
 export function CpuIllustration() {
+  const queued = ["01", "10", "11", "00"];
+  const completed = ["01", "10"];
+
   return (
     <RoughSvg viewBox="0 0 560 400">
-      <g transform="translate(92 178)">
-        <path d="M0 20 L98 86 L124 78 L30 4 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.5" />
-        <path d="M18 24 L94 80 M34 16 L84 72 M8 38 L70 80" stroke="currentColor" strokeOpacity="0.26" strokeWidth="1.1" />
-        <path d="M96 86 H136" stroke="var(--accent)" strokeOpacity="0.54" strokeWidth="1.8" />
-        <path d="M114 88 V214 M114 150 L48 224 M114 150 L172 224" stroke="currentColor" strokeOpacity="0.58" strokeWidth="2.6" />
+      <g transform="translate(64 136)">
+        {queued.map((bits, index) => (
+          <g key={bits} transform={`translate(${index * 52} ${index % 2 === 0 ? 0 : 10})`}>
+            <rect width="38" height="42" rx="4" fill="var(--background)" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1.3" />
+            <path d="M8 14 H30 M8 27 H30" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.1" />
+            <text x="19" y="63" textAnchor="middle" className="font-mono text-[13px] font-semibold" fill="currentColor" fillOpacity="0.42">
+              {bits}
+            </text>
+          </g>
+        ))}
       </g>
 
-      <g transform="translate(266 56)">
-        <path d="M86 6 C110 0 132 16 134 42 C136 66 122 84 102 88 C92 100 78 100 70 88 C82 80 88 66 86 48 C84 30 78 18 86 6 Z" fill="currentColor" fillOpacity="0.78" />
-        <path
-          d="M50 50 C66 40 72 16 90 12 C108 20 112 54 100 76 C90 94 68 94 58 78 C48 76 42 70 44 64 C44 58 46 54 50 50 Z"
-          fill="var(--background)"
-          stroke="currentColor"
-          strokeOpacity="0.5"
-          strokeWidth="1.4"
-        />
-        <path d="M78 96 L100 92 L108 118 L84 124 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.2" />
-        <path
-          d="M64 122 C86 106 122 110 146 130 C166 148 172 180 162 214 C150 252 134 286 116 326"
-          fill="none"
-          stroke="currentColor"
-          strokeOpacity="0.72"
-          strokeWidth="2.2"
-        />
-        <path
-          d="M64 122 C50 158 48 196 58 232 C66 260 72 292 76 326"
-          fill="none"
-          stroke="currentColor"
-          strokeOpacity="0.62"
-          strokeWidth="2"
-        />
-        <path d="M84 126 C102 146 126 146 146 128" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2" />
-        <path d="M96 136 L116 180 L124 124" fill="none" stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.3" />
-        <path d="M66 126 C36 108 6 82 -30 46" fill="none" stroke="currentColor" strokeOpacity="0.62" strokeWidth="3" />
-        <path d="M-46 34 C-32 24 -12 28 -4 42 C-12 52 -34 54 -48 46 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.4" />
-        <path d="M-36 28 L-138 -20" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="2" />
-        <path d="M78 176 C54 176 34 184 28 198 C22 212 50 212 78 194" fill="none" stroke="currentColor" strokeOpacity="0.5" strokeWidth="2.2" />
-        <path d="M76 326 C58 342 74 350 104 338 M116 326 C104 346 122 352 150 336" fill="none" stroke="currentColor" strokeOpacity="0.62" strokeWidth="4.5" />
+      <path d="M92 226 H218" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.4" />
+      <path d="M210 184 C230 184 238 184 258 184" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.2" />
+
+      <g transform="translate(250 90)">
+        <rect width="130" height="190" rx="8" fill={fill.blue} stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.7" />
+        <rect x="28" y="54" width="74" height="64" rx="5" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.64" strokeWidth="1.8" />
+        <path d="M42 76 H88 M42 96 H88" stroke="var(--accent)" strokeOpacity="0.5" strokeWidth="1.4" />
+        <path d="M16 28 H114 M16 146 H114 M42 0 V-22 M66 0 V-22 M90 0 V-22 M42 190 V212 M66 190 V212 M90 190 V212" stroke="currentColor" strokeOpacity="0.24" strokeWidth="1.2" />
+        <path d="M0 42 H-28 M0 74 H-28 M0 106 H-28 M0 138 H-28 M130 74 H158 M130 118 H158" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.3" />
+        <text x="65" y="166" textAnchor="middle" className="font-mono text-[17px] font-semibold" fill="currentColor" fillOpacity="0.58">
+          CPU
+        </text>
       </g>
 
-      <path d="M252 156 C212 144 174 158 132 210 M344 172 C306 198 276 212 222 238" fill="none" stroke="var(--accent)" strokeOpacity="0.18" strokeWidth="1.5" />
+      <path d="M380 184 C404 184 414 184 436 184" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="2.2" />
+
+      <g transform="translate(430 138)">
+        {completed.map((bits, index) => (
+          <g key={bits} transform={`translate(${index * 50} ${index % 2 === 0 ? 8 : 0})`}>
+            <rect width="38" height="42" rx="4" fill={fill.sage} stroke="currentColor" strokeOpacity="0.4" strokeWidth="1.3" />
+            <path d="M8 14 H30 M8 27 H30" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.1" />
+          </g>
+        ))}
+      </g>
+
+      <g transform="translate(216 168)">
+        <rect width="44" height="34" rx="4" fill={fill.amber} stroke="var(--accent)" strokeOpacity="0.72" strokeWidth="1.6" />
+        <path d="M10 12 H34 M10 23 H34" stroke="var(--accent)" strokeOpacity="0.46" strokeWidth="1.2" />
+      </g>
+
+      <path d="M118 94 C190 62 374 62 442 94 M112 318 C184 344 376 344 448 318" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
       <path d="M112 348 C184 370 374 370 448 348" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
     </RoughSvg>
   );
 }
 
 export function GpuIllustration() {
-  const players = [
-    { x: 98, y: 82, active: false },
-    { x: 224, y: 74, active: true },
-    { x: 350, y: 82, active: false },
-    { x: 98, y: 214, active: false },
-    { x: 224, y: 206, active: false },
-    { x: 350, y: 214, active: false },
+  const workers = [
+    { x: 62, y: 118, angle: 8, active: false },
+    { x: 108, y: 174, angle: -7, active: true },
+    { x: 58, y: 254, angle: -12, active: false },
+    { x: 172, y: 118, angle: 10, active: false },
+    { x: 198, y: 286, angle: -5, active: true },
+    { x: 288, y: 104, angle: 8, active: false },
+    { x: 320, y: 286, angle: -8, active: false },
+    { x: 438, y: 264, angle: 11, active: true },
   ];
+  const stackAnts = [
+    { x: 308, y: 282, angle: -7, active: false },
+    { x: 358, y: 284, angle: 8, active: true },
+    { x: 408, y: 280, angle: -5, active: false },
+    { x: 458, y: 284, angle: 6, active: false },
+    { x: 332, y: 240, angle: 10, active: false },
+    { x: 382, y: 238, angle: -8, active: false },
+    { x: 432, y: 240, angle: 7, active: true },
+    { x: 356, y: 198, angle: -7, active: false },
+    { x: 406, y: 198, angle: 8, active: false },
+    { x: 380, y: 158, angle: 4, active: true },
+  ];
+  const carryBlocks = [
+    { x: 78, y: 94 },
+    { x: 124, y: 150 },
+    { x: 214, y: 262 },
+    { x: 454, y: 240 },
+  ];
+
+  function Ant({
+    active,
+  }: {
+    active: boolean;
+  }) {
+    return (
+      <>
+        <ellipse cx="-16" cy="0" rx="11" ry="7" fill={active ? fill.clay : fill.sage} stroke={active ? "var(--accent)" : "currentColor"} strokeOpacity={active ? 0.66 : 0.4} strokeWidth="1.2" />
+        <ellipse cx="2" cy="0" rx="13" ry="8" fill={active ? fill.amber : fill.sage} stroke={active ? "var(--accent)" : "currentColor"} strokeOpacity={active ? 0.64 : 0.42} strokeWidth="1.3" />
+        <circle cx="20" cy="0" r="6" fill="var(--background)" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.1" />
+        <path d="M17 -5 C18 -15 27 -18 34 -22 M17 5 C20 14 30 16 38 18" fill="none" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.1" />
+        {[-6, 0, 6].map((y) => (
+          <path key={y} d={`M${-9 + y / 4} ${y} L-24 ${y - 12} M${2 + y / 4} ${y} L-12 ${y + 14}`} stroke="currentColor" strokeOpacity="0.36" strokeWidth="1.1" />
+        ))}
+      </>
+    );
+  }
 
   return (
     <RoughSvg viewBox="0 0 560 400">
       <path
-        d="M82 64 C176 38 386 38 478 64 M72 196 C174 168 388 168 488 196"
+        d="M46 324 C132 354 412 358 510 320"
         fill="none"
         stroke="currentColor"
         strokeOpacity="0.12"
         strokeWidth="1.4"
       />
 
-      {players.map((player, index) => (
-        <g key={index} transform={`translate(${player.x} ${player.y})`}>
-          <circle
-            cx="34"
-            cy="24"
-            r="14"
-            fill="var(--background)"
-            stroke={player.active ? "var(--accent)" : "currentColor"}
-            strokeOpacity={player.active ? 0.72 : 0.48}
-            strokeWidth={player.active ? 1.8 : 1.4}
-          />
-          <path
-            d="M18 82 C24 52 44 52 52 82 L62 128 H8 Z"
-            fill={player.active ? fill.amber : fill.blue}
-            stroke={player.active ? "var(--accent)" : "currentColor"}
-            strokeOpacity={player.active ? 0.68 : 0.44}
-            strokeWidth="1.5"
-          />
-          <path d="M22 64 C40 74 56 74 76 64" fill="none" stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.5" />
-          <path
-            d="M70 62 C86 50 108 54 114 70 C104 82 82 82 68 72 Z"
-            fill="var(--background)"
-            stroke="currentColor"
-            strokeOpacity="0.48"
-            strokeWidth="1.3"
-          />
-          <path d="M82 56 L126 30" stroke={player.active ? "var(--accent)" : "currentColor"} strokeOpacity={player.active ? 0.7 : 0.34} strokeWidth="1.6" />
-          <path d="M80 72 L122 96" stroke={player.active ? "var(--accent)" : "currentColor"} strokeOpacity={player.active ? 0.7 : 0.34} strokeWidth="1.5" />
-          <path d="M30 128 L18 158 M50 128 L66 158" stroke="currentColor" strokeOpacity="0.38" strokeWidth="1.6" />
+      <path d="M286 306 C312 228 354 156 384 118 C418 160 468 232 492 306 Z" fill={fill.blue} stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.3" />
+
+      <g stroke="var(--accent)" strokeOpacity="0.22" strokeWidth="1.5">
+        <path d="M126 152 C206 104 288 112 364 158" fill="none" />
+        <path d="M94 266 C186 304 274 292 338 240" fill="none" />
+        <path d="M312 104 C338 114 362 132 382 158" fill="none" />
+        <path d="M464 252 C448 240 436 236 414 240" fill="none" />
+      </g>
+
+      {stackAnts.map((ant, index) => (
+        <g key={index} transform={`translate(${ant.x} ${ant.y}) rotate(${ant.angle})`}>
+          <Ant active={ant.active} />
         </g>
       ))}
 
+      {workers.map((ant, index) => (
+        <g key={index} transform={`translate(${ant.x} ${ant.y}) rotate(${ant.angle})`}>
+          <Ant active={ant.active} />
+        </g>
+      ))}
+
+      {carryBlocks.map((block, index) => (
+        <rect key={index} x={block.x} y={block.y} width="14" height="14" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.48" strokeWidth="1.1" />
+      ))}
+
       <path
-        d="M130 44 C208 26 338 26 430 44 M130 176 C208 158 338 158 430 176"
+        d="M74 78 C164 46 268 50 342 94 M84 304 C172 332 276 330 338 304"
         fill="none"
-        stroke="var(--accent)"
-        strokeOpacity="0.36"
-        strokeWidth="2"
+        stroke="currentColor"
+        strokeOpacity="0.12"
+        strokeWidth="1.4"
       />
-      <path d="M114 352 C184 372 376 372 448 350" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
     </RoughSvg>
   );
 }
@@ -845,39 +945,43 @@ export function GpuIllustration() {
 export function RamIllustration() {
   return (
     <RoughSvg viewBox="0 0 560 400">
-      <path d="M92 132 H468 L430 286 H54 Z" fill={fill.sage} stroke="currentColor" strokeOpacity="0.52" strokeWidth="1.7" />
-      <path d="M112 154 H444 M92 286 H430" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.3" />
+      <path d="M82 158 H478 L436 302 H44 Z" fill={fill.sage} stroke="currentColor" strokeOpacity="0.54" strokeWidth="1.8" />
+      <path d="M104 182 H452 M76 302 H436" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1.3" />
 
       <g className="font-mono">
-        <g transform="translate(126 86)">
-          <rect width="96" height="72" rx="5" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.7" strokeWidth="1.8" />
-          <path d="M16 22 H78 M16 38 H62 M16 54 H72" stroke="currentColor" strokeOpacity="0.26" strokeWidth="1.3" />
-          <text x="48" y="96" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
+        <g transform="translate(98 106) rotate(-5)">
+          <rect width="112" height="82" rx="5" fill="var(--background)" stroke="var(--accent)" strokeOpacity="0.68" strokeWidth="1.8" />
+          <path d="M16 22 H96 M16 40 H72 M16 58 H88" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.3" />
+          <text x="56" y="108" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
             tab
           </text>
         </g>
 
-        <g transform="translate(246 70)">
-          <rect width="92" height="88" rx="5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
-          <circle cx="24" cy="28" r="8" fill="var(--accent)" fillOpacity="0.5" />
-          <path d="M44 26 H74 M18 52 H72 M18 68 H56" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.3" />
-          <text x="46" y="112" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
+        <g transform="translate(240 92) rotate(4)">
+          <rect width="104" height="98" rx="6" fill="var(--background)" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" />
+          <circle cx="28" cy="30" r="9" fill="var(--accent)" fillOpacity="0.48" />
+          <path d="M48 28 H84 M20 58 H84 M20 76 H66" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.3" />
+          <text x="52" y="124" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
             app
           </text>
         </g>
 
-        <g transform="translate(354 100)">
-          <rect width="80" height="58" rx="5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.48" strokeWidth="1.5" />
-          <path d="M16 24 C28 10 42 42 54 24 S68 10 74 24" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="1.8" />
-          <text x="40" y="82" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
+        <g transform="translate(372 132) rotate(-3)">
+          <rect width="86" height="62" rx="5" fill="var(--background)" stroke="currentColor" strokeOpacity="0.48" strokeWidth="1.5" />
+          <path d="M16 28 C28 12 44 44 58 28 S72 12 80 28" fill="none" stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="1.8" />
+          <text x="43" y="88" textAnchor="middle" className="text-[13px] font-semibold" fill="currentColor" fillOpacity="0.52">
             video
           </text>
         </g>
       </g>
 
-      <path d="M174 178 L150 286 M294 174 L280 286 M394 178 L366 286" stroke="var(--accent)" strokeOpacity="0.34" strokeWidth="1.8" />
-      <path d="M178 312 C226 338 340 338 390 312" fill="none" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.5" />
-      <path d="M226 312 L212 336 M334 312 L352 336" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.6" />
+      <g transform="translate(208 212)">
+        <rect width="124" height="42" rx="5" fill={fill.amber} stroke="currentColor" strokeOpacity="0.42" strokeWidth="1.4" />
+        <path d="M16 16 H108 M16 28 H86" stroke="var(--accent)" strokeOpacity="0.42" strokeWidth="1.4" />
+      </g>
+      <path d="M154 186 L130 302 M292 194 L278 302 M414 196 L384 302" stroke="var(--accent)" strokeOpacity="0.3" strokeWidth="1.7" />
+      <path d="M172 328 C222 352 342 352 392 328" fill="none" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.5" />
+      <path d="M224 328 L208 354 M338 328 L358 354" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.6" />
       <path d="M118 330 C190 354 374 354 444 330" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="1.5" />
     </RoughSvg>
   );
@@ -886,37 +990,46 @@ export function RamIllustration() {
 export function StorageIllustration() {
   return (
     <RoughSvg viewBox="0 0 560 400">
-      <g transform="translate(128 70)">
-        <path d="M0 0 H304 V278 H0 Z" fill={fill.amber} stroke="currentColor" strokeOpacity="0.56" strokeWidth="1.8" />
+      <g transform="translate(134 58)">
+        <path d="M0 0 H292 V292 H0 Z" fill={fill.amber} stroke="currentColor" strokeOpacity="0.58" strokeWidth="1.8" />
+        <path d="M12 10 H280 V282 H12 Z" fill="none" stroke="currentColor" strokeOpacity="0.16" strokeWidth="1.2" />
         {[0, 1, 2].map((drawer) => (
-          <g key={drawer} transform={`translate(26 ${28 + drawer * 78})`}>
+          <g key={drawer} transform={`translate(26 ${30 + drawer * 82})`}>
             <rect
-              width="252"
-              height="54"
+              width="240"
+              height="58"
               rx="5"
               fill="var(--background)"
               stroke={drawer === 1 ? "var(--accent)" : "currentColor"}
               strokeOpacity={drawer === 1 ? 0.66 : 0.42}
               strokeWidth={drawer === 1 ? 1.8 : 1.4}
             />
-            <path d="M92 28 H160" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.5" />
-            <circle cx="182" cy="28" r="4" fill="currentColor" fillOpacity="0.28" />
+            <rect x="24" y="14" width="58" height="20" rx="3" fill={drawer === 1 ? fill.sage : fill.blue} stroke="currentColor" strokeOpacity="0.28" strokeWidth="1" />
+            <path d="M104 30 H166" stroke="currentColor" strokeOpacity="0.34" strokeWidth="1.5" />
+            <circle cx="188" cy="30" r="4" fill="currentColor" fillOpacity="0.28" />
           </g>
         ))}
       </g>
 
-      <g transform="translate(362 198)">
-        <path d="M0 0 C40 -14 86 -14 126 0 V82 C88 98 40 98 0 82 Z" fill="var(--background)" stroke="currentColor" strokeOpacity="0.46" strokeWidth="1.5" />
-        <path d="M0 0 C38 18 88 18 126 0 M0 40 C38 58 88 58 126 40" fill="none" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.3" />
-        <path d="M24 70 H46 M58 70 H78 M90 70 H102" stroke="var(--accent)" strokeOpacity="0.52" strokeWidth="1.6" />
+      <g transform="translate(332 128) rotate(4)">
+        <path d="M0 0 H138 V78 H0 Z" fill={fill.sage} stroke="var(--accent)" strokeOpacity="0.58" strokeWidth="1.6" />
+        <path d="M18 22 H118 M18 42 H92 M18 60 H108" stroke="currentColor" strokeOpacity="0.26" strokeWidth="1.2" />
+      </g>
+
+      <g transform="translate(70 246) rotate(-7)">
+        <rect width="68" height="52" rx="4" fill="var(--background)" stroke="currentColor" strokeOpacity="0.46" strokeWidth="1.4" />
+        <circle cx="24" cy="24" r="8" fill={fill.rose} stroke="currentColor" strokeOpacity="0.34" strokeWidth="1" />
+        <path d="M40 22 H56 M14 40 H56" stroke="currentColor" strokeOpacity="0.24" strokeWidth="1.2" />
+      </g>
+
+      <g transform="translate(86 110) rotate(6)">
+        <rect width="58" height="76" rx="4" fill="var(--background)" stroke="currentColor" strokeOpacity="0.44" strokeWidth="1.4" />
+        <path d="M16 16 H42 M16 30 H42 M16 44 H36 M16 58 H42" stroke="var(--accent)" strokeOpacity="0.4" strokeWidth="1.2" />
       </g>
 
       <g className="font-mono">
         <text x="280" y="58" textAnchor="middle" className="text-[14px] font-semibold" fill="currentColor" fillOpacity="0.48">
           files stay here
-        </text>
-        <text x="426" y="320" textAnchor="middle" className="text-[12px] font-semibold" fill="currentColor" fillOpacity="0.42">
-          bits
         </text>
       </g>
 
