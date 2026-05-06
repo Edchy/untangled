@@ -1,10 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { X, Check } from "lucide-react";
+import { useState, useEffect, useSyncExternalStore } from "react";
+import { X, Check, Moon, Sun } from "lucide-react";
 import type { Module, Slide } from "@/lib/content";
 import { useProgress, isChapterComplete } from "@/lib/progress";
+
+const THEME_CHANGE_EVENT = "untangled-themechange";
+
+function getThemeSnapshot() {
+  return document.documentElement.dataset.theme === "light";
+}
+
+function getServerThemeSnapshot() {
+  return false;
+}
+
+function subscribeToThemeChange(callback: () => void) {
+  window.addEventListener(THEME_CHANGE_EVENT, callback);
+  window.addEventListener("storage", callback);
+
+  return () => {
+    window.removeEventListener(THEME_CHANGE_EVENT, callback);
+    window.removeEventListener("storage", callback);
+  };
+}
 
 function chapterSlugToTitle(slug: string): string {
   const withoutNumber = slug.replace(/^\d+-/, "");
@@ -38,6 +58,50 @@ function getChapters(mod: Module): Chapter[] {
   return chapters;
 }
 
+function ThemeToggle() {
+  const isLight = useSyncExternalStore(
+    subscribeToThemeChange,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
+
+  function handleToggle() {
+    const theme = isLight ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("theme", theme);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+  }
+
+  return (
+    <button
+      type="button"
+      aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
+      aria-pressed={isLight}
+      onClick={handleToggle}
+      className="relative flex w-10 shrink-0 items-center justify-center text-foreground/42 transition-colors duration-150 hover:bg-foreground/6 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
+    >
+      <span
+        aria-hidden
+        className={[
+          "absolute transition-[opacity,scale,filter] duration-150 ease-out",
+          isLight ? "scale-100 opacity-100 blur-0" : "scale-[0.25] opacity-0 blur-[4px]",
+        ].join(" ")}
+      >
+        <Sun size={14} />
+      </span>
+      <span
+        aria-hidden
+        className={[
+          "absolute transition-[opacity,scale,filter] duration-150 ease-out",
+          isLight ? "scale-[0.25] opacity-0 blur-[4px]" : "scale-100 opacity-100 blur-0",
+        ].join(" ")}
+      >
+        <Moon size={14} />
+      </span>
+    </button>
+  );
+}
+
 export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   const { visited } = useProgress();
   const [open, setOpen] = useState(false);
@@ -60,8 +124,8 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
     const onPointer = (e: PointerEvent) => {
       const panel = document.getElementById("toc-panel");
-      const trigger = document.getElementById("toc-trigger");
-      if (panel && !panel.contains(e.target as Node) && trigger && !trigger.contains(e.target as Node)) {
+      const siteNav = document.getElementById("site-nav");
+      if (panel && !panel.contains(e.target as Node) && siteNav && !siteNav.contains(e.target as Node)) {
         setOpen(false);
       }
     };
@@ -83,7 +147,6 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   const currentChapter = currentModuleChapters[currentChapterIndex];
   const chapterIndex = currentChapter?.slides.findIndex((s) => s.key === currentSlideKey) ?? -1;
   const lessonNumber = chapterIndex >= 0 ? String(chapterIndex + 1).padStart(2, "0") : null;
-  const chapterNumber = currentChapterIndex >= 0 ? currentChapterIndex + 1 : null;
 
   // Chapters for the open module
   const mod = modules.find((m) => m.slug === openModule);
@@ -125,7 +188,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   return (
     <>
       {/* Home + Trigger — fixed top-left */}
-      <nav aria-label="Site navigation" className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex w-72 items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
+      <nav id="site-nav" aria-label="Site navigation" className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex w-72 items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
         <Link
           href="/"
           aria-label="Go to home"
@@ -156,6 +219,10 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
             {lessonNumber && <span className="tabular-nums text-accent">{lessonNumber} </span>}{currentSlide?.title ?? ""}
           </span>
         </button>
+
+        <div className="w-px self-stretch bg-foreground/10" aria-hidden />
+
+        <ThemeToggle />
       </nav>
 
       {/* Floating panel */}
