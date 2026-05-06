@@ -1,5 +1,12 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.fixedWindow(2, "1 m"),
+});
 
 const openrouter = createOpenAI({
   baseURL: "https://openrouter.ai/api/v1",
@@ -18,13 +25,15 @@ Never say "incorrect" or "wrong". Write like a thoughtful person talking to a cu
 const QUESTION_RUBRIC = [
   {
     id: "transistor",
-    question: "Explain what a transistor does. Pretend you're telling a friend who's never heard the word.",
+    question:
+      "Explain what a transistor does. Pretend you're telling a friend who's never heard the word.",
     expected:
       "A transistor is a tiny electronic switch. It can let electricity through or block it, giving computers a physical way to make yes/no, on/off, 1/0 choices. Huge numbers of these switches can be arranged to store information and follow instructions.",
   },
   {
     id: "abstraction",
-    question: "What does abstraction mean? Give me an example from your own life. Not the light switch.",
+    question:
+      "What does abstraction mean? Give me an example from your own life. Not the light switch.",
     expected:
       "Abstraction means hiding messy lower-level details behind a simpler idea, label, or interface, so you can use something without thinking about every part underneath. A good answer should include a real-life example and explain what details are being hidden.",
   },
@@ -37,28 +46,41 @@ const QUESTION_RUBRIC = [
 ] as const;
 
 const MAX_ANSWER_CHARS = 500;
+const RATE_LIMIT_MESSAGE =
+  "You're sending answers a little too quickly. Please wait a minute and try again.";
+const FEEDBACK_ERROR_MESSAGE =
+  "I couldn't get your response just now. Please try again.";
 
 export async function POST(req: Request) {
-  const { answers } = await req.json();
+  try {
+    const ip = req.headers.get("x-forwarded-for") ?? "anonymous";
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return new Response(RATE_LIMIT_MESSAGE, { status: 429 });
+    }
 
-  const sanitized: Record<string, string> = {};
-  for (const [k, v] of Object.entries(answers as Record<string, string>)) {
-    sanitized[k] = String(v).slice(0, MAX_ANSWER_CHARS);
-  }
+    const { answers } = await req.json();
 
-  const userMessage = QUESTION_RUBRIC
-    .map(({ id, question, expected }) => {
+    const sanitized: Record<string, string> = {};
+    for (const [k, v] of Object.entries(answers as Record<string, string>)) {
+      sanitized[k] = String(v).slice(0, MAX_ANSWER_CHARS);
+    }
+
+    const userMessage = QUESTION_RUBRIC.map(({ id, question, expected }) => {
       const answer = sanitized[id]?.trim() || "[skipped]";
       return `Question: ${question}\nExpected idea: ${expected}\nStudent answer: ${answer}`;
-    })
-    .join("\n\n");
+    }).join("\n\n");
 
-  const { text } = await generateText({
-    model: openrouter("google/gemini-2.0-flash-001"),
-    system: SYSTEM_PROMPT,
-    messages: [{ role: "user", content: userMessage }],
-    maxOutputTokens: 600,
-  });
+    const { text } = await generateText({
+      model: openrouter("google/gemini-2.0-flash-001"),
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userMessage }],
+      maxOutputTokens: 600,
+    });
 
-  return new Response(text, { headers: { "Content-Type": "text/plain" } });
+    return new Response(text, { headers: { "Content-Type": "text/plain" } });
+  } catch (error) {
+    console.error("Failed to evaluate quiz answers", error);
+    return new Response(FEEDBACK_ERROR_MESSAGE, { status: 500 });
+  }
 }

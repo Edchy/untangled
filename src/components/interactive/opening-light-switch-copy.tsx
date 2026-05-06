@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { LightSwitch } from "./light-switch";
+import { proseParagraphClassName } from "@/components/ui/prose";
 
 const THEME_CHANGE_EVENT = "untangled-themechange";
 
@@ -23,19 +23,18 @@ function subscribeToThemeChange(callback: () => void) {
   };
 }
 
-export function LightSwitchScene() {
+export function OpeningLightSwitchCopy() {
   const on = useSyncExternalStore(
     subscribeToThemeChange,
     getThemeSnapshot,
     getServerThemeSnapshot,
   );
 
-  function handleToggle(nextOn: boolean) {
-    const theme = nextOn ? "light" : "dark";
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem("theme", theme);
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
-  }
-
-  return <LightSwitch on={on} onToggle={handleToggle} />;
+  return (
+    <p className={proseParagraphClassName} aria-live="polite">
+      {on
+        ? "Flip it back again if you prefer the dark."
+        : "Flip the switch to turn on the light."}
+    </p>
+  );
 }

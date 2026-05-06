@@ -5,6 +5,8 @@ import { createContext, useContext, useRef, useState, useEffect } from "react";
 type Answers = Record<string, string>;
 type FeedbackState = "idle" | "loading" | "streaming" | "done" | "error";
 
+const GENERIC_FEEDBACK_ERROR = "I couldn't get your response just now. Please try again.";
+
 interface ChapterAnswersContextValue {
   answers: Answers;
   storageKey: string;
@@ -85,6 +87,12 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
       });
 
       const responseText = await res.text();
+      if (!res.ok) {
+        setFeedback(responseText || GENERIC_FEEDBACK_ERROR);
+        setFeedbackState("error");
+        return;
+      }
+
       setFullFeedback(responseText);
       setFeedbackState("streaming");
 
@@ -99,7 +107,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
         }
       }, 60);
     } catch {
-      setFeedback("Something went wrong. Please try again.");
+      setFeedback(GENERIC_FEEDBACK_ERROR);
       setFeedbackState("error");
     }
   }

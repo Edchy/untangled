@@ -30,8 +30,9 @@ export function QuizGate({ nextHref }: Props) {
         {nextHref && (
           <Button
             onClick={() => router.push(nextHref, { transitionTypes: ["nav-forward"] })}
-            size="sm"
-            className="tracking-wide"
+            variant="subtle"
+            size="md"
+            className="gap-2 tracking-wide"
           >
             Start →
           </Button>

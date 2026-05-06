@@ -123,8 +123,12 @@ body {
   color: var(--foreground);
   font-family: var(--ds-font-body), Arial, Helvetica, sans-serif;
   transition:
-    background-color 400ms ease,
-    color 400ms ease;
+    background-color 650ms ease,
+    color 650ms ease;
+}
+
+.bg-background {
+  transition: background-color 650ms ease;
 }
 
 a,

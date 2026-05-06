@@ -366,11 +366,7 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
       >
         <span
           aria-hidden
-          className="absolute left-[20px] top-3 h-[172px] w-[92px] border border-foreground/18"
-          style={{
-            background:
-              "linear-gradient(180deg, color-mix(in srgb, var(--background) 92%, var(--foreground)), color-mix(in srgb, var(--background) 78%, var(--foreground)))",
-          }}
+          className="absolute left-[20px] top-3 h-[172px] w-[92px] border border-foreground/18 bg-background"
         />
 
         <motion.span
@@ -427,6 +423,7 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
               boxShadow: on
                 ? "inset 0 34px 0 color-mix(in srgb, var(--background) 68%, transparent), inset 0 -14px 0 color-mix(in srgb, var(--foreground) 18%, transparent), 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)"
                 : "inset 0 14px 0 color-mix(in srgb, var(--background) 78%, transparent), inset 0 -34px 0 color-mix(in srgb, var(--foreground) 14%, transparent)",
+              transition: "background .65s, box-shadow .65s",
             }}
           />
           <canvas

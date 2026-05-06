@@ -1,45 +1,103 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import type { MouseEvent } from "react";
+import { ArrowLeft, ArrowRight, Home } from "lucide-react";
+import { useChapterAnswers } from "@/components/interactive/chapter-answers-context";
 
 type SlideNavProps = {
   previousHref?: string;
   nextHref?: string;
   nextLabel?: string;
+  nextSubmitQuestionId?: string;
+  showKeyboardHint?: boolean;
 };
 
-export function SlideNav({ previousHref, nextHref, nextLabel }: SlideNavProps) {
+function ArrowKey({ children }: { children: string }) {
+  return (
+    <kbd className="inline-flex h-6 min-w-6 items-center justify-center rounded-control border border-foreground/18 px-1.5 font-sans text-xs font-semibold leading-none text-foreground/60">
+      {children}
+    </kbd>
+  );
+}
+
+export function SlideNav({
+  previousHref,
+  nextHref,
+  nextLabel,
+  nextSubmitQuestionId,
+  showKeyboardHint,
+}: SlideNavProps) {
+  const router = useRouter();
+  const { submitAnswers } = useChapterAnswers();
+
+  function handleNextClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (!nextHref || !nextSubmitQuestionId) return;
+    event.preventDefault();
+    submitAnswers(nextSubmitQuestionId, "");
+    router.push(nextHref, { transitionTypes: ["nav-forward"] });
+  }
+
   return (
     <nav
       aria-label="Slide navigation"
-      className="fixed bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-6"
+      className="fixed inset-x-0 bottom-0 z-40 bg-inherit px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6"
     >
-      {previousHref ? (
-        <Link
-          href={previousHref}
-          transitionTypes={["nav-back"]}
-          aria-label="Previous slide"
-          className="text-foreground/36 transition-colors duration-150 hover:text-accent"
-        >
-          <ArrowLeft size={16} />
-        </Link>
-      ) : (
-        <div className="w-4" />
+      {showKeyboardHint && (
+        <p className="mb-2 flex items-center justify-center gap-2 text-xs leading-6 text-foreground/48">
+          <span>Arrow keys to move back and forth</span>
+          <span className="inline-flex shrink-0 gap-1" aria-hidden>
+            <ArrowKey>←</ArrowKey>
+            <ArrowKey>→</ArrowKey>
+          </span>
+        </p>
       )}
-      {nextHref ? (
-        <Link
-          href={nextHref}
-          transitionTypes={["nav-forward"]}
-          aria-label="Next slide"
-          className="group relative flex h-4 w-4 items-center text-foreground/36 transition-colors duration-150 hover:text-accent"
-        >
-          <ArrowRight size={16} />
-          {nextLabel && (
-            <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs text-foreground/36 transition-colors duration-150 group-hover:text-accent">
-              ({nextLabel})
-            </span>
-          )}
-        </Link>
-      ) : null}
+      <div className="mx-auto flex w-full max-w-2xl items-center justify-center gap-3">
+        {previousHref ? (
+          <Link
+            href={previousHref}
+            transitionTypes={["nav-back"]}
+            aria-label="Previous slide"
+            className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm !text-foreground/50 transition-colors duration-150 hover:border-foreground/24 hover:!text-foreground"
+          >
+            <ArrowLeft size={14} />
+            Back
+          </Link>
+        ) : (
+          <Link
+            href="/"
+            aria-label="Home"
+            className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm !text-foreground/50 transition-colors duration-150 hover:border-foreground/24 hover:!text-foreground"
+          >
+            <Home size={14} />
+            Home
+          </Link>
+        )}
+        {nextHref ? (
+          nextSubmitQuestionId ? (
+            <Link
+              href={nextHref}
+              onClick={handleNextClick}
+              aria-label="Next slide"
+              className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
+            >
+              {nextLabel ?? "Next"}
+              <ArrowRight size={14} />
+            </Link>
+          ) : (
+            <Link
+              href={nextHref}
+              transitionTypes={["nav-forward"]}
+              aria-label="Next slide"
+              className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
+            >
+              {nextLabel ?? "Next"}
+              <ArrowRight size={14} />
+            </Link>
+          )
+        ) : null}
+      </div>
     </nav>
   );
 }

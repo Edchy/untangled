@@ -101,9 +101,9 @@ export function FreeFormQuestion({ questionId, nextHref, bodyHtml }: Props) {
           <Button
             onClick={handleSubmit}
             disabled={!isReady}
-            variant="quiet"
-            size="sm"
-            className="px-0 tracking-wide text-foreground/80 enabled:hover:text-foreground"
+            variant={isLast ? "primary" : "subtle"}
+            size="md"
+            className="gap-2 tracking-wide"
           >
             {isLast ? "Submit →" : "Save & continue →"}
           </Button>

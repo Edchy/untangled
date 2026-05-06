@@ -6,6 +6,7 @@ import { RevealAnswer } from "@/components/ui/reveal-answer";
 import { SlideColumns, SlideShell } from "@/components/ui/slide-shell";
 import { SlideTransition } from "@/components/ui/slide-transition";
 import { DevToolbar } from "@/components/ui/dev-toolbar";
+import { SlideProgressMarker } from "@/components/ui/slide-progress-marker";
 import {
   getAdjacentSlides,
   getInteractiveComponent,
@@ -138,6 +139,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
     <SlideShell>
       <BookSidebar modules={modules} currentSlideKey={current.key} />
       <SlideTransition>{slideBody}</SlideTransition>
+      <SlideProgressMarker slideKey={current.key} />
       <DevToolbar conceptSlug={concept} />
     </SlideShell>
   );

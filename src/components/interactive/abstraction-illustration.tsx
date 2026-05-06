@@ -4,7 +4,7 @@ import { StandaloneLightSwitch } from "@/components/interactive/light-switch";
 
 export function AbstractionIllustration() {
   return (
-    <div className="relative isolate flex h-[360px] w-full min-w-0 items-center justify-center overflow-hidden">
+    <div className="relative isolate flex h-[360px] w-full min-w-0 items-center justify-center bg-background">
       <svg
         viewBox="0 0 920 360"
         xmlns="http://www.w3.org/2000/svg"

@@ -2,21 +2,56 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
-import type { Module } from "@/lib/content";
+import { X, Check } from "lucide-react";
+import type { Module, Slide } from "@/lib/content";
+import { useProgress, isChapterComplete } from "@/lib/progress";
+
+function chapterSlugToTitle(slug: string): string {
+  const withoutNumber = slug.replace(/^\d+-/, "");
+  return withoutNumber.charAt(0).toUpperCase() + withoutNumber.slice(1).replace(/-/g, " ");
+}
+
+type Chapter = {
+  slug: string;
+  title: string;
+  slides: Slide[];
+};
 
 type BookNavProps = {
   modules: Module[];
   currentSlideKey: string;
 };
 
+function getChapters(mod: Module): Chapter[] {
+  const chapters: Chapter[] = [];
+  const seen = new Set<string>();
+  for (const slide of mod.slides) {
+    if (!seen.has(slide.conceptSlug)) {
+      seen.add(slide.conceptSlug);
+      chapters.push({
+        slug: slide.conceptSlug,
+        title: chapterSlugToTitle(slide.conceptSlug),
+        slides: mod.slides.filter((s) => s.conceptSlug === slide.conceptSlug),
+      });
+    }
+  }
+  return chapters;
+}
+
 export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
+  const { visited } = useProgress();
   const [open, setOpen] = useState(false);
   const [openModule, setOpenModule] = useState<string | null>(() => {
     const current = modules.find((m) =>
       m.slides.some((s) => s.key === currentSlideKey)
     );
     return current?.slug ?? null;
+  });
+  const [openChapter, setOpenChapter] = useState<string | null>(() => {
+    const current = modules.find((m) =>
+      m.slides.some((s) => s.key === currentSlideKey)
+    );
+    return current?.slides.find((s) => s.key === currentSlideKey)?.conceptSlug ?? null;
   });
 
   // Close on Escape or click outside
@@ -42,13 +77,55 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
     m.slides.some((s) => s.key === currentSlideKey)
   );
   const currentSlide = currentModule?.slides.find((s) => s.key === currentSlideKey);
-  const lessonIndex = currentModule?.slides.findIndex((s) => s.key === currentSlideKey) ?? -1;
-  const lessonNumber = lessonIndex >= 0 ? String(lessonIndex + 1).padStart(2, "0") : null;
+  // Chapter-relative slide number
+  const currentModuleChapters = currentModule ? getChapters(currentModule) : [];
+  const currentChapterIndex = currentModuleChapters.findIndex((c) => c.slug === currentSlide?.conceptSlug);
+  const currentChapter = currentModuleChapters[currentChapterIndex];
+  const chapterIndex = currentChapter?.slides.findIndex((s) => s.key === currentSlideKey) ?? -1;
+  const lessonNumber = chapterIndex >= 0 ? String(chapterIndex + 1).padStart(2, "0") : null;
+  const chapterNumber = currentChapterIndex >= 0 ? currentChapterIndex + 1 : null;
+
+  // Chapters for the open module
+  const mod = modules.find((m) => m.slug === openModule);
+  const chapters = mod ? getChapters(mod) : [];
+  // Single-chapter modules skip straight to the slide list
+  const effectiveOpenChapter = chapters.length === 1 ? chapters[0].slug : openChapter;
+  const activeChapter = chapters.find((c) => c.slug === effectiveOpenChapter);
+  const chapterSlides = activeChapter?.slides ?? [];
+
+  // Header back-button
+  let headerLeft: React.ReactNode;
+  if (!openModule) {
+    headerLeft = (
+      <span className="text-xs font-semibold tracking-wide text-foreground/36">Modules</span>
+    );
+  } else if (!effectiveOpenChapter) {
+    headerLeft = (
+      <button
+        onClick={() => { setOpenModule(null); setOpenChapter(null); }}
+        className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-accent"
+      >
+        <span aria-hidden>←</span>
+        All modules
+      </button>
+    );
+  } else {
+    const isSkipped = chapters.length === 1;
+    headerLeft = (
+      <button
+        onClick={() => isSkipped ? setOpenModule(null) : setOpenChapter(null)}
+        className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-accent"
+      >
+        <span aria-hidden>←</span>
+        {isSkipped ? "All modules" : "All chapters"}
+      </button>
+    );
+  }
 
   return (
     <>
       {/* Home + Trigger — fixed top-left */}
-      <div className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
+      <div className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex w-72 items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
         <Link
           href="/"
           aria-label="Go to home"
@@ -66,10 +143,14 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
           id="toc-trigger"
           onClick={() => setOpen((o) => !o)}
           aria-label="Open table of contents"
-          className="flex flex-col items-start px-3 py-2 text-left"
+          className="flex flex-1 flex-col items-start px-3 py-2 text-left"
         >
-          <span className="text-[10px] font-medium tabular-nums text-foreground/36">
-            {currentModule?.title ?? "Contents"}
+          <span className="truncate max-w-[160px] text-[10px] font-medium text-foreground/36">
+            {currentModule
+              ? currentChapter
+                ? `${currentModule.title.replace(/^\d+:\s*/, "")} · ${currentChapter.title}`
+                : currentModule.title.replace(/^\d+:\s*/, "")
+              : "Contents"}
           </span>
           <span className="max-w-[160px] truncate text-xs font-medium text-foreground/70">
             {lessonNumber && <span className="tabular-nums text-accent">{lessonNumber} </span>}{currentSlide?.title ?? ""}
@@ -77,10 +158,10 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
         </button>
       </div>
 
-      {/* Floating panel — vertically centered, fixed size */}
+      {/* Floating panel */}
       <div
         className={[
-          "fixed left-4 sm:left-8 top-1/2 z-50 flex h-[70svh] w-72 -translate-y-1/2 flex-col rounded-surface border border-foreground/12 bg-foreground/[0.03] overflow-hidden transition-opacity duration-150",
+          "fixed left-4 sm:left-8 top-1/2 z-50 flex h-[70svh] w-72 -translate-y-1/2 flex-col rounded-surface border border-foreground/12 bg-background overflow-hidden transition-opacity duration-150",
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
         ].join(" ")}
         id="toc-panel"
@@ -90,17 +171,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
       >
         {/* Header */}
         <div className="flex h-12 shrink-0 items-center justify-between border-b border-foreground/10 pl-5">
-          {openModule ? (
-            <button
-              onClick={() => setOpenModule(null)}
-              className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-accent"
-            >
-              <span aria-hidden>←</span>
-              All chapters
-            </button>
-          ) : (
-            <span className="text-xs font-semibold tracking-wide text-foreground/36">Chapters</span>
-          )}
+          {headerLeft}
           <button
             onClick={() => setOpen(false)}
             aria-label="Close"
@@ -110,85 +181,131 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
           </button>
         </div>
 
-        {/* Module list / slide list */}
         <nav className="flex flex-1 flex-col overflow-hidden">
-          {openModule ? (() => {
-            const chapter = modules.find((m) => m.slug === openModule);
-            if (!chapter) return null;
-            return (
-              <>
-                <div className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
-                  <p className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30 tabular-nums">
-                    {chapter.title}
-                  </p>
-                  <ol>
-                    {chapter.slides.length > 0 ? (
-                      chapter.slides.map((slide, i) => {
-                        const isActive = slide.key === currentSlideKey;
-                        const conceptSlides = chapter.slides.filter((s) => s.subConceptSlug === slide.subConceptSlug && s.subConceptSlug !== null);
-                        const isQuizLocked = slide.subConceptSlug?.includes("quiz") && slide.key !== conceptSlides[0]?.key;
-                        return (
-                          <li key={slide.key}>
-                            {isQuizLocked ? (
-                              <span className="flex cursor-default items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 text-foreground/30 select-none">
-                                <span className="shrink-0 text-[10px] tabular-nums">
-                                  {String(i + 1).padStart(2, "0")}
-                                </span>
-                                {slide.title}
-                              </span>
-                            ) : (
-                            <Link
-                              href={slide.href}
-                              onClick={() => setOpen(false)}
-                              className={[
-                                "flex items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 transition-colors",
-                                isActive
-                                  ? "font-medium text-accent"
-                                  : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
-                              ].join(" ")}
-                            >
-                              <span className={[
-                                "shrink-0 text-[10px] tabular-nums",
-                                isActive ? "text-accent" : "text-foreground/28",
-                              ].join(" ")}>
-                                {String(i + 1).padStart(2, "0")}
-                              </span>
-                              {slide.title}
-                            </Link>
-                            )}
-                          </li>
-                        );
-                      })
-                    ) : (
-                      <li className="px-2.5 py-2 text-xs italic text-foreground/24">
-                        Coming soon
-                      </li>
-                    )}
-                  </ol>
-                </div>
-              </>
-            );
-          })() : (
+          {!openModule ? (
+            /* ── Module list ── */
             <ol className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
-              {modules.map((chapter) => {
-                const hasActive = chapter.slides.some((s) => s.key === currentSlideKey);
+              {modules.map((m) => {
+                const hasActive = m.slides.some((s) => s.key === currentSlideKey);
+                const moduleChapters = getChapters(m);
+                const isDone = moduleChapters.length > 0 && moduleChapters.every((c) =>
+                  isChapterComplete(visited, c.slides.map((s) => s.key))
+                );
                 return (
-                  <li key={chapter.slug}>
+                  <li key={m.slug}>
                     <button
-                      onClick={() => setOpenModule(chapter.slug)}
+                      onClick={() => { setOpenModule(m.slug); setOpenChapter(null); }}
                       className={[
-                        "flex w-full items-baseline gap-3 rounded-control px-2.5 py-2.5 text-left transition-colors",
-                        hasActive ? "text-foreground" : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
+                        "flex w-full items-center gap-3 rounded-control px-2.5 py-2.5 text-left transition-colors",
+                        hasActive
+                          ? "bg-accent/8 text-accent hover:bg-accent/14"
+                          : isDone
+                            ? "text-foreground/36 hover:bg-foreground/4 hover:text-accent"
+                            : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
                       ].join(" ")}
                     >
-                      <span className="text-xs font-medium leading-5 tabular-nums">
-                        {chapter.title}
+                      {isDone && <Check size={11} className="shrink-0 text-foreground/36" />}
+                      <span className={["text-xs leading-5", hasActive ? "font-semibold" : "font-medium"].join(" ")}>
+                        {m.title}
                       </span>
                     </button>
                   </li>
                 );
               })}
             </ol>
+          ) : !effectiveOpenChapter ? (
+            /* ── Chapter list ── */
+            <div className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
+              <p className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30">
+                {mod?.title.replace(/^\d+:\s*/, "")}
+              </p>
+              <ol>
+                {chapters.length > 0 ? chapters.map((chapter, i) => {
+                  const hasActive = chapter.slides.some((s) => s.key === currentSlideKey);
+                  const isDone = isChapterComplete(visited, chapter.slides.map((s) => s.key));
+                  return (
+                    <li key={chapter.slug}>
+                      <button
+                        onClick={() => setOpenChapter(chapter.slug)}
+                        className={[
+                          "flex w-full items-center gap-3 rounded-control px-2.5 py-2.5 text-left transition-colors",
+                          hasActive
+                            ? "bg-accent/8 text-accent hover:bg-accent/14"
+                            : isDone
+                              ? "text-foreground/36 hover:bg-foreground/4 hover:text-accent"
+                              : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
+                        ].join(" ")}
+                      >
+                        {isDone ? (
+                          <Check size={11} className="shrink-0 text-foreground/36" />
+                        ) : (
+                          <span className={["shrink-0 text-[10px] tabular-nums", hasActive ? "text-accent/60" : "text-foreground/28"].join(" ")}>
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                        )}
+                        <span className={["flex-1 text-xs leading-5", hasActive ? "font-semibold" : "font-medium"].join(" ")}>{chapter.title}</span>
+                        <span className={["shrink-0 text-[10px] tabular-nums", hasActive ? "text-accent/50" : "text-foreground/28"].join(" ")}>
+                          {chapter.slides.length}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                }) : (
+                  <li className="px-2.5 py-2 text-xs italic text-foreground/24">Coming soon</li>
+                )}
+              </ol>
+            </div>
+          ) : (
+            /* ── Slide list ── */
+            <div className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
+              <p className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30">
+                {activeChapter?.title}
+              </p>
+              <ol>
+                {chapterSlides.length > 0 ? (
+                  chapterSlides.map((slide, i) => {
+                    const isActive = slide.key === currentSlideKey;
+                    const conceptSlides = chapterSlides.filter(
+                      (s) => s.subConceptSlug === slide.subConceptSlug && s.subConceptSlug !== null
+                    );
+                    const isQuizLocked = slide.subConceptSlug?.includes("quiz") && slide.key !== conceptSlides[0]?.key;
+                    return (
+                      <li key={slide.key}>
+                        {isQuizLocked ? (
+                          <span className="flex cursor-default items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 text-foreground/30 select-none">
+                            <span className="shrink-0 text-[10px] tabular-nums">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            {slide.title}
+                          </span>
+                        ) : (
+                          <Link
+                            href={slide.href}
+                            onClick={() => setOpen(false)}
+                            className={[
+                              "flex items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 transition-colors",
+                              isActive
+                                ? "bg-accent/8 font-semibold text-accent hover:bg-accent/14"
+                                : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
+                            ].join(" ")}
+                          >
+                            <span className={[
+                              "shrink-0 text-[10px] tabular-nums",
+                              isActive ? "text-accent" : "text-foreground/28",
+                            ].join(" ")}>
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            {slide.title}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })
+                ) : (
+                  <li className="px-2.5 py-2 text-xs italic text-foreground/24">Coming soon</li>
+                )}
+              </ol>
+            </div>
           )}
         </nav>
       </div>

@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 import { SwitchIllustration } from "@/components/interactive/switch-illustration";
 import { LightSwitchScene } from "@/components/interactive/light-switch-scene";
+import { OpeningLightSwitchCopy } from "@/components/interactive/opening-light-switch-copy";
 import { IcebergIllustration } from "@/components/interactive/iceberg-illustration";
 import { AbstractionIllustration } from "@/components/interactive/abstraction-illustration";
 import {
@@ -35,15 +36,20 @@ import { BinaryExplorer } from "@/components/interactive/binary-explorer";
 import { PunchCardReader } from "@/components/interactive/punch-card-reader";
 import { PunchCardIllustration } from "@/components/interactive/punch-card-illustration";
 import { InstructionsBody } from "@/components/interactive/instructions-body";
-import { ChapterEndScene } from "@/components/interactive/chapter-end-scene";
 import { FreeFormQuestion } from "@/components/interactive/free-form-question";
 import { QuestionResponse } from "@/components/interactive/question-response";
 import { QuizGate } from "@/components/interactive/quiz-gate";
+import { GateDemoAND, GateDemoOR, GateDemoNOT } from "@/components/interactive/gate-demo";
+import { HalfAdderDemo } from "@/components/interactive/half-adder-demo";
+import { LogicGatePlayground } from "@/components/interactive/logic-gate-playground";
+import { LogicSwitchSlide } from "@/components/interactive/logic-switch-slide";
+import { SwitchCircuitExplorer } from "@/components/interactive/switch-circuit-explorer";
+import { TransistorFieldIllustration } from "@/components/interactive/transistor-field-illustration";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const slideComponents: Record<string, ComponentType<any>> = {
+  "01-the-machine/01-what-is-a-computer/01-try-it": OpeningLightSwitchCopy,
   "01-the-machine/01-what-is-a-computer/13-instructions": InstructionsBody,
-  "01-the-machine/01-what-is-a-computer/41-final-switch": ChapterEndScene,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,4 +90,12 @@ export const interactiveComponents: Record<string, ComponentType<any>> = {
   "free-form-question": FreeFormQuestion,
   "question-response": QuestionResponse,
   "quiz-gate": QuizGate,
+  "gate-demo-and": GateDemoAND,
+  "gate-demo-or": GateDemoOR,
+  "gate-demo-not": GateDemoNOT,
+  "half-adder-demo": HalfAdderDemo,
+  "logic-gate-playground": LogicGatePlayground,
+  "logic-switch-slide": LogicSwitchSlide,
+  "switch-circuit-explorer": SwitchCircuitExplorer,
+  "transistor-field-illustration": TransistorFieldIllustration,
 };
