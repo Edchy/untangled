@@ -26,13 +26,13 @@ function renderHtml(html: string) {
   REVEAL_RE.lastIndex = 0;
   while ((match = REVEAL_RE.exec(html)) !== null) {
     if (match.index > last) {
-      parts.push(<div key={i++} dangerouslySetInnerHTML={{ __html: html.slice(last, match.index) }} />);
+      parts.push(<section key={i++} dangerouslySetInnerHTML={{ __html: html.slice(last, match.index) }} />);
     }
     parts.push(<RevealAnswer key={i++} answer={match[1].replace(/&quot;/g, '"')} />);
     last = match.index + match[0].length;
   }
   if (last < html.length) {
-    parts.push(<div key={i++} dangerouslySetInnerHTML={{ __html: html.slice(last) }} />);
+    parts.push(<section key={i++} dangerouslySetInnerHTML={{ __html: html.slice(last) }} />);
   }
   return <>{parts}</>;
 }

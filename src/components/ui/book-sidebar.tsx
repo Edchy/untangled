@@ -125,7 +125,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   return (
     <>
       {/* Home + Trigger — fixed top-left */}
-      <div className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex w-72 items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
+      <nav aria-label="Site navigation" className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex w-72 items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
         <Link
           href="/"
           aria-label="Go to home"
@@ -156,7 +156,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
             {lessonNumber && <span className="tabular-nums text-accent">{lessonNumber} </span>}{currentSlide?.title ?? ""}
           </span>
         </button>
-      </div>
+      </nav>
 
       {/* Floating panel */}
       <div

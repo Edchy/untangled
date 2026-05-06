@@ -8,9 +8,9 @@ type SlideShellProps = {
 
 export function SlideShell({ children, className }: SlideShellProps) {
   return (
-    <div className={cn("flex min-h-svh flex-col items-center justify-center px-8 py-16 sm:px-16 sm:py-24", className)}>
+    <main className={cn("flex min-h-svh flex-col items-center justify-center px-8 py-16 sm:px-16 sm:py-24", className)}>
       {children}
-    </div>
+    </main>
   );
 }
 

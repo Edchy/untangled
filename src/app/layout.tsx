@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Fira_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const firaSans = Fira_Sans({
@@ -34,10 +35,16 @@ export default function RootLayout({
       className={`${firaSans.variable} ${cormorant.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.dataset.theme=t;})();` }} />
-      </head>
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+      <body className="min-h-full bg-background text-foreground">
+        {children}
+        <Script
+          id="theme-bootstrap"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme')||'dark';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}})();`,
+          }}
+        />
+      </body>
     </html>
   );
 }
