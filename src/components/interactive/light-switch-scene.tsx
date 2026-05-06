@@ -2,26 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { LightSwitch } from "./light-switch";
-
-const THEME_CHANGE_EVENT = "untangled-themechange";
-
-function getThemeSnapshot() {
-  return document.documentElement.dataset.theme === "light";
-}
-
-function getServerThemeSnapshot() {
-  return false;
-}
-
-function subscribeToThemeChange(callback: () => void) {
-  window.addEventListener(THEME_CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-
-  return () => {
-    window.removeEventListener(THEME_CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
+import { switchTheme, subscribeToThemeChange, getThemeSnapshot, getServerThemeSnapshot } from "@/lib/theme";
 
 export function LightSwitchScene() {
   const on = useSyncExternalStore(
@@ -30,11 +11,8 @@ export function LightSwitchScene() {
     getServerThemeSnapshot,
   );
 
-  function handleToggle(nextOn: boolean) {
-    const theme = nextOn ? "light" : "dark";
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem("theme", theme);
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+  function handleToggle(nextOn: boolean, originX?: number, originY?: number) {
+    switchTheme(nextOn ? "light" : "dark", originX, originY);
   }
 
   return <LightSwitch on={on} onToggle={handleToggle} />;

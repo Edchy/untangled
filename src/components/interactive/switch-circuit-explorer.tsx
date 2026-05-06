@@ -3,20 +3,15 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import rough from "roughjs";
 import { Button } from "@/components/ui/button";
+import { switchTheme, subscribeToThemeChange, getThemeSnapshot } from "@/lib/theme";
 
 type WiringMode = "series" | "parallel";
 
-const THEME_CHANGE_EVENT = "untangled-themechange";
-
 function applyThemeFromCircuit(output: boolean) {
   const theme = output ? "light" : "dark";
-
   if (document.documentElement.dataset.theme !== theme) {
-    document.documentElement.dataset.theme = theme;
+    switchTheme(theme);
   }
-
-  localStorage.setItem("theme", theme);
-  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
 }
 
 function getInitialSwitchState() {
@@ -25,20 +20,6 @@ function getInitialSwitchState() {
 
 function getHintFill() {
   return "light-dark(var(--accent), var(--ds-color-paper))";
-}
-
-function getThemeSnapshot() {
-  return document.documentElement.dataset.theme === "light";
-}
-
-function subscribeToThemeChange(callback: () => void) {
-  window.addEventListener(THEME_CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-
-  return () => {
-    window.removeEventListener(THEME_CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
 }
 
 function ModeButton({
@@ -412,11 +393,24 @@ export function SwitchCircuitExplorer() {
     setBOverride(!b);
   };
 
+  const circuitDrivenRef = useRef(false);
+
+  // When theme changes externally (not from this circuit), reset overrides so switches mirror the theme.
   useEffect(() => {
-    const documentIsLight = document.documentElement.dataset.theme === "light";
-    if (aOverride === null && bOverride === null && documentIsLight !== themeIsLight) return;
+    if (circuitDrivenRef.current) {
+      circuitDrivenRef.current = false;
+      return;
+    }
+    setAOverride(null);
+    setBOverride(null);
+  }, [themeIsLight]);
+
+  useEffect(() => {
+    // Only drive the theme when the user has touched at least one circuit switch.
+    if (aOverride === null && bOverride === null) return;
+    circuitDrivenRef.current = true;
     applyThemeFromCircuit(output);
-  }, [output, themeIsLight, aOverride, bOverride]);
+  }, [output, aOverride, bOverride]);
 
   return (
     <div className="flex w-full flex-col items-center gap-ds-6">

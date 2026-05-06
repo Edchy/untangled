@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useSyncExternalStore } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { Variants } from "motion/react";
 import { Check, Moon, Sun } from "lucide-react";
 import type { Module, Slide } from "@/lib/content";
 import { useProgress, isChapterComplete } from "@/lib/progress";
+import { switchTheme, subscribeToThemeChange, getThemeSnapshot, getServerThemeSnapshot } from "@/lib/theme";
 
-const THEME_CHANGE_EVENT = "untangled-themechange";
 const UNTANGLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const panelVariants: Variants = {
@@ -87,24 +87,6 @@ const reducedItemVariants: Variants = {
   },
 };
 
-function getThemeSnapshot() {
-  return document.documentElement.dataset.theme === "light";
-}
-
-function getServerThemeSnapshot() {
-  return false;
-}
-
-function subscribeToThemeChange(callback: () => void) {
-  window.addEventListener(THEME_CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-
-  return () => {
-    window.removeEventListener(THEME_CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
-
 function chapterSlugToTitle(slug: string): string {
   const withoutNumber = slug.replace(/^\d+-/, "");
   return withoutNumber.charAt(0).toUpperCase() + withoutNumber.slice(1).replace(/-/g, " ");
@@ -144,11 +126,8 @@ function ThemeToggle() {
     getServerThemeSnapshot,
   );
 
-  function handleToggle() {
-    const theme = isLight ? "dark" : "light";
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem("theme", theme);
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+  function handleToggle(event: React.MouseEvent) {
+    switchTheme(isLight ? "dark" : "light", event.clientX, event.clientY);
   }
 
   return (
@@ -197,6 +176,15 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
     );
     return current?.slides.find((s) => s.key === currentSlideKey)?.conceptSlug ?? null;
   });
+
+  // Return focus to trigger when panel closes
+  const prevOpenRef = useRef(false);
+  useEffect(() => {
+    if (prevOpenRef.current && !open) {
+      (document.getElementById("toc-trigger") as HTMLElement | null)?.focus();
+    }
+    prevOpenRef.current = open;
+  }, [open]);
 
   // Close on Escape or click outside
   useEffect(() => {

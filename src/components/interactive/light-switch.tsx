@@ -3,30 +3,12 @@
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import rough from "roughjs";
+import { switchTheme, subscribeToThemeChange, getThemeSnapshot, getServerThemeSnapshot } from "@/lib/theme";
 
 const WIDTH = 132;
 const HEIGHT = 196;
 const DRAG_RANGE = 36;
 const SNAP_THRESHOLD = 0.18;
-const THEME_CHANGE_EVENT = "untangled-themechange";
-
-function getThemeSnapshot() {
-  return document.documentElement.dataset.theme === "light";
-}
-
-function getServerThemeSnapshot() {
-  return false;
-}
-
-function subscribeToThemeChange(callback: () => void) {
-  window.addEventListener(THEME_CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-
-  return () => {
-    window.removeEventListener(THEME_CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
 
 function withAlpha(color: string, alpha: number) {
   const value = color.trim();
@@ -66,7 +48,7 @@ function setupCanvas(canvas: HTMLCanvasElement) {
 
 type LightSwitchProps = {
   on: boolean;
-  onToggle: (nextOn: boolean) => void;
+  onToggle: (nextOn: boolean, originX?: number, originY?: number) => void;
 };
 
 export function LightSwitch({ on, onToggle }: LightSwitchProps) {
@@ -82,8 +64,16 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
   // tilt: -1 = up (off/dark), +1 = down (on/light).
   const tilt = useMotionValue(on ? 1 : -1);
   const draggingRef = useRef(false);
+
+  // Snap tilt to match when theme is changed externally (e.g. sidebar toggle).
+  useEffect(() => {
+    if (!draggingRef.current) {
+      animate(tilt, on ? 1 : -1, { type: "spring", stiffness: 520, damping: 22, mass: 0.6 });
+    }
+  }, [on, tilt]);
   const dragStartTiltRef = useRef(0);
   const dragStartYRef = useRef(0);
+  const pointerOriginRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const rockerRotate = useTransform(tilt, (t) => t * 14);
   const rockerY = useTransform(tilt, (t) => t * 1.2);
@@ -276,7 +266,7 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
     }
     lastFlipAtRef.current = now;
 
-    onToggle(nextOn);
+    onToggle(nextOn, pointerOriginRef.current.x, pointerOriginRef.current.y);
     setSeed((s) => s + 17);
     jostleScrews();
     playClick();
@@ -304,6 +294,7 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
     draggingRef.current = true;
     dragStartTiltRef.current = tilt.get();
     dragStartYRef.current = event.clientY;
+    pointerOriginRef.current = { x: event.clientX, y: event.clientY };
     playThock();
   }
 
@@ -345,6 +336,8 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
   function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
     if (event.key === " " || event.key === "Enter") {
       event.preventDefault();
+      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      pointerOriginRef.current = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       const nextOn = !on;
       commitFlip(nextOn);
       snapTo(nextOn ? 1 : -1);
@@ -446,11 +439,8 @@ export function StandaloneLightSwitch() {
     getServerThemeSnapshot,
   );
 
-  function handleToggle(nextOn: boolean) {
-    const theme = nextOn ? "light" : "dark";
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem("theme", theme);
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+  function handleToggle(nextOn: boolean, originX?: number, originY?: number) {
+    switchTheme(nextOn ? "light" : "dark", originX, originY);
   }
 
   return <LightSwitch on={on} onToggle={handleToggle} />;
