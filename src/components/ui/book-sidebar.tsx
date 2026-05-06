@@ -2,11 +2,90 @@
 
 import Link from "next/link";
 import { useState, useEffect, useSyncExternalStore } from "react";
-import { X, Check, Moon, Sun } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import type { Variants } from "motion/react";
+import { Check, Moon, Sun } from "lucide-react";
 import type { Module, Slide } from "@/lib/content";
 import { useProgress, isChapterComplete } from "@/lib/progress";
 
 const THEME_CHANGE_EVENT = "untangled-themechange";
+const UNTANGLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const panelVariants: Variants = {
+  closed: {
+    clipPath: "inset(0 0 100% 0)",
+    opacity: 0,
+    y: -4,
+  },
+  open: {
+    clipPath: "inset(0 0 0% 0)",
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.28, ease: UNTANGLE_EASE },
+  },
+};
+
+const reducedPanelVariants: Variants = {
+  closed: {
+    clipPath: "inset(0 0 0% 0)",
+    opacity: 0,
+    y: 0,
+  },
+  open: {
+    clipPath: "inset(0 0 0% 0)",
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.12, ease: "easeOut" },
+  },
+};
+
+const contentVariants: Variants = {
+  closed: {},
+  open: {
+    transition: {
+      delayChildren: 0.03,
+      staggerChildren: 0.015,
+    },
+  },
+};
+
+const reducedContentVariants: Variants = {
+  closed: {},
+  open: {
+    transition: {
+      delayChildren: 0,
+      staggerChildren: 0,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  closed: {
+    filter: "blur(3px)",
+    opacity: 0,
+    y: -5,
+  },
+  open: {
+    filter: "blur(0px)",
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.16, ease: UNTANGLE_EASE },
+  },
+};
+
+const reducedItemVariants: Variants = {
+  closed: {
+    filter: "blur(0px)",
+    opacity: 0,
+    y: 0,
+  },
+  open: {
+    filter: "blur(0px)",
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.12, ease: "easeOut" },
+  },
+};
 
 function getThemeSnapshot() {
   return document.documentElement.dataset.theme === "light";
@@ -78,7 +157,7 @@ function ThemeToggle() {
       aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
       aria-pressed={isLight}
       onClick={handleToggle}
-      className="relative flex w-10 shrink-0 items-center justify-center text-foreground/42 transition-colors duration-150 hover:bg-foreground/6 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
+      className="relative flex w-11 shrink-0 items-center justify-center text-foreground/42 transition-colors duration-150 hover:bg-foreground/6 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
     >
       <span
         aria-hidden
@@ -104,6 +183,7 @@ function ThemeToggle() {
 
 export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   const { visited } = useProgress();
+  const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [openModule, setOpenModule] = useState<string | null>(() => {
     const current = modules.find((m) =>
@@ -160,13 +240,13 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   let headerLeft: React.ReactNode;
   if (!openModule) {
     headerLeft = (
-      <span className="text-xs font-semibold tracking-wide text-foreground/36">Modules</span>
+      <span className="text-xs font-semibold tracking-wide text-foreground/72">Modules</span>
     );
   } else if (!effectiveOpenChapter) {
     headerLeft = (
       <button
         onClick={() => { setOpenModule(null); setOpenChapter(null); }}
-        className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-accent"
+        className="flex items-center gap-1.5 text-xs text-foreground/72 transition-colors hover:text-foreground"
       >
         <span aria-hidden>←</span>
         All modules
@@ -177,7 +257,7 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
     headerLeft = (
       <button
         onClick={() => isSkipped ? setOpenModule(null) : setOpenChapter(null)}
-        className="flex items-center gap-1.5 text-xs text-foreground/36 transition-colors hover:text-accent"
+        className="flex items-center gap-1.5 text-xs text-foreground/72 transition-colors hover:text-foreground"
       >
         <span aria-hidden>←</span>
         {isSkipped ? "All modules" : "All chapters"}
@@ -188,70 +268,86 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
   return (
     <>
       {/* Home + Trigger — fixed top-left */}
-      <nav id="site-nav" aria-label="Site navigation" className="fixed left-4 top-4 sm:left-8 sm:top-6 z-40 flex w-72 items-stretch rounded-control border border-foreground/12 overflow-hidden transition-colors hover:border-accent/40">
+      <nav
+        id="site-nav"
+        aria-label="Site navigation"
+        className={[
+          "fixed left-4 top-4 z-50 flex h-12 w-72 items-stretch overflow-hidden rounded-control border border-foreground/8 bg-background/94 backdrop-blur transition-colors duration-150 hover:border-foreground/14 hover:bg-background sm:left-8 sm:top-6",
+          open ? "border-b-transparent bg-background" : "",
+        ].join(" ")}
+        style={{
+          borderBottomLeftRadius: open ? 0 : undefined,
+          borderBottomRightRadius: open ? 0 : undefined,
+        }}
+      >
         <Link
           href="/"
           aria-label="Go to home"
-          className="flex items-center justify-center px-3 py-2"
+          className="group flex items-center justify-center px-3 py-2 text-foreground transition-colors duration-150 hover:bg-foreground/6 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
         >
-          <svg viewBox="0 0 89 97" className="h-5 w-5 fill-foreground" aria-hidden>
+          <svg viewBox="0 0 89 97" className="h-5 w-5 fill-current transition-colors duration-150 group-hover:text-accent" aria-hidden>
             <path d="M56.3745 17.3517C46.3359 17.3517 41.8185 25.5246 41.8185 35.0805V64H24V32.943C24 14.8369 34.666 0 56.3745 0C78.083 0 89 14.7112 89 32.943V64H71.1815V35.0805C71.1815 25.5246 66.5386 17.3517 56.3745 17.3517Z" />
             <path d="M32.627 79.28C42.1161 79.28 46.9257 70.96 46.9257 61.104V31.792H65.384V63.28C65.384 81.84 54.205 96.816 32.627 96.816C11.179 96.816 0 81.84 0 63.28V31.792H18.4583V61.232C18.4583 70.96 23.1379 79.28 32.627 79.28Z" />
           </svg>
         </Link>
 
-        <div className="w-px self-stretch bg-foreground/10" aria-hidden />
-
         <button
           id="toc-trigger"
           onClick={() => setOpen((o) => !o)}
           aria-label="Open table of contents"
-          className="flex flex-1 flex-col items-start px-3 py-2 text-left"
+          className="group flex flex-1 flex-col items-start px-3 py-2 text-left transition-colors duration-150 hover:bg-foreground/6 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
         >
-          <span className="truncate max-w-[160px] text-[10px] font-medium text-foreground/36">
+          <span className="max-w-[160px] truncate text-[10px] font-medium text-foreground/68 transition-colors duration-150 group-hover:text-foreground/78">
             {currentModule
               ? currentChapter
                 ? `${currentModule.title.replace(/^\d+:\s*/, "")} · ${currentChapter.title}`
                 : currentModule.title.replace(/^\d+:\s*/, "")
               : "Contents"}
           </span>
-          <span className="max-w-[160px] truncate text-xs font-medium text-foreground/70">
-            {lessonNumber && <span className="tabular-nums text-accent">{lessonNumber} </span>}{currentSlide?.title ?? ""}
+          <span className="max-w-[160px] truncate text-xs font-medium text-foreground/78 transition-colors duration-150 group-hover:text-foreground">
+            {lessonNumber && <span className="tabular-nums text-foreground/84">{lessonNumber} </span>}{currentSlide?.title ?? ""}
           </span>
         </button>
-
-        <div className="w-px self-stretch bg-foreground/10" aria-hidden />
 
         <ThemeToggle />
       </nav>
 
       {/* Floating panel */}
-      <div
+      <motion.div
         className={[
-          "fixed left-4 sm:left-8 top-1/2 z-50 flex h-[70svh] w-72 -translate-y-1/2 flex-col rounded-surface border border-foreground/12 bg-background overflow-hidden transition-opacity duration-150",
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+          "fixed left-4 top-16 z-50 flex h-[calc(100svh-5rem)] max-h-[70svh] w-72 origin-top flex-col overflow-hidden rounded-surface border border-t-0 border-foreground/8 bg-background pt-4 sm:left-8 sm:top-[72px]",
+          open ? "pointer-events-auto" : "pointer-events-none",
         ].join(" ")}
+        style={{
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+        }}
+        initial={false}
+        animate={open ? "open" : "closed"}
+        variants={reducedMotion ? reducedPanelVariants : panelVariants}
         id="toc-panel"
         aria-modal
+        aria-hidden={!open}
         role="dialog"
         aria-label="Table of contents"
       >
-        {/* Header */}
-        <div className="flex h-12 shrink-0 items-center justify-between border-b border-foreground/10 pl-5">
+        <motion.div
+          className="flex h-12 shrink-0 items-center border-b border-foreground/10 px-5"
+          variants={reducedMotion ? reducedItemVariants : itemVariants}
+        >
           {headerLeft}
-          <button
-            onClick={() => setOpen(false)}
-            aria-label="Close"
-            className="flex h-11 w-11 items-center justify-center rounded-control text-foreground/36 transition-colors hover:bg-foreground/6 hover:text-accent"
-          >
-            <X size={14} />
-          </button>
-        </div>
+        </motion.div>
 
-        <nav className="flex flex-1 flex-col overflow-hidden">
+        <motion.nav
+          className="flex flex-1 flex-col overflow-hidden"
+          variants={reducedMotion ? reducedContentVariants : contentVariants}
+        >
           {!openModule ? (
             /* ── Module list ── */
-            <ol className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
+            <motion.ol
+              className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3"
+              variants={reducedMotion ? reducedContentVariants : contentVariants}
+            >
               {modules.map((m) => {
                 const hasActive = m.slides.some((s) => s.key === currentSlideKey);
                 const moduleChapters = getChapters(m);
@@ -259,75 +355,92 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                   isChapterComplete(visited, c.slides.map((s) => s.key))
                 );
                 return (
-                  <li key={m.slug}>
+                  <motion.li key={m.slug} variants={reducedMotion ? reducedItemVariants : itemVariants}>
                     <button
                       onClick={() => { setOpenModule(m.slug); setOpenChapter(null); }}
                       className={[
                         "flex w-full items-center gap-3 rounded-control px-2.5 py-2.5 text-left transition-colors",
                         hasActive
-                          ? "bg-accent/8 text-accent hover:bg-accent/14"
+                          ? "font-semibold text-accent hover:bg-foreground/6"
                           : isDone
-                            ? "text-foreground/36 hover:bg-foreground/4 hover:text-accent"
-                            : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
+                            ? "text-foreground/68 hover:bg-foreground/6 hover:text-foreground"
+                            : "text-foreground/76 hover:bg-foreground/6 hover:text-foreground",
                       ].join(" ")}
                     >
-                      {isDone && <Check size={11} className="shrink-0 text-foreground/36" />}
+                      {isDone && <Check size={11} className="shrink-0 text-foreground/68" />}
                       <span className={["text-xs leading-5", hasActive ? "font-semibold" : "font-medium"].join(" ")}>
                         {m.title}
                       </span>
                     </button>
-                  </li>
+                  </motion.li>
                 );
               })}
-            </ol>
+            </motion.ol>
           ) : !effectiveOpenChapter ? (
             /* ── Chapter list ── */
-            <div className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
-              <p className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30">
+            <motion.div
+              className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3"
+              variants={reducedMotion ? reducedContentVariants : contentVariants}
+            >
+              <motion.p
+                className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/68"
+                variants={reducedMotion ? reducedItemVariants : itemVariants}
+              >
                 {mod?.title.replace(/^\d+:\s*/, "")}
-              </p>
+              </motion.p>
               <ol>
                 {chapters.length > 0 ? chapters.map((chapter, i) => {
                   const hasActive = chapter.slides.some((s) => s.key === currentSlideKey);
                   const isDone = isChapterComplete(visited, chapter.slides.map((s) => s.key));
                   return (
-                    <li key={chapter.slug}>
+                    <motion.li key={chapter.slug} variants={reducedMotion ? reducedItemVariants : itemVariants}>
                       <button
                         onClick={() => setOpenChapter(chapter.slug)}
                         className={[
                           "flex w-full items-center gap-3 rounded-control px-2.5 py-2.5 text-left transition-colors",
                           hasActive
-                            ? "bg-accent/8 text-accent hover:bg-accent/14"
+                            ? "font-semibold text-accent hover:bg-foreground/6"
                             : isDone
-                              ? "text-foreground/36 hover:bg-foreground/4 hover:text-accent"
-                              : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
+                              ? "text-foreground/68 hover:bg-foreground/6 hover:text-foreground"
+                              : "text-foreground/76 hover:bg-foreground/6 hover:text-foreground",
                         ].join(" ")}
                       >
                         {isDone ? (
-                          <Check size={11} className="shrink-0 text-foreground/36" />
+                          <Check size={11} className="shrink-0 text-foreground/68" />
                         ) : (
-                          <span className={["shrink-0 text-[10px] tabular-nums", hasActive ? "text-accent/60" : "text-foreground/28"].join(" ")}>
+                          <span className={["shrink-0 text-[10px] tabular-nums", hasActive ? "text-accent" : "text-foreground/68"].join(" ")}>
                             {String(i + 1).padStart(2, "0")}
                           </span>
                         )}
                         <span className={["flex-1 text-xs leading-5", hasActive ? "font-semibold" : "font-medium"].join(" ")}>{chapter.title}</span>
-                        <span className={["shrink-0 text-[10px] tabular-nums", hasActive ? "text-accent/50" : "text-foreground/28"].join(" ")}>
+                        <span className={["shrink-0 text-[10px] tabular-nums", hasActive ? "text-accent" : "text-foreground/68"].join(" ")}>
                           {chapter.slides.length}
                         </span>
                       </button>
-                    </li>
+                    </motion.li>
                   );
                 }) : (
-                  <li className="px-2.5 py-2 text-xs italic text-foreground/24">Coming soon</li>
+                  <motion.li
+                    className="px-2.5 py-2 text-xs italic text-foreground/68"
+                    variants={reducedMotion ? reducedItemVariants : itemVariants}
+                  >
+                    Coming soon
+                  </motion.li>
                 )}
               </ol>
-            </div>
+            </motion.div>
           ) : (
             /* ── Slide list ── */
-            <div className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3">
-              <p className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/30">
+            <motion.div
+              className="scrollbar-thin flex-1 overflow-y-auto px-2.5 py-3"
+              variants={reducedMotion ? reducedContentVariants : contentVariants}
+            >
+              <motion.p
+                className="px-2.5 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-foreground/68"
+                variants={reducedMotion ? reducedItemVariants : itemVariants}
+              >
                 {activeChapter?.title}
-              </p>
+              </motion.p>
               <ol>
                 {chapterSlides.length > 0 ? (
                   chapterSlides.map((slide, i) => {
@@ -337,9 +450,9 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                     );
                     const isQuizLocked = slide.subConceptSlug?.includes("quiz") && slide.key !== conceptSlides[0]?.key;
                     return (
-                      <li key={slide.key}>
+                      <motion.li key={slide.key} variants={reducedMotion ? reducedItemVariants : itemVariants}>
                         {isQuizLocked ? (
-                          <span className="flex cursor-default items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 text-foreground/30 select-none">
+                          <span className="flex cursor-default items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 text-foreground/62 select-none">
                             <span className="shrink-0 text-[10px] tabular-nums">
                               {String(i + 1).padStart(2, "0")}
                             </span>
@@ -352,30 +465,35 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                             className={[
                               "flex items-baseline gap-3 rounded-control px-2.5 py-2 text-xs leading-5 transition-colors",
                               isActive
-                                ? "bg-accent/8 font-semibold text-accent hover:bg-accent/14"
-                                : "text-foreground/44 hover:bg-foreground/4 hover:text-accent",
+                                ? "font-semibold text-accent hover:bg-foreground/6"
+                                : "text-foreground/76 hover:bg-foreground/6 hover:text-foreground",
                             ].join(" ")}
                           >
                             <span className={[
                               "shrink-0 text-[10px] tabular-nums",
-                              isActive ? "text-accent" : "text-foreground/28",
+                              isActive ? "text-accent" : "text-foreground/68",
                             ].join(" ")}>
                               {String(i + 1).padStart(2, "0")}
                             </span>
-                            {slide.title}
+                            <span className={isActive ? "text-accent" : ""}>{slide.title}</span>
                           </Link>
                         )}
-                      </li>
+                      </motion.li>
                     );
                   })
                 ) : (
-                  <li className="px-2.5 py-2 text-xs italic text-foreground/24">Coming soon</li>
+                  <motion.li
+                    className="px-2.5 py-2 text-xs italic text-foreground/68"
+                    variants={reducedMotion ? reducedItemVariants : itemVariants}
+                  >
+                    Coming soon
+                  </motion.li>
                 )}
               </ol>
-            </div>
+            </motion.div>
           )}
-        </nav>
-      </div>
+        </motion.nav>
+      </motion.div>
     </>
   );
 }

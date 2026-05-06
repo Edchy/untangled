@@ -56,7 +56,7 @@ function ModeButton({
       size="lg"
       aria-pressed={active}
       onClick={onClick}
-      className="h-14 flex-1 text-base"
+      className="h-14 flex-1 select-none text-base"
     >
       {children}
     </Button>
@@ -92,7 +92,7 @@ function SwitchHitTarget({
       tabIndex={0}
       aria-pressed={on}
       aria-label={`Switch ${label}: ${on ? "on" : "off"}`}
-      className="group/switch cursor-pointer outline-none"
+      className="group/switch cursor-pointer select-none outline-none"
       onClick={onToggle}
       onKeyDown={handleKeyDown}
     >

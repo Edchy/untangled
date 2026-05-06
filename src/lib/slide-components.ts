@@ -40,6 +40,7 @@ import { FreeFormQuestion } from "@/components/interactive/free-form-question";
 import { QuestionResponse } from "@/components/interactive/question-response";
 import { QuizGate } from "@/components/interactive/quiz-gate";
 import { GateDemoAND, GateDemoOR, GateDemoNOT } from "@/components/interactive/gate-demo";
+import { AndGateExplorer } from "@/components/interactive/and-gate-explorer";
 import { HalfAdderDemo } from "@/components/interactive/half-adder-demo";
 import { LogicGatePlayground } from "@/components/interactive/logic-gate-playground";
 import { LogicSwitchSlide } from "@/components/interactive/logic-switch-slide";
@@ -90,6 +91,7 @@ export const interactiveComponents: Record<string, ComponentType<any>> = {
   "free-form-question": FreeFormQuestion,
   "question-response": QuestionResponse,
   "quiz-gate": QuizGate,
+  "and-gate-explorer": AndGateExplorer,
   "gate-demo-and": GateDemoAND,
   "gate-demo-or": GateDemoOR,
   "gate-demo-not": GateDemoNOT,

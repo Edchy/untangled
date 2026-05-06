@@ -79,3 +79,13 @@ Before implementing anything with a library or framework, look up the docs first
 - **What it is:** A free, nonprofit, interactive "learn AI" experience that uses narrative, illustration, and hands-on moments to help non-technical people build a real mental model of AI.
 - **Tier:** Public
 - **Stack:** Next.js App Router, TypeScript, MDX, Tailwind CSS, Framer Motion, Rough.js, Vercel, PWA
+
+## Content Structure
+The content hierarchy is: **module → concept → slide**.
+
+In everyday conversation, the user may say:
+- **"module"** → maps to a top-level directory like `01-the-machine`
+- **"chapter"** → maps to a concept directory within a module, like `02-logic-and-circuits`
+- **"lesson"** or **"slide"** → maps to an individual `.mdx` file within a concept
+
+Content lives in `content/<module-slug>/<concept-slug>/[<subconcept-slug>/]<NN>-slide-name.mdx`.
