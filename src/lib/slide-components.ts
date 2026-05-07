@@ -55,8 +55,8 @@ import { ComparisonCircuitIllustration } from "@/components/interactive/comparis
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const slideComponents: Record<string, ComponentType<any>> = {
-  "01-the-machine/01-what-is-a-computer/01-try-it": OpeningLightSwitchCopy,
-  "01-the-machine/01-what-is-a-computer/13-instructions": InstructionsBody,
+  "01-the-machine/01-the-foundation/01-try-it": OpeningLightSwitchCopy,
+  "01-the-machine/01-the-foundation/13-instructions": InstructionsBody,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

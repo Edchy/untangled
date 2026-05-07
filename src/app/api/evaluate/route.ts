@@ -20,9 +20,8 @@ Separate the paragraphs with one blank line. Do not use bullet points, headings,
 If the student has skipped questions, just acknowledge that they didn't answer it and provide a short explanation of the concept as if teaching it for the first time.
 Use the expected idea as a guide, not as wording the student must repeat. Reward answers that show the same mental model in the student's own words.
 For each answer: if they got it right, affirm it briefly. If they got it wrong or missed something important, explain the concept clearly in plain language — don't just nudge, actually teach it.
-Calibrate your length to how much correction is needed. Three perfect answers might get three short sentences. Three wrong answers might need a short paragraph each.
+Calibrate your length to how much correction is needed. Three perfect answers might get three short sentences. Three wrong answers might need a short paragraph each. If the answer for a question is clearly gibberish, make a jokeful comment about it and then explain the concept.
 Never say "incorrect" or "wrong". Write like a thoughtful person talking to a curious non-technical friend.`;
-
 
 const MAX_ANSWER_CHARS = 500;
 const RATE_LIMIT_MESSAGE =
@@ -50,10 +49,12 @@ export async function POST(req: Request) {
       sanitized[k] = String(v).slice(0, MAX_ANSWER_CHARS);
     }
 
-    const userMessage = rubric.map(({ id, question, expected }) => {
-      const answer = sanitized[id]?.trim() || "[skipped]";
-      return `Question: ${question}\nExpected idea: ${expected}\nStudent answer: ${answer}`;
-    }).join("\n\n");
+    const userMessage = rubric
+      .map(({ id, question, expected }) => {
+        const answer = sanitized[id]?.trim() || "[skipped]";
+        return `Question: ${question}\nExpected idea: ${expected}\nStudent answer: ${answer}`;
+      })
+      .join("\n\n");
 
     const models = [
       "google/gemini-2.0-flash-001",

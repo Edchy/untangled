@@ -14,7 +14,8 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   const { previous, next } = current ? getAdjacentSlides(current) : { previous: undefined, next: undefined };
   const isQuizQuestion = current?.component === "free-form-question";
   const isQuizResponse = current?.component === "question-response";
-  const showKeyboardHint = current?.key === "01-the-machine/01-what-is-a-computer/01-try-it";
+  const isQuizGate = current?.component === "quiz-gate";
+  const showKeyboardHint = current?.key === "01-the-machine/01-the-foundation/01-try-it";
 
   // A chapter-end slide is the last slide of its chapter: no next slide, or next is a different chapter
   const isChapterEnd = !!current && (!next || next.conceptSlug !== current.conceptSlug);
@@ -26,10 +27,16 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
     : current?.hideNavNext
       ? current?.skipHref ?? undefined
       : next?.href;
+
+  // For the last quiz question: if the user has no answers to submit, skip past the response slide
+  const responseSlide = isQuizQuestion && current?.isLastQuestion
+    ? getSlides().find((s) => s.moduleSlug === current.moduleSlug && s.conceptSlug === current.conceptSlug && s.component === "question-response")
+    : undefined;
+  const noAnswerSkipHref = responseSlide
+    ? getAdjacentSlides(responseSlide).next?.href
+    : undefined;
   const nextLabel = isQuizQuestion
-    ? current?.skipHref
-      ? "skip question and submit"
-      : "skip question"
+    ? "skip question"
     : current?.hideNavNext && current?.skipHref && !isQuizResponse
       ? "skip quiz"
       : undefined;
@@ -54,7 +61,9 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
           previousHref={previousHref}
           nextHref={nextHref}
           nextLabel={nextLabel}
-          nextSubmitQuestionId={isQuizQuestion && current?.skipHref ? current.questionId ?? undefined : undefined}
+          nextSubmitQuestionId={isQuizQuestion && current?.isLastQuestion ? current.questionId ?? undefined : undefined}
+          skipQuestionId={isQuizQuestion ? current.questionId ?? undefined : undefined}
+          noAnswerSkipHref={noAnswerSkipHref}
           showKeyboardHint={showKeyboardHint}
         />
       )}

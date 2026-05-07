@@ -11,6 +11,8 @@ type SlideNavProps = {
   nextHref?: string;
   nextLabel?: string;
   nextSubmitQuestionId?: string;
+  skipQuestionId?: string;
+  noAnswerSkipHref?: string;
   showKeyboardHint?: boolean;
 };
 
@@ -27,16 +29,32 @@ export function SlideNav({
   nextHref,
   nextLabel,
   nextSubmitQuestionId,
+  skipQuestionId,
+  noAnswerSkipHref,
   showKeyboardHint,
 }: SlideNavProps) {
   const router = useRouter();
-  const { submitAnswers } = useChapterAnswers();
+  const { submitAnswers, answers, saveAnswer } = useChapterAnswers();
+  const hasExistingAnswers = Object.entries(answers).some(([id, v]) => id !== (nextSubmitQuestionId ?? skipQuestionId) && v.trim().length > 0);
+  const resolvedNextLabel = nextSubmitQuestionId && hasExistingAnswers
+    ? "skip question and submit"
+    : nextLabel;
+  const resolvedNextHref = nextSubmitQuestionId && !hasExistingAnswers && noAnswerSkipHref
+    ? noAnswerSkipHref
+    : nextHref;
 
   function handleNextClick(event: MouseEvent<HTMLAnchorElement>) {
-    if (!nextHref || !nextSubmitQuestionId) return;
+    if (!resolvedNextHref || !nextSubmitQuestionId || !hasExistingAnswers) return;
     event.preventDefault();
     submitAnswers(nextSubmitQuestionId, "");
-    router.push(nextHref, { transitionTypes: ["nav-forward"] });
+    router.push(resolvedNextHref, { transitionTypes: ["nav-forward"] });
+  }
+
+  function handleSkipClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (!resolvedNextHref || !skipQuestionId) return;
+    event.preventDefault();
+    saveAnswer(skipQuestionId, "");
+    router.push(resolvedNextHref, { transitionTypes: ["nav-forward"] });
   }
 
   return (
@@ -74,25 +92,26 @@ export function SlideNav({
             Home
           </Link>
         )}
-        {nextHref ? (
-          nextSubmitQuestionId ? (
+        {resolvedNextHref ? (
+          nextSubmitQuestionId && hasExistingAnswers ? (
             <Link
-              href={nextHref}
+              href={resolvedNextHref}
               onClick={handleNextClick}
               aria-label="Next slide"
               className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
             >
-              {nextLabel ?? "Next"}
+              {resolvedNextLabel ?? "Next"}
               <ArrowRight size={14} />
             </Link>
           ) : (
             <Link
-              href={nextHref}
+              href={resolvedNextHref}
+              onClick={skipQuestionId ? handleSkipClick : undefined}
               transitionTypes={["nav-forward"]}
               aria-label="Next slide"
               className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
             >
-              {nextLabel ?? "Next"}
+              {resolvedNextLabel ?? "Next"}
               <ArrowRight size={14} />
             </Link>
           )

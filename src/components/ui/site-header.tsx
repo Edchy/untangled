@@ -15,7 +15,7 @@ export function SiteHeader() {
           <Link className="hover:text-accent" href="/modules">
             Modules
           </Link>
-          <Link className="hover:text-accent" href="/01-the-machine/01-what-is-a-computer/01-try-it">
+          <Link className="hover:text-accent" href="/01-the-machine/01-the-foundation/01-try-it">
             Start
           </Link>
         </Text>

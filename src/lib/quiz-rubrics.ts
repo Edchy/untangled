@@ -5,7 +5,7 @@ export type QuizQuestion = {
 };
 
 export const QUIZ_RUBRICS: Record<string, QuizQuestion[]> = {
-  "01-what-is-a-computer": [
+  "01-the-foundation": [
     {
       id: "transistor",
       question:
@@ -27,7 +27,7 @@ export const QUIZ_RUBRICS: Record<string, QuizQuestion[]> = {
         "One bit can represent two states. Two bits can represent four combinations: 00, 01, 10, and 11. The key idea is that each added bit doubles the number of possible combinations because every old possibility can now happen with the new bit off or on.",
     },
   ],
-  "02-logic-and-circuits": [
+  "02-the-logic": [
     {
       id: "and-gate",
       question:

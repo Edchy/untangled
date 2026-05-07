@@ -1,0 +1,24 @@
+---
+title: "Turn the rule into gates"
+module: the-machine
+concept: the-logic
+order: 11
+type: visual
+component: comparison-circuit-illustration
+component_variant: setup
+cols: 2
+---
+
+The rule is: the light turns on if **A is 1 and B is 0**.
+
+The **AND gate** seems like the obvious choice. It fires when both inputs are 1. So let's try feeding A and B straight in.
+
+Our winning combination is A=1, B=0.
+AND sees 1 AND 0 and outputs 0.
+The light stays off. **Wrong answer.**
+
+What about **OR**? It fires when either input is 1.
+With A=1, B=0 it outputs 1. Correct.
+But with A=0, B=1 it also outputs 1, even though B is the bigger one. **Also wrong.**
+
+We're stuck. AND only fires when both inputs are 1. OR fires when either input is 1. But what we need is a gate that fires when **A is 1 and B is 0**. None of these gates can do that.
