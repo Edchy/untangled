@@ -5,6 +5,8 @@ grade the answers from each quiz and show the user in the end what they understa
 
 add users last chapter to localstorage so that they can pick up where they left off when they come back. (this needs to be relfected on the start page aswell somehow)
 
+permanent knowledge USP. this will never get outdated. the core concepts of how computers work, how AI works, how the internet works, etc. will always be relevant and useful to understand. even as technology evolves, these fundamental ideas will still be the foundation of everything else.
+
 view-transitions?
 scroll animations?
 

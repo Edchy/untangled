@@ -12,7 +12,9 @@
       "Bash(sed -i '' 's/export function GateFieldIllustration\\(\\) {/export function GateFieldIllustration\\(\\) {\\\\n  const theme = useTheme\\(\\);/' src/components/interactive/gate-field-illustration.tsx)",
       "Bash(sed -i '' 's/function AdderCanvas\\({ a, b, sum, carry }: { a: boolean; b: boolean; sum: boolean; carry: boolean }\\) {/function AdderCanvas\\({ a, b, sum, carry }: { a: boolean; b: boolean; sum: boolean; carry: boolean }\\) {\\\\n  const theme = useTheme\\(\\);/' src/components/interactive/half-adder-demo.tsx)",
       "Bash(sed -i '' 's/}, \\\\[a, b, sum, carry\\\\]\\);/}, [a, b, sum, carry, theme]\\);/' src/components/interactive/half-adder-demo.tsx)",
-      "Bash(grep -rn \"#[0-9a-fA-F]\\\\{3,6\\\\}\\\\|rgb\\(\" /Users/eddietovebeppearonelsa/dev/wip/untangled/src/components/interactive/ --include=\"*.tsx\")"
+      "Bash(grep -rn \"#[0-9a-fA-F]\\\\{3,6\\\\}\\\\|rgb\\(\" /Users/eddietovebeppearonelsa/dev/wip/untangled/src/components/interactive/ --include=\"*.tsx\")",
+      "Bash(sort -t: -k2 -n)",
+      "Bash(npx tsc *)"
     ]
   }
 }

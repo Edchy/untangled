@@ -1,7 +1,7 @@
 import { SlideNav } from "@/components/ui/slide-nav";
 import { SlideGestures } from "@/components/ui/slide-gestures";
 import { ChapterEndNav } from "@/components/interactive/chapter-end-nav";
-import { getAdjacentSlides, getSlide } from "@/lib/content";
+import { getAdjacentSlides, getSlide, getSlides } from "@/lib/content";
 
 type SlideLayoutProps = {
   children: React.ReactNode;
@@ -16,8 +16,8 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   const isQuizResponse = current?.component === "question-response";
   const showKeyboardHint = current?.key === "01-the-machine/01-what-is-a-computer/01-try-it";
 
-  // A chapter-end slide is the last slide of its chapter: next exists but is in a different chapter
-  const isChapterEnd = !!current && !!next && next.conceptSlug !== current.conceptSlug;
+  // A chapter-end slide is the last slide of its chapter: no next slide, or next is a different chapter
+  const isChapterEnd = !!current && (!next || next.conceptSlug !== current.conceptSlug);
 
   const nextHref = isQuizQuestion
     ? current?.skipHref ?? next?.href
@@ -35,6 +35,9 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
       : undefined;
 
   const previousHref = current?.backHref ?? previous?.href;
+  const chapterStartHref = current
+    ? getSlides().find((item) => item.moduleSlug === current.moduleSlug && item.conceptSlug === current.conceptSlug)?.href
+    : undefined;
 
   return (
     <>
@@ -45,7 +48,7 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
         disableNext={!isChapterEnd && !isQuizQuestion && !isQuizResponse && current?.hideNavNext && !!current?.skipHref}
       />
       {isChapterEnd ? (
-        <ChapterEndNav previousHref={previousHref} nextChapterHref={next!.href} />
+        <ChapterEndNav previousHref={previousHref} nextChapterHref={next?.href} shareHref={chapterStartHref} />
       ) : (
         <SlideNav
           previousHref={previousHref}

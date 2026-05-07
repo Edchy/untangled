@@ -24,7 +24,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <strong className="font-semibold text-foreground/90">{children}</strong>
     ),
     ul: ({ children }) => (
-      <ul className="mt-prose-block space-y-2.5 text-body leading-[var(--ds-leading-body)] text-foreground/68">
+      <ul className="mt-prose-block space-y-2.5 font-body text-body leading-[var(--ds-leading-body)] text-foreground/68">
         {children}
       </ul>
     ),

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createElement } from "react";
 import { BookSidebar } from "@/components/ui/book-sidebar";
+import { ChapterCoverSlide } from "@/components/ui/chapter-cover-slide";
 import { Heading } from "@/components/ui/typography";
 import { RevealAnswer } from "@/components/ui/reveal-answer";
 import { SlideColumns, SlideShell } from "@/components/ui/slide-shell";
@@ -17,6 +18,7 @@ import {
 } from "@/lib/content";
 
 const REVEAL_RE = /<reveal-answer data-answer="([^"]*)"><\/reveal-answer>/g;
+const ROMAN_NUMERALS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 function renderHtml(html: string) {
   const parts: React.ReactNode[] = [];
@@ -70,6 +72,7 @@ export default async function SlidePage({ params }: SlidePageProps) {
   const SlideContent = getSlideComponent(current.key);
 
   const modules = getModuleList();
+  const moduleInfo = modules.find((item) => item.slug === current.moduleSlug);
   const InteractiveContent = current.component
     ? getInteractiveComponent(current.component)
     : null;
@@ -84,8 +87,46 @@ export default async function SlidePage({ params }: SlidePageProps) {
   if (current.questionId) interactiveProps.questionId = current.questionId;
   if (next) interactiveProps.nextHref = next.href;
   if (current.component === "free-form-question") interactiveProps.bodyHtml = current.html;
+  if (current.isLastQuestion) interactiveProps.isLastQuestion = true;
   if (current.skipHref) interactiveProps.skipHref = current.skipHref;
   if (current.redirectHref) interactiveProps.redirectHref = current.redirectHref;
+
+  if (current.type === "cover") {
+    const chapterNumber = Number(current.conceptSlug.match(/^\d+/)?.[0] ?? 0);
+    const moduleTitle = moduleInfo?.title.replace(/^\d+:\s*/, "") ?? current.module;
+    const eyebrow = moduleTitle;
+    const chapterLabel = chapterNumber > 0
+      ? `Chapter ${ROMAN_NUMERALS[chapterNumber] ?? chapterNumber}`
+      : "Chapter";
+
+    const ulMatch = current.html.match(/<ul[\s\S]*?<\/ul>/);
+    const ulHtml = ulMatch ? ulMatch[0] : null;
+    const proseHtml = current.html.replace(/<ul[\s\S]*?<\/ul>/, "").trim();
+
+    const coverProse = proseHtml
+      ? <div dangerouslySetInnerHTML={{ __html: proseHtml }} />
+      : null;
+    const coverOutline = ulHtml
+      ? <div dangerouslySetInnerHTML={{ __html: ulHtml }} />
+      : null;
+
+    return (
+      <SlideShell>
+        <BookSidebar modules={modules} currentSlideKey={current.key} />
+        <SlideTransition>
+          <ChapterCoverSlide
+            eyebrow={eyebrow}
+            chapterLabel={chapterLabel}
+            title={current.title}
+            prose={coverProse}
+            outline={coverOutline}
+          />
+        </SlideTransition>
+        <SlideProgressMarker slideKey={current.key} />
+        <DevToolbar conceptSlug={concept} />
+      </SlideShell>
+    );
+  }
 
   const slideBody = current.cols === 1 ? (
     <div className={`flex w-full flex-col items-center ${InteractiveContent ? "max-w-5xl" : "max-w-2xl"}`}>

@@ -109,10 +109,12 @@ function getChapters(mod: Module): Chapter[] {
   for (const slide of mod.slides) {
     if (!seen.has(slide.conceptSlug)) {
       seen.add(slide.conceptSlug);
+      const conceptSlides = mod.slides.filter((s) => s.conceptSlug === slide.conceptSlug);
+      const coverSlide = conceptSlides.find((s) => s.type === "cover");
       chapters.push({
         slug: slide.conceptSlug,
-        title: chapterSlugToTitle(slide.conceptSlug),
-        slides: mod.slides.filter((s) => s.conceptSlug === slide.conceptSlug),
+        title: coverSlide?.title ?? chapterSlugToTitle(slide.conceptSlug),
+        slides: conceptSlides,
       });
     }
   }
@@ -436,7 +438,9 @@ export function BookSidebar({ modules, currentSlideKey }: BookNavProps) {
                     const conceptSlides = chapterSlides.filter(
                       (s) => s.subConceptSlug === slide.subConceptSlug && s.subConceptSlug !== null
                     );
-                    const isQuizLocked = slide.subConceptSlug?.includes("quiz") && slide.key !== conceptSlides[0]?.key;
+                    const isQuizLocked = (slide.subConceptSlug?.includes("quiz") && slide.key !== conceptSlides[0]?.key)
+                      || slide.component === "free-form-question"
+                      || slide.component === "question-response";
                     return (
                       <motion.li key={slide.key} variants={reducedMotion ? reducedItemVariants : itemVariants}>
                         {isQuizLocked ? (

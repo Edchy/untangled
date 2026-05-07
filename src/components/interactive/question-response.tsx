@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useChapterAnswers } from "./chapter-answers-context";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   nextHref?: string;
@@ -11,7 +12,7 @@ interface Props {
 
 export function QuestionResponse({ redirectHref }: Props) {
   const router = useRouter();
-  const { feedbackState, feedback, fullFeedback } = useChapterAnswers();
+  const { feedbackState, feedback, fullFeedback, retrySubmit } = useChapterAnswers();
 
   useEffect(() => {
     if (feedbackState === "idle" && redirectHref) {
@@ -30,9 +31,18 @@ export function QuestionResponse({ redirectHref }: Props) {
         </div>
       )}
 
-      {(feedbackState === "streaming" || feedbackState === "done" || feedbackState === "error") && feedback && (
+      {feedbackState === "error" && (
+        <div className="flex flex-col gap-4">
+          <p className="text-body text-foreground/48">{feedback}</p>
+          <Button variant="subtle" size="sm" onClick={retrySubmit}>
+            Try again
+          </Button>
+        </div>
+      )}
+
+      {(feedbackState === "streaming" || feedbackState === "done") && feedback && (
         <div className="relative">
-          {/* Ghost holds the full final text from word 1 — reserves exact height so streaming never reflows */}
+          {/* Ghost holds the full final text — reserves exact height so streaming never reflows */}
           <p className="max-w-[70ch] text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] whitespace-pre-line opacity-0 select-none" aria-hidden>
             {fullFeedback || feedback}
           </p>
@@ -44,7 +54,6 @@ export function QuestionResponse({ redirectHref }: Props) {
           </p>
         </div>
       )}
-
     </div>
   );
 }

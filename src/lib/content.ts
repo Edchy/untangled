@@ -3,7 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { slideComponents, interactiveComponents } from "@/lib/slide-components";
 
-export type SlideType = "text" | "interactive" | "visual";
+export type SlideType = "text" | "interactive" | "visual" | "cover";
 
 export type Slide = {
   title: string;
@@ -18,6 +18,7 @@ export type Slide = {
   component: string | null;
   componentVariant: string | null;
   questionId: string | null;
+  isLastQuestion: boolean;
   skipHref: string | null;
   backHref: string | null;
   redirectHref: string | null;
@@ -110,6 +111,19 @@ function toHtml(mdxBody: string): string {
         ].join("");
       }
 
+      const isUnorderedList = lines.every((line) => line.trim().startsWith("- "));
+      if (isUnorderedList) {
+        const items = lines.map((line) => {
+          const text = line.replace(/^-\s+/, "");
+          const colonMatch = text.match(/^([^:]+):\s*(.+)$/);
+          if (colonMatch) {
+            return `<li><span class="outline-item-label">${renderInlineMarkdown(colonMatch[1])}</span><span class="outline-item-desc">${renderInlineMarkdown(colonMatch[2])}</span></li>`;
+          }
+          return `<li>${renderInlineMarkdown(text)}</li>`;
+        });
+        return `<ul>${items.join("")}</ul>`;
+      }
+
       if (lines.length === 1 && lines[0].startsWith("?? ")) {
         const answer = renderInlineMarkdown(lines[0].slice(3).trim());
         return `<reveal-answer data-answer="${answer.replace(/"/g, "&quot;")}"></reveal-answer>`;
@@ -181,6 +195,7 @@ function toSlide(filePath: string): Slide {
     component: data.component ? String(data.component) : null,
     componentVariant: data.component_variant ? String(data.component_variant) : null,
     questionId: data.question_id ? String(data.question_id) : null,
+    isLastQuestion: Boolean(data.is_last_question),
     skipHref: data.skip_href ? String(data.skip_href) : null,
     backHref: data.back_href ? String(data.back_href) : null,
     redirectHref: data.redirect_href ? String(data.redirect_href) : null,
@@ -211,7 +226,7 @@ export function getSlides(): Slide[] {
     return slide;
   });
 
-  return slides.sort((a, b) => {
+  const sortedSlides = slides.sort((a, b) => {
     if (a.moduleSlug !== b.moduleSlug) {
       return a.moduleSlug.localeCompare(b.moduleSlug);
     }
@@ -220,6 +235,23 @@ export function getSlides(): Slide[] {
     }
     return a.order - b.order;
   });
+
+  const conceptSlides = new Map<string, Slide[]>();
+  for (const slide of sortedSlides) {
+    const conceptKey = `${slide.moduleSlug}/${slide.conceptSlug}`;
+    conceptSlides.set(conceptKey, [...(conceptSlides.get(conceptKey) ?? []), slide]);
+  }
+
+  for (const [conceptKey, items] of conceptSlides) {
+    const covers = items.filter((slide) => slide.type === "cover");
+    if (covers.length !== 1) {
+      throw new Error(
+        `Expected exactly one cover slide in ${conceptKey}; found ${covers.length}. Add a 00-cover.mdx slide with type: cover.`,
+      );
+    }
+  }
+
+  return sortedSlides;
 }
 
 export function getModuleList(): Module[] {

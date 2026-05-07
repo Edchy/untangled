@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Fira_Sans } from "next/font/google";
+import { Crimson_Pro, Fira_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const firaSans = Fira_Sans({
+const crimsonProBody = Crimson_Pro({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const cormorant = Cormorant_Garamond({
+const crimsonProDisplay = Crimson_Pro({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
+});
+
+const firaSans = Fira_Sans({
+  variable: "--font-ui",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -49,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${firaSans.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${crimsonProBody.variable} ${crimsonProDisplay.variable} ${firaSans.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-background text-foreground">

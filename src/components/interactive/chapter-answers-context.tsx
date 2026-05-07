@@ -15,6 +15,7 @@ interface ChapterAnswersContextValue {
   feedback: string;
   fullFeedback: string;
   submitAnswers: (finalId: string, finalText: string) => void;
+  retrySubmit: () => void;
 }
 
 const ChapterAnswersContext = createContext<ChapterAnswersContextValue | null>(null);
@@ -27,8 +28,8 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
   const [feedback, setFeedback] = useState("");
   const [fullFeedback, setFullFeedback] = useState("");
 
-  // Keep a ref to answers so saveAnswer can write to localStorage synchronously
   const answersRef = useRef<Answers>({});
+  const lastSubmittedAnswersRef = useRef<Answers | null>(null);
 
   // Restore from localStorage on mount
   useEffect(() => {
@@ -37,12 +38,10 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
-        const { answers: a, feedback: f, feedbackState: fs } = JSON.parse(saved);
+        const { answers: a } = JSON.parse(saved);
         window.setTimeout(() => {
           if (cancelled) return;
           if (a) { setAnswers(a); answersRef.current = a; }
-          if (f) { setFeedback(f); setFullFeedback(f); }
-          if (fs && fs !== "loading" && fs !== "streaming") setFeedbackState(fs);
         }, 0);
       }
     } catch {}
@@ -52,19 +51,18 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
     };
   }, [storageKey]);
 
-  // Persist feedback state changes to localStorage
+  // Persist answers to localStorage
   useEffect(() => {
-    if (Object.keys(answersRef.current).length === 0 && !feedback) return;
+    if (Object.keys(answersRef.current).length === 0) return;
     try {
-      localStorage.setItem(storageKey, JSON.stringify({ answers: answersRef.current, feedback, feedbackState }));
+      localStorage.setItem(storageKey, JSON.stringify({ answers: answersRef.current }));
     } catch {}
-  }, [feedback, feedbackState, storageKey]);
+  }, [storageKey]);
 
   function saveAnswer(id: string, text: string) {
     const next = { ...answersRef.current, [id]: text };
     answersRef.current = next;
     setAnswers(next);
-    // Write synchronously so a refresh never loses in-progress text
     try {
       const existing = localStorage.getItem(storageKey);
       const parsed = existing ? JSON.parse(existing) : {};
@@ -72,10 +70,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
     } catch {}
   }
 
-  async function submitAnswers(finalId: string, finalText: string) {
-    if (feedbackState === "done" || feedbackState === "streaming" || feedbackState === "loading") return;
-    const allAnswers = { ...answers, [finalId]: finalText };
-    setAnswers(allAnswers);
+  async function callEvaluate(allAnswers: Answers) {
     setFeedbackState("loading");
     setFeedback("");
 
@@ -83,7 +78,7 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
       const res = await fetch("/api/evaluate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers: allAnswers }),
+        body: JSON.stringify({ answers: allAnswers, conceptSlug }),
       });
 
       const responseText = await res.text();
@@ -112,8 +107,22 @@ export function ChapterAnswersProvider({ conceptSlug, children }: { conceptSlug:
     }
   }
 
+  async function submitAnswers(finalId: string, finalText: string) {
+    if (feedbackState === "streaming" || feedbackState === "loading") return;
+    const allAnswers = { ...answers, [finalId]: finalText };
+    setAnswers(allAnswers);
+    lastSubmittedAnswersRef.current = allAnswers;
+    await callEvaluate(allAnswers);
+  }
+
+  function retrySubmit() {
+    if (feedbackState === "streaming" || feedbackState === "loading") return;
+    if (!lastSubmittedAnswersRef.current) return;
+    callEvaluate(lastSubmittedAnswersRef.current);
+  }
+
   return (
-    <ChapterAnswersContext.Provider value={{ answers, storageKey, saveAnswer, feedbackState, feedback, fullFeedback, submitAnswers }}>
+    <ChapterAnswersContext.Provider value={{ answers, storageKey, saveAnswer, feedbackState, feedback, fullFeedback, submitAnswers, retrySubmit }}>
       {children}
     </ChapterAnswersContext.Provider>
   );

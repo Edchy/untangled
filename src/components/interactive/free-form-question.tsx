@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { useChapterAnswers } from "./chapter-answers-context";
 import { Button } from "@/components/ui/button";
 
-const QUESTION_SEQUENCE = ["transistor", "abstraction", "binary"] as const;
 const MIN_CHARS = 10;
 const MAX_CHARS = 500;
 
@@ -13,13 +12,14 @@ interface Props {
   questionId: string;
   nextHref?: string;
   bodyHtml?: string;
+  isLastQuestion?: boolean;
 }
 
-export function FreeFormQuestion({ questionId, nextHref, bodyHtml }: Props) {
+export function FreeFormQuestion({ questionId, nextHref, bodyHtml, isLastQuestion }: Props) {
   const router = useRouter();
   const { storageKey, saveAnswer, submitAnswers } = useChapterAnswers();
 
-  const isLast = QUESTION_SEQUENCE[QUESTION_SEQUENCE.length - 1] === questionId;
+  const isLast = !!isLastQuestion;
   const [text, setText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

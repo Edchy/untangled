@@ -32,6 +32,7 @@ export function switchTheme(
   document.documentElement.style.setProperty("--vt-origin-x", `${originX}px`);
   document.documentElement.style.setProperty("--vt-origin-y", `${originY}px`);
   document.documentElement.style.setProperty("--vt-radius", `${radius}px`);
+  document.documentElement.dataset.themeTransition = "true";
 
   activeTransition = document.startViewTransition(apply);
 
@@ -40,8 +41,10 @@ export function switchTheme(
     document.documentElement.style.removeProperty("--vt-origin-x");
     document.documentElement.style.removeProperty("--vt-origin-y");
     document.documentElement.style.removeProperty("--vt-radius");
+    delete document.documentElement.dataset.themeTransition;
   }).catch(() => {
     activeTransition = null;
+    delete document.documentElement.dataset.themeTransition;
   });
 }
 

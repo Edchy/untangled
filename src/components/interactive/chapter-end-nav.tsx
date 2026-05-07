@@ -7,39 +7,30 @@ import { ArrowLeft, ArrowRight, Home, Link2, Mail, MoreHorizontal, X } from "luc
 import { Button, LinkButton } from "@/components/ui/button";
 import { Bluesky, Facebook, LinkedIn, Messenger, Reddit, XformerlyTwitter } from "@/components/icons/social";
 
-const SHARE_URL = "https://untangled.se";
+const SHARE_ORIGIN = "https://untangled.se";
 const SHARE_TEXT = "If you've ever wanted to actually understand how AI works, not just the surface-level stuff, this is worth reading. It's free and starts from scratch.";
 const SHARE_TITLE = "Untangled";
 const SHARE_DESCRIPTION = "AI is reshaping the world faster than most people can follow. Untangled takes the knot apart, one careful chapter at a time, from the very beginning. No technical background needed. No jargon. No shortcuts. Just a careful, illustrated journey through how AI actually works, built for curious people who want a real understanding, not just the surface version. Free, forever.";
-const ENCODED_URL = encodeURIComponent(SHARE_URL);
 const ENCODED_TEXT = encodeURIComponent(SHARE_TEXT);
 const ENCODED_TITLE = encodeURIComponent(SHARE_TITLE);
 
-async function copyShareText() {
-  await navigator.clipboard.writeText(SHARE_URL);
-}
-
-async function shareNative() {
-  if (typeof navigator !== "undefined" && navigator.share) {
-    try {
-      await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL });
-      return true;
-    } catch {
-      return false;
-    }
-  }
-  return false;
+async function copyShareText(shareUrl: string) {
+  await navigator.clipboard.writeText(shareUrl);
 }
 
 type ChapterEndNavProps = {
   previousHref?: string;
-  nextChapterHref: string;
+  nextChapterHref?: string;
+  shareHref?: string;
 };
 
-export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavProps) {
+export function ChapterEndNav({ previousHref, nextChapterHref, shareHref = "/" }: ChapterEndNavProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const shareUrl = new URL(shareHref, SHARE_ORIGIN).toString();
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const displayUrl = shareUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
   useEffect(() => {
     if (!open) {
@@ -57,16 +48,9 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
   }, [open]);
 
   async function handleCopy() {
-    await copyShareText();
+    await copyShareText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2200);
-  }
-
-  async function handleMoreShare() {
-    const shared = await shareNative();
-    if (!shared) {
-      await handleCopy();
-    }
   }
 
   return (
@@ -97,16 +81,18 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
             <Home size={14} />
             Home
           </Link>
-          <LinkButton
-            href={nextChapterHref}
-            transitionTypes={["nav-forward"]}
-            variant="ember"
-            size="md"
-            className="gap-2 px-5"
-          >
-            Next chapter
-            <ArrowRight size={14} />
-          </LinkButton>
+          {nextChapterHref && (
+            <LinkButton
+              href={nextChapterHref}
+              transitionTypes={["nav-forward"]}
+              variant="ember"
+              size="md"
+              className="gap-2 px-5"
+            >
+              Next chapter
+              <ArrowRight size={14} />
+            </LinkButton>
+          )}
           <Button
             variant="quiet"
             size="md"
@@ -148,7 +134,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                 <p className="mt-ds-2 line-clamp-4 font-sans text-sm leading-6 text-foreground/58">
                   {SHARE_DESCRIPTION}
                 </p>
-                <p className="mt-ds-3 font-sans text-xs font-semibold text-foreground/70">untangled.se</p>
+                <p className="mt-ds-3 font-sans text-xs font-semibold text-foreground/70">{displayUrl}</p>
               </div>
             </div>
 
@@ -158,7 +144,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                 {copied ? "Copied!" : "Copy link"}
               </Button>
               <a
-                href={`https://twitter.com/intent/tweet?text=${ENCODED_TEXT}&url=${ENCODED_URL}`}
+                href={`https://twitter.com/intent/tweet?text=${ENCODED_TEXT}&url=${encodedUrl}`}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Share on X"
@@ -167,7 +153,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                 <XformerlyTwitter className="h-4 w-4" />
               </a>
               <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${ENCODED_URL}`}
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Share on LinkedIn"
@@ -176,7 +162,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                 <LinkedIn className="h-5 w-5" />
               </a>
               <a
-                href={`mailto:?subject=${ENCODED_TITLE}&body=${ENCODED_TEXT}%0A%0A${ENCODED_URL}`}
+                href={`mailto:?subject=${ENCODED_TITLE}&body=${ENCODED_TEXT}%0A%0A${encodedUrl}`}
                 aria-label="Share by email"
                 className="flex h-12 w-12 shrink-0 items-center justify-center rounded-control border border-foreground/12 text-foreground/78 transition-colors duration-150 hover:border-foreground/24 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
               >
@@ -186,7 +172,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                 {expanded && (
                   <div className="absolute bottom-[calc(100%+0.5rem)] right-0 flex gap-ds-2 rounded-control border border-foreground/12 bg-background p-2 shadow-lg">
                     <a
-                      href={`https://bsky.app/intent/compose?text=${ENCODED_TEXT}%20${ENCODED_URL}`}
+                      href={`https://bsky.app/intent/compose?text=${ENCODED_TEXT}%20${encodedUrl}`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label="Share on Bluesky"
@@ -195,7 +181,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                       <Bluesky className="h-4 w-4" />
                     </a>
                     <a
-                      href={`https://www.reddit.com/submit?url=${ENCODED_URL}&title=${ENCODED_TITLE}`}
+                      href={`https://www.reddit.com/submit?url=${encodedUrl}&title=${ENCODED_TITLE}`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label="Share on Reddit"
@@ -204,7 +190,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                       <Reddit className="h-4 w-4" />
                     </a>
                     <a
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${ENCODED_URL}`}
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label="Share on Facebook"
@@ -213,7 +199,7 @@ export function ChapterEndNav({ previousHref, nextChapterHref }: ChapterEndNavPr
                       <Facebook className="h-4 w-4" />
                     </a>
                     <a
-                      href={`https://m.me/share?link=${ENCODED_URL}`}
+                      href={`https://m.me/share?link=${encodedUrl}`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label="Share on Messenger"

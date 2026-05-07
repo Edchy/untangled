@@ -29,6 +29,7 @@
 
   --ds-font-body: var(--font-body);
   --ds-font-display: var(--font-display);
+  --ds-font-ui: var(--font-ui);
   /* Fluid type scale from 18px/1.2 at 360px to 20px/1.25 at 1240px. */
   --ds-step--2: clamp(0.7813rem, 0.7736rem + 0.0341vw, 0.8rem);
   --ds-step--1: clamp(0.9375rem, 0.9119rem + 0.1136vw, 1rem);
@@ -47,7 +48,7 @@
   --ds-leading-display: 0.95;
   --ds-leading-headline: 1.2;
   --ds-leading-title: 1.25;
-  --ds-leading-body: 1.85;
+  --ds-leading-body: 1.5;
   --ds-leading-label: 1.5;
   --ds-tracking-label: 0.18em;
 
@@ -94,8 +95,9 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
-  --font-sans: var(--ds-font-body);
+  --font-sans: var(--ds-font-ui);
   --font-serif: var(--ds-font-display);
+  --font-body: var(--ds-font-body);
   --text-display: var(--ds-text-display);
   --text-headline: var(--ds-text-headline);
   --text-title: var(--ds-text-title);
@@ -140,7 +142,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--ds-font-body), Arial, Helvetica, sans-serif;
+  font-family: var(--ds-font-ui), Arial, Helvetica, sans-serif;
   transition:
     background-color 650ms ease,
     color 650ms ease;
@@ -207,43 +209,6 @@ html[data-theme="light"] {
   }
 }
 
-@keyframes slide {
-  from {
-    translate: var(--slide-offset);
-  }
-  to {
-    translate: 0;
-  }
-}
-
-::view-transition-old(.nav-forward) {
-  --slide-offset: -60px;
-  animation:
-    var(--duration-exit) ease-in both fade reverse,
-    var(--duration-move) ease-in-out both slide reverse;
-}
-
-::view-transition-new(.nav-forward) {
-  --slide-offset: 60px;
-  animation:
-    var(--duration-enter) ease-out var(--duration-exit) both fade,
-    var(--duration-move) ease-in-out both slide;
-}
-
-::view-transition-old(.nav-back) {
-  --slide-offset: 60px;
-  animation:
-    var(--duration-exit) ease-in both fade reverse,
-    var(--duration-move) ease-in-out both slide reverse;
-}
-
-::view-transition-new(.nav-back) {
-  --slide-offset: -60px;
-  animation:
-    var(--duration-enter) ease-out var(--duration-exit) both fade,
-    var(--duration-move) ease-in-out both slide;
-}
-
 /* ─── Theme ripple reveal ────────────────────────────────────────── */
 
 @keyframes theme-ripple-in {
@@ -263,11 +228,11 @@ html[data-theme="light"] {
   }
 }
 
-::view-transition-new(root) {
+:root[data-theme-transition="true"]::view-transition-new(root) {
   animation: theme-ripple-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-::view-transition-old(root) {
+:root[data-theme-transition="true"]::view-transition-old(root) {
   animation: none;
 }
 
