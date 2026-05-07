@@ -88,7 +88,7 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
     if (!context) return;
 
     const styles = getComputedStyle(document.documentElement);
-    const ink = styles.getPropertyValue("--foreground").trim();
+    const ink = styles.getPropertyValue("--foreground-canvas").trim();
     const muted = withAlpha(ink, 0.36);
     const quiet = withAlpha(ink, 0.18);
     const rc = rough.canvas(canvas);
@@ -158,8 +158,8 @@ export function LightSwitch({ on, onToggle }: LightSwitchProps) {
     if (!context) return;
 
     const styles = getComputedStyle(document.documentElement);
-    const ink = styles.getPropertyValue("--foreground").trim();
-    const accent = styles.getPropertyValue("--accent").trim();
+    const ink = styles.getPropertyValue("--foreground-canvas").trim();
+    const accent = styles.getPropertyValue("--accent-canvas").trim();
     const rc = rough.canvas(canvas);
 
     const topInset = on ? 3 : 0;

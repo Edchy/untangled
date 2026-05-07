@@ -23,47 +23,46 @@ Use Rough.js to give objects a human, explanatory quality. Avoid sketchiness for
 
 Use these as the starting point for new Rough.js drawings.
 
+Rough.js runs inside Canvas 2D — use the canvas-safe tokens, not CSS variables directly (canvas cannot parse `oklch`).
+
 ```ts
+// Read once per draw call, after theme is resolved:
+const ink    = getComputedStyle(document.documentElement).getPropertyValue("--foreground-canvas").trim();
+const paper  = getComputedStyle(document.documentElement).getPropertyValue("--background-canvas").trim();
+const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-canvas").trim();
+
 export const roughStyle = {
-  primaryStroke: {
-    stroke: "var(--foreground)",
-    strokeWidth: 1.5,
-    roughness: 0.85,
-    bowing: 0.45,
-  },
-  detailStroke: {
-    stroke: "var(--foreground)",
-    strokeWidth: 1.2,
-    roughness: 0.75,
-    bowing: 0.35,
-  },
-  quietStroke: {
-    stroke: "var(--foreground)",
-    strokeWidth: 1.2,
-    roughness: 0.75,
-    bowing: 0.35,
-  },
-  activeStroke: {
-    stroke: "var(--accent)",
-    strokeWidth: 2.2,
-    roughness: 0.8,
-    bowing: 0.4,
-  },
-  quietFill: {
-    fillStyle: "hachure",
-    hachureGap: 16,
-    hachureAngle: -35,
-  },
+  primaryStroke: { stroke: ink,    strokeWidth: 1.5, roughness: 0.85, bowing: 0.45 },
+  detailStroke:  { stroke: ink,    strokeWidth: 1.2, roughness: 0.75, bowing: 0.35 },
+  quietStroke:   { stroke: ink,    strokeWidth: 1.2, roughness: 0.75, bowing: 0.35 },
+  activeStroke:  { stroke: accent, strokeWidth: 2.2, roughness: 0.8,  bowing: 0.4  },
+  quietFill:     { fillStyle: "hachure", hachureGap: 16, hachureAngle: -35 },
 } as const;
 ```
 
 ## Color
 
-- Use `var(--foreground)` for structure.
-- Use `var(--background)` for filled surfaces.
-- Use `var(--accent)` only for the active path, selected state, or the single thing the learner should notice.
+- Use `var(--foreground)` for structure in SVG. In Canvas 2D, use `var(--foreground-canvas)` — it is always a hex value the browser can parse.
+- Use `var(--background)` for filled surfaces in SVG. In Canvas 2D, use `var(--background-canvas)`.
+- Use `var(--accent)` in SVG, `var(--accent-canvas)` in Canvas 2D — never hardcode a hex accent color.
 - Keep supporting wires, construction lines, and hidden systems at low opacity.
-- Do not introduce new accent colors.
+- Do not introduce new colors outside the approved palette below.
+
+### Approved illustration palette
+
+These tokens are always available. Use `color-mix()` to apply opacity in SVG, or read the token via `getComputedStyle` and apply `globalAlpha` in Canvas 2D.
+
+| Token | Use |
+|---|---|
+| `var(--accent-canvas)` | Active path, selected state, the one thing to notice (Canvas 2D) |
+| `var(--accent)` | Same, but in SVG |
+| `var(--ds-color-banana)` | Warm yellow — layers, memory, data at rest |
+| `var(--ds-color-peach)` | Warm orange — energy, active state, heat |
+| `var(--ds-color-pink)` | Rose — human element, history, people |
+| `var(--ds-color-lavender)` | Cool blue-purple — logic, structure, connections |
+| `var(--ds-color-purple)` | Deep purple — abstraction, hidden systems |
+
+**Never hardcode hex or rgba color values in illustrations.** All colors must come from these tokens.
 
 Recommended opacity ranges:
 

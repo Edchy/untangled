@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "@/hooks/use-theme";
 import { motion } from "framer-motion";
 import rough from "roughjs";
 
@@ -90,6 +91,7 @@ function OutputBulb({ on }: { on: boolean }) {
 }
 
 function GateCanvas({ gate, a, b, output }: { gate: Gate; a: boolean; b: boolean; output: boolean }) {
+  const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -108,8 +110,8 @@ function GateCanvas({ gate, a, b, output }: { gate: Gate; a: boolean; b: boolean
     ctx.clearRect(0, 0, W, H);
 
     const rc = rough.canvas(canvas);
-    const fg = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#0a0a0a";
-    const accent = "#d85a30";
+    const fg = getComputedStyle(document.documentElement).getPropertyValue("--foreground-canvas").trim() || "#0a0a0a";
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-canvas").trim() || "#4a9e8e";
 
     const wire = (x1: number, y1: number, x2: number, y2: number, active: boolean) => {
       ctx.globalAlpha = active ? 0.9 : 0.28;
@@ -139,7 +141,7 @@ function GateCanvas({ gate, a, b, output }: { gate: Gate; a: boolean; b: boolean
       rc.circle(20, midY, 8, {
         stroke: a ? accent : fg,
         strokeWidth: a ? 2 : 1.5,
-        fill: a ? "rgba(216,90,48,0.18)" : "transparent",
+        fill: a ? "rgba(74,158,142,0.18)" : "transparent",
         roughness: 1.2,
         seed: 11,
       });
@@ -147,7 +149,7 @@ function GateCanvas({ gate, a, b, output }: { gate: Gate; a: boolean; b: boolean
       rc.circle(320, midY, 8, {
         stroke: output ? accent : fg,
         strokeWidth: output ? 2.2 : 1.5,
-        fill: output ? "rgba(216,90,48,0.18)" : "transparent",
+        fill: output ? "rgba(74,158,142,0.18)" : "transparent",
         roughness: 1.2,
         seed: 13,
       });
@@ -185,20 +187,20 @@ function GateCanvas({ gate, a, b, output }: { gate: Gate; a: boolean; b: boolean
       rc.circle(20, aY, 8, {
         stroke: a ? accent : fg,
         strokeWidth: a ? 2 : 1.5,
-        fill: a ? "rgba(216,90,48,0.18)" : "transparent",
+        fill: a ? "rgba(74,158,142,0.18)" : "transparent",
         roughness: 1.2, seed: 11,
       });
       rc.circle(20, bY, 8, {
         stroke: b ? accent : fg,
         strokeWidth: b ? 2 : 1.5,
-        fill: b ? "rgba(216,90,48,0.18)" : "transparent",
+        fill: b ? "rgba(74,158,142,0.18)" : "transparent",
         roughness: 1.2, seed: 12,
       });
       // output node
       rc.circle(320, H / 2, 8, {
         stroke: output ? accent : fg,
         strokeWidth: output ? 2.2 : 1.5,
-        fill: output ? "rgba(216,90,48,0.18)" : "transparent",
+        fill: output ? "rgba(74,158,142,0.18)" : "transparent",
         roughness: 1.2, seed: 13,
       });
 
@@ -210,7 +212,7 @@ function GateCanvas({ gate, a, b, output }: { gate: Gate; a: boolean; b: boolean
       ctx.fillText(gate, gateX + gateW / 2 + 10, H / 2 + 5);
       ctx.globalAlpha = 1;
     }
-  }, [gate, a, b, output]);
+  }, [gate, a, b, output, theme]);
 
   return (
     <canvas

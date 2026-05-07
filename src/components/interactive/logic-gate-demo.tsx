@@ -41,12 +41,12 @@ export function LogicGateDemo() {
 
     const roughCanvas = rough.canvas(canvas);
     const ink = getComputedStyle(document.documentElement)
-      .getPropertyValue("--foreground")
+      .getPropertyValue("--foreground-canvas")
       .trim();
     const accent = getComputedStyle(document.documentElement)
-      .getPropertyValue("--accent")
+      .getPropertyValue("--accent-canvas")
       .trim();
-    const muted = "rgba(115, 115, 115, 0.55)";
+    const muted = getComputedStyle(document.documentElement).getPropertyValue("--muted").trim() || "#737373";
 
     const lineOptions = { stroke: ink, strokeWidth: 2, roughness: 1.2 };
     const activeOptions = { stroke: accent, strokeWidth: 3, roughness: 1.1 };
@@ -58,25 +58,25 @@ export function LogicGateDemo() {
       stroke: ink,
       strokeWidth: 2,
       roughness: 1.6,
-      fill: output ? "rgba(216, 90, 48, 0.10)" : "transparent",
+      fill: output ? "rgba(74, 158, 142, 0.10)" : "transparent",
       fillStyle: "hachure",
     });
     roughCanvas.circle(70, 92, 32, {
       stroke: a ? accent : muted,
       strokeWidth: a ? 3 : 2,
-      fill: a ? "rgba(216, 90, 48, 0.12)" : "transparent",
+      fill: a ? "rgba(74, 158, 142, 0.12)" : "transparent",
       roughness: 1.4,
     });
     roughCanvas.circle(70, 205, 32, {
       stroke: b ? accent : muted,
       strokeWidth: b ? 3 : 2,
-      fill: b ? "rgba(216, 90, 48, 0.12)" : "transparent",
+      fill: b ? "rgba(74, 158, 142, 0.12)" : "transparent",
       roughness: 1.4,
     });
     roughCanvas.circle(650, 150, 38, {
       stroke: output ? accent : muted,
       strokeWidth: output ? 3 : 2,
-      fill: output ? "rgba(216, 90, 48, 0.16)" : "transparent",
+      fill: output ? "rgba(74, 158, 142, 0.16)" : "transparent",
       roughness: 1.4,
     });
 

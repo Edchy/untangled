@@ -1,4 +1,9 @@
+
 end each chapter witn an interactive quiz to reinforce learning. something that makes them apply the concepts they just learned in a fun way. maybe a mini-game, a quiz or a puzzle.
+
+grade the answers from each quiz and show the user in the end what they understand and where there is knowledge gaps. maybe even suggest which chapters to review based on their answers.
+
+add users last chapter to localstorage so that they can pick up where they left off when they come back. (this needs to be relfected on the start page aswell somehow)
 
 view-transitions?
 scroll animations?

@@ -30,11 +30,11 @@ function RoughSvg({
             />
           </filter>
           <pattern id="chapter-one-sloppy-blue" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(58)">
-            <path d="M-6 6 C4 2 14 4 34 0 M-6 16 C8 12 20 16 34 10 M-6 26 C8 20 22 26 34 20" stroke="rgba(108, 108, 245, 0.72)" strokeWidth="4" />
+            <path d="M-6 6 C4 2 14 4 34 0 M-6 16 C8 12 20 16 34 10 M-6 26 C8 20 22 26 34 20" stroke="color-mix(in srgb, var(--ds-color-lavender) 72%, transparent)" strokeWidth="4" />
           </pattern>
           <pattern id="chapter-one-sloppy-clay" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
-            <path d="M0 5 H30 M0 20 H30" stroke="rgba(255, 110, 94, 0.7)" strokeWidth="5" />
-            <path d="M6 0 V30 M22 0 V30" stroke="rgba(255, 110, 94, 0.58)" strokeWidth="5" />
+            <path d="M0 5 H30 M0 20 H30" stroke="color-mix(in srgb, var(--ds-color-peach) 70%, transparent)" strokeWidth="5" />
+            <path d="M6 0 V30 M22 0 V30" stroke="color-mix(in srgb, var(--ds-color-peach) 58%, transparent)" strokeWidth="5" />
           </pattern>
           <pattern id="chapter-one-sloppy-ink" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-25)">
             <path d="M0 3 H14 M0 10 H14 M3 0 V14 M10 0 V14" stroke="currentColor" strokeOpacity="0.32" strokeWidth="1.5" />
@@ -52,11 +52,11 @@ function RoughSvg({
 }
 
 const fill = {
-  amber: "rgba(215, 162, 63, 0.36)",
-  blue: "rgba(82, 128, 176, 0.34)",
-  clay: "rgba(216, 90, 48, 0.32)",
-  rose: "rgba(190, 92, 124, 0.3)",
-  sage: "rgba(106, 142, 96, 0.34)",
+  amber: "color-mix(in srgb, var(--ds-color-banana) 36%, transparent)",
+  blue:  "color-mix(in srgb, var(--ds-color-lavender) 34%, transparent)",
+  clay:  "color-mix(in srgb, var(--ds-color-peach) 32%, transparent)",
+  rose:  "color-mix(in srgb, var(--ds-color-pink) 30%, transparent)",
+  sage:  "color-mix(in srgb, var(--ds-color-banana) 34%, transparent)",
 } as const;
 
 function MiniSwitch({ x, y, active = false }: { x: number; y: number; active?: boolean }) {

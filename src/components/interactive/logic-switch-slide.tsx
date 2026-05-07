@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export function LogicSwitchSlide() {
   const [on, setOn] = useState(false);
-  const accent = "#d85a30";
+  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-canvas").trim() || "#4a9e8e";
   const color = on ? accent : "var(--foreground)";
 
   return (

@@ -1,0 +1,18 @@
+---
+title: "Addition, from scratch"
+module: the-machine
+concept: logic-and-circuits
+order: 16
+type: interactive
+component: half-adder-demo
+cols: 2
+---
+
+We need two outputs: **sum** and **carry**. It turns out we already have a gate for each one.
+
+The **carry** is easy. It's only 1 when both inputs are 1. That's **AND**.
+
+The **sum** needs one more gate we haven't seen yet: **XOR**. Think of it as OR, but not when both inputs are on. So 0+1 gives 1, but 1+1 gives 0. Exactly what we need for the sum column.
+
+**AND and XOR**, connected to the same two inputs. That's a circuit that adds two binary digits.
+**Two gates. That's addition.**

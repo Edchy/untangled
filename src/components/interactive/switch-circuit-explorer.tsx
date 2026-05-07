@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { type RefObject, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import rough from "roughjs";
 import { Button } from "@/components/ui/button";
 import { switchTheme, subscribeToThemeChange, getThemeSnapshot } from "@/lib/theme";
 
 type WiringMode = "series" | "parallel";
 
-function applyThemeFromCircuit(output: boolean) {
+function applyThemeFromCircuit(output: boolean, originX?: number, originY?: number) {
   const theme = output ? "light" : "dark";
   if (document.documentElement.dataset.theme !== theme) {
-    switchTheme(theme);
+    switchTheme(theme, originX, originY);
   }
 }
 
@@ -121,13 +121,14 @@ function RoughCircuitCanvas({
   a,
   b,
   themeIsLight,
+  canvasRef,
 }: {
   mode: WiringMode;
   a: boolean;
   b: boolean;
   themeIsLight: boolean;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -146,9 +147,9 @@ function RoughCircuitCanvas({
     context.clearRect(0, 0, width, height);
 
     const styles = getComputedStyle(document.documentElement);
-    const ink = styles.getPropertyValue("--foreground").trim() || "#1a1614";
-    const paper = styles.getPropertyValue("--background").trim() || "#f5f0e8";
-    const accent = styles.getPropertyValue("--accent").trim() || "#d85a30";
+    const ink = styles.getPropertyValue("--foreground-canvas").trim() || "#1a1614";
+    const paper = styles.getPropertyValue("--background-canvas").trim() || "#f5f0e8";
+    const accent = styles.getPropertyValue("--accent-canvas").trim() || "#4a9e8e";
     const rc = rough.canvas(canvas);
     const output = mode === "series" ? a && b : a || b;
 
@@ -394,6 +395,18 @@ export function SwitchCircuitExplorer() {
   };
 
   const circuitDrivenRef = useRef(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Compute viewport position of the lightbulb center (canvas coords: 400, 90 in a 450×180 logical space).
+  function getBulbOrigin(): { x: number; y: number } | undefined {
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: rect.left + (400 / 450) * rect.width,
+      y: rect.top + (90 / 180) * rect.height,
+    };
+  }
 
   // When theme changes externally (not from this circuit), reset overrides so switches mirror the theme.
   useEffect(() => {
@@ -409,7 +422,8 @@ export function SwitchCircuitExplorer() {
     // Only drive the theme when the user has touched at least one circuit switch.
     if (aOverride === null && bOverride === null) return;
     circuitDrivenRef.current = true;
-    applyThemeFromCircuit(output);
+    const bulb = getBulbOrigin();
+    applyThemeFromCircuit(output, bulb?.x, bulb?.y);
   }, [output, aOverride, bOverride]);
 
   return (
@@ -419,7 +433,7 @@ export function SwitchCircuitExplorer() {
         role="group"
         aria-label={`${mode === "series" ? "In a row" : "Side by side"} circuit, light is ${output ? "on" : "off"}`}
       >
-        <RoughCircuitCanvas mode={mode} a={a} b={b} themeIsLight={themeIsLight} />
+        <RoughCircuitCanvas mode={mode} a={a} b={b} themeIsLight={themeIsLight} canvasRef={canvasRef} />
         {mode === "series" ? (
           <SeriesCircuit
             a={a}

@@ -75,8 +75,8 @@ function BinarySwitch({
     context.clearRect(0, 0, SWITCH_WIDTH, SWITCH_HEIGHT);
 
     const styles = getComputedStyle(document.documentElement);
-    const ink = styles.getPropertyValue("--foreground").trim();
-    const accent = styles.getPropertyValue("--accent").trim();
+    const ink = styles.getPropertyValue("--foreground-canvas").trim();
+    const accent = styles.getPropertyValue("--accent-canvas").trim();
     const muted = withAlpha(ink, 0.36);
     const color = on ? accent : ink;
     const seed = 20 + index * 10;

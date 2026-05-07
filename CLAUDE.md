@@ -48,6 +48,9 @@ Plan → Verify inputs → Execute → Explain changes → Capture lessons
 ## Quality
 - Root-cause every bug. Symptoms are not solutions.
 - Verify before done: tests pass, build succeeds, UI looks correct.
+- Scale verification to the change. For minor docs, copy, class, or single-component tweaks, prefer targeted checks or a concise source review over full builds, full lint runs, dependency installs, or browser automation.
+- Run expensive verification only when the change affects routing, data loading, build config, shared primitives, or broad user-facing behavior, or when the user explicitly asks for it.
+- Ask before using Playwright, screenshots, or other visual browser automation. Do not install or fetch tooling just to verify a small UI change unless the user approves.
 
 ## Styling
 - This is a hardcore Tailwind project.

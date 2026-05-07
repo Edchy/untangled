@@ -77,9 +77,10 @@ export default async function SlidePage({ params }: SlidePageProps) {
   const renderedSlideContent = SlideContent
     ? createElement(SlideContent)
     : renderHtml(current.html);
-  const textColumnClassName = "relative z-10";
+  const textColumnClassName = "relative z-10 max-w-prose mx-auto lg:mx-0";
 
   const interactiveProps: Record<string, unknown> = {};
+  if (current.componentVariant) interactiveProps.variant = current.componentVariant;
   if (current.questionId) interactiveProps.questionId = current.questionId;
   if (next) interactiveProps.nextHref = next.href;
   if (current.component === "free-form-question") interactiveProps.bodyHtml = current.html;

@@ -58,10 +58,10 @@ function SwitchHitTarget({
   );
 }
 
-function AndGateCanvas({ a, b }: { a: boolean; b: boolean }) {
+function OrGateCanvas({ a, b }: { a: boolean; b: boolean }) {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const output = a && b;
+  const output = a || b;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -152,12 +152,19 @@ function AndGateCanvas({ a, b }: { a: boolean; b: boolean }) {
       ctx.globalAlpha = 1;
     }
 
-    // Series wiring: source → switch A → switch B → bulb
-    line(38, 90, 124, 90, a, 1);
-    line(172, 90, 264, 90, a && b, 2);
-    line(312, 90, 366, 90, output, 3);
-    switchSketch(148, 90, a, 10);
-    switchSketch(288, 90, b, 20);
+    // Parallel wiring: source → split → switch A (top) + switch B (bottom) → merge → bulb
+    line(38, 90, 88, 90, output, 30);
+    line(88, 90, 88, 54, a, 31);
+    line(88, 54, 124, 54, a, 32);
+    line(88, 90, 88, 126, b, 33);
+    line(88, 126, 124, 126, b, 34);
+    line(172, 54, 308, 54, a, 35);
+    line(308, 54, 308, 90, a, 36);
+    line(172, 126, 308, 126, b, 37);
+    line(308, 126, 308, 90, b, 38);
+    line(308, 90, 366, 90, output, 39);
+    switchSketch(148, 54, a, 40);
+    switchSketch(148, 126, b, 50);
     sourceSketch();
     bulbSketch(output);
   }, [a, b, output, theme]);
@@ -165,29 +172,29 @@ function AndGateCanvas({ a, b }: { a: boolean; b: boolean }) {
   return <canvas ref={canvasRef} aria-hidden className="absolute inset-0 h-full w-full" />;
 }
 
-export function AndGateExplorer() {
+export function OrGateExplorer() {
   const [a, setA] = useState(false);
   const [b, setB] = useState(false);
   const [touchedA, setTouchedA] = useState(false);
   const [touchedB, setTouchedB] = useState(false);
-  const output = a && b;
+  const output = a || b;
 
   return (
     <div className="flex w-full flex-col items-center gap-ds-6">
       <div
         className="relative h-[208px] w-full max-w-[520px]"
         role="group"
-        aria-label={`AND gate: light is ${output ? "on" : "off"}`}
+        aria-label={`OR gate: light is ${output ? "on" : "off"}`}
       >
-        <AndGateCanvas a={a} b={b} />
+        <OrGateCanvas a={a} b={b} />
         <svg viewBox="0 0 450 180" className="absolute inset-0 h-full w-full">
           <SwitchHitTarget
-            x={148} y={90} label="A" on={a}
+            x={148} y={54} label="A" on={a}
             onToggle={() => { setTouchedA(true); setA((v) => !v); }}
             showHint={!touchedA}
           />
           <SwitchHitTarget
-            x={288} y={90} label="B" on={b}
+            x={148} y={126} label="B" on={b}
             onToggle={() => { setTouchedB(true); setB((v) => !v); }}
             showHint={!touchedB}
           />
@@ -195,9 +202,9 @@ export function AndGateExplorer() {
       </div>
 
       <p className="max-w-[440px] text-center text-sm leading-relaxed text-foreground/50">
-        This is an <strong className="font-semibold text-foreground/90">AND gate</strong>.
-        {" "}Both switches must be on for the light to turn on.
-        {" "}That's the rule. That's all it is.
+        This is an <strong className="font-semibold text-foreground/90">OR gate</strong>.
+        {" "}Either switch is enough to turn the light on.
+        {" "}Both at once works too.
       </p>
     </div>
   );

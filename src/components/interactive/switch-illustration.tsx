@@ -38,7 +38,7 @@ export function SwitchIllustration() {
   const on = useSwitchIllustrationOn();
 
   const inkColor = "var(--foreground)";
-  const accentColor = "#d85a30";
+  const accentColor = getComputedStyle(document.documentElement).getPropertyValue("--accent-canvas").trim() || "#4a9e8e";
   const color = on ? accentColor : inkColor;
 
   return (

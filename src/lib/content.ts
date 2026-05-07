@@ -16,6 +16,7 @@ export type Slide = {
   hideNavNext: boolean;
   flipCols: boolean;
   component: string | null;
+  componentVariant: string | null;
   questionId: string | null;
   skipHref: string | null;
   backHref: string | null;
@@ -178,6 +179,7 @@ function toSlide(filePath: string): Slide {
     hideNavNext: Boolean(data.hide_nav),
     flipCols: Boolean(data.flip_cols),
     component: data.component ? String(data.component) : null,
+    componentVariant: data.component_variant ? String(data.component_variant) : null,
     questionId: data.question_id ? String(data.question_id) : null,
     skipHref: data.skip_href ? String(data.skip_href) : null,
     backHref: data.back_href ? String(data.back_href) : null,

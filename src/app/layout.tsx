@@ -18,7 +18,24 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Untangled",
   description:
-    "A warm, interactive path for understanding how artificial intelligence actually works.",
+    "AI is reshaping the world faster than most people can follow. Untangled takes the knot apart, one careful chapter at a time. Free, illustrated, no technical background needed.",
+  metadataBase: new URL("https://untangled.se"),
+  openGraph: {
+    title: "Untangled",
+    description:
+      "AI is reshaping the world faster than most people can follow. Untangled takes the knot apart, one careful chapter at a time. Free, illustrated, no technical background needed.",
+    url: "https://untangled.se",
+    siteName: "Untangled",
+    images: [{ url: "/un.png", width: 356, height: 388, alt: "Untangled" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Untangled",
+    description:
+      "AI is reshaping the world faster than most people can follow. Untangled takes the knot apart, one careful chapter at a time. Free, illustrated, no technical background needed.",
+    images: ["/un.png"],
+  },
   icons: {
     icon: [{ url: "/un.svg", type: "image/svg+xml", sizes: "any" }],
   },

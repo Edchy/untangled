@@ -1,248 +1,230 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import rough from "roughjs";
 
-function evaluate(a: boolean, b: boolean) {
-  return {
-    sum: a !== b,    // XOR
-    carry: a && b,   // AND
-  };
+function getAccent() {
+  if (typeof document === "undefined") return "#4a9e8e";
+  return getComputedStyle(document.documentElement).getPropertyValue("--accent-canvas").trim() || "#4a9e8e";
 }
 
-function Toggle({ on, label, onToggle }: { on: boolean; label: string; onToggle: () => void }) {
+// SVG layout constants
+// Inputs at x=40 (A at y=90, B at y=190)
+// Wires branch right to gate inputs at x=200
+// XOR box: y=60–120, AND box: y=160–220
+// Output wires from x=280 to x=360
+// Output nodes at x=370
+
+const AY = 90;
+const BY = 190;
+const GATE_X = 200;
+const GATE_W = 80;
+const GATE_H = 56;
+const XOR_Y = AY - 16;        // top of XOR box: 74
+const AND_Y = BY - 16;        // top of AND box: 174
+const XOR_MID = XOR_Y + GATE_H / 2;  // 102 ≈ midpoint
+const AND_MID = AND_Y + GATE_H / 2;  // 202 ≈ midpoint
+const OUT_X = GATE_X + GATE_W + 80;
+
+function wire(x1: number, y1: number, x2: number, y2: number, active: boolean, accent: string) {
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-label={`Input ${label}: ${on ? "1" : "0"}`}
-      aria-pressed={on}
-      className="flex flex-col items-center gap-1.5"
-    >
-      <span className="font-mono text-xs font-semibold text-foreground/50">{label}</span>
-      <div
-        className="relative h-7 w-12 rounded-pill transition-colors duration-150"
-        style={{
-          background: on ? "var(--accent)" : "color-mix(in srgb, var(--foreground) 15%, transparent)",
-        }}
-      >
-        <motion.div
-          layout
-          transition={{ type: "spring", stiffness: 500, damping: 35 }}
-          className="absolute top-1 h-5 w-5 rounded-full bg-background shadow"
-          style={{ left: on ? "calc(100% - 1.5rem)" : "0.25rem" }}
-        />
-      </div>
-      <span
-        className="font-mono text-sm font-bold transition-colors duration-150"
-        style={{ color: on ? "var(--accent)" : "var(--foreground)", opacity: on ? 1 : 0.4 }}
-      >
-        {on ? "1" : "0"}
-      </span>
-    </button>
+    <line
+      x1={x1} y1={y1} x2={x2} y2={y2}
+      stroke={active ? accent : "var(--foreground)"}
+      strokeWidth={active ? 2.4 : 1.8}
+      strokeOpacity={active ? 0.9 : 0.28}
+      strokeLinecap="round"
+    />
   );
 }
 
-function OutputNode({ on, label }: { on: boolean; label: string }) {
+function GateBox({ x, y, w, h, label, active, accent }: {
+  x: number; y: number; w: number; h: number; label: string; active: boolean; accent: string;
+}) {
   return (
-    <div className="flex flex-col items-center gap-1.5">
-      <span className="font-mono text-xs font-semibold text-foreground/50">{label}</span>
-      <motion.div
-        key={String(on)}
-        initial={{ scale: 0.85, opacity: 0.5 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.18, type: "spring", stiffness: 400, damping: 30 }}
-        className="h-7 w-7 rounded-full border-2"
-        style={{
-          borderColor: on ? "var(--accent)" : "var(--foreground)",
-          background: on ? "color-mix(in srgb, var(--accent) 22%, transparent)" : "transparent",
-          opacity: on ? 1 : 0.3,
-        }}
+    <g>
+      <rect
+        x={x} y={y} width={w} height={h} rx="6"
+        fill={active ? `color-mix(in srgb, ${accent} 12%, transparent)` : "color-mix(in srgb, var(--foreground) 5%, transparent)"}
+        stroke={active ? accent : "var(--foreground)"}
+        strokeWidth={active ? 2 : 1.5}
+        strokeOpacity={active ? 0.9 : 0.4}
       />
-      <span
-        className="font-mono text-sm font-bold"
-        style={{ color: on ? "var(--accent)" : "var(--foreground)", opacity: on ? 1 : 0.4 }}
+      <text
+        x={x + w / 2} y={y + h / 2 + 5}
+        textAnchor="middle"
+        fontFamily="var(--font-mono, monospace)"
+        fontSize="13"
+        fontWeight="600"
+        fill={active ? accent : "var(--foreground)"}
+        fillOpacity={active ? 0.9 : 0.45}
       >
-        {on ? "1" : "0"}
-      </span>
-    </div>
+        {label}
+      </text>
+    </g>
   );
 }
 
-function AdderCanvas({ a, b, sum, carry }: { a: boolean; b: boolean; sum: boolean; carry: boolean }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+function OutputNode({ x, y, label, active, accent }: {
+  x: number; y: number; label: string; active: boolean; accent: string;
+}) {
+  return (
+    <g>
+      <circle
+        cx={x} cy={y} r="10"
+        fill={active ? `color-mix(in srgb, ${accent} 22%, transparent)` : "transparent"}
+        stroke={active ? accent : "var(--foreground)"}
+        strokeWidth={active ? 2.2 : 1.5}
+        strokeOpacity={active ? 1 : 0.3}
+      />
+      <text
+        x={x + 16} y={y + 5}
+        fontFamily="var(--font-mono, monospace)"
+        fontSize="11"
+        fontWeight="600"
+        fill="var(--foreground)"
+        fillOpacity="0.4"
+      >
+        {label}
+      </text>
+    </g>
+  );
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+function BinaryDigit({
+  value,
+  label,
+  active,
+  accent,
+}: {
+  value: "0" | "1";
+  label: string;
+  active: boolean;
+  accent: string;
+}) {
+  return (
+    <span className="relative inline-flex items-center">
+      <span
+        className="font-mono text-5xl font-bold leading-none"
+        style={{ color: active ? accent : "var(--foreground)", opacity: active ? 1 : 0.42 }}
+      >
+        {value}
+      </span>
+      <span className="absolute left-1/2 top-full mt-1 -translate-x-1/2 font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-foreground/42">
+        {label}
+      </span>
+    </span>
+  );
+}
 
-    const dpr = window.devicePixelRatio || 1;
-    const W = 380, H = 220;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = `${W}px`;
-    canvas.style.height = `${H}px`;
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, W, H);
-
-    const rc = rough.canvas(canvas);
-    const fg = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#0a0a0a";
-    const accent = "#d85a30";
-
-    const wire = (x1: number, y1: number, x2: number, y2: number, active: boolean) => {
-      ctx.globalAlpha = active ? 0.9 : 0.28;
-      rc.line(x1, y1, x2, y2, {
-        stroke: active ? accent : fg,
-        strokeWidth: active ? 2.2 : 1.5,
-        roughness: 0.85,
-        bowing: 0.4,
-      });
-      ctx.globalAlpha = 1;
-    };
-
-    // Layout: inputs at x=30, two gates at x=120-220, outputs at x=340
-    const aY = 75, bY = 145;
-    const xorTop = 60, andTop = 130;
-    const gateW = 76, gateH = 56;
-    const xorMidY = xorTop + gateH / 2; // 88
-    const andMidY = andTop + gateH / 2; // 158
-
-    // Input wires → XOR gate
-    wire(30, aY, 120, aY, a);
-    wire(30, bY, 120, bY, b);
-
-    // Input wires → AND gate (branch down)
-    wire(60, aY, 60, andTop, a);
-    wire(60, andTop, 120, andTop, a);
-    wire(80, bY, 80, andTop + gateH, b);
-    wire(80, andTop + gateH, 120, andTop + gateH, b);
-
-    // XOR gate: curved shield shape
-    rc.path(
-      `M 120 ${xorTop} Q 136 ${xorMidY}, 120 ${xorTop + gateH} C ${120 + gateW * 1.6} ${xorTop + gateH}, ${120 + gateW * 1.6} ${xorTop}, 120 ${xorTop}`,
-      { stroke: fg, strokeWidth: 1.5, roughness: 0.85, seed: 55 }
-    );
-    // XOR second curved line (distinguishing mark)
-    rc.path(
-      `M 115 ${xorTop} Q 130 ${xorMidY}, 115 ${xorTop + gateH}`,
-      { stroke: fg, strokeWidth: 1.5, roughness: 0.75, seed: 56 }
-    );
-
-    // AND gate: flat back, D-shape
-    rc.path(
-      `M 120 ${andTop} L 120 ${andTop + gateH} C ${120 + gateW * 1.65} ${andTop + gateH}, ${120 + gateW * 1.65} ${andTop}, 120 ${andTop}`,
-      { stroke: fg, strokeWidth: 1.5, roughness: 0.85, seed: 44 }
-    );
-
-    // Gate labels
-    ctx.font = "600 11px var(--font-sans, sans-serif)";
-    ctx.fillStyle = fg;
-    ctx.globalAlpha = 0.45;
-    ctx.textAlign = "center";
-    ctx.fillText("XOR", 152, xorMidY + 4);
-    ctx.fillText("AND", 152, andMidY + 4);
-    ctx.globalAlpha = 1;
-
-    // Output wires
-    wire(120 + gateW + 5, xorMidY, 340, xorMidY, sum);
-    wire(120 + gateW + 5, andMidY, 340, andMidY, carry);
-
-    // Input nodes
-    rc.circle(30, aY, 8, {
-      stroke: a ? accent : fg, strokeWidth: a ? 2 : 1.5,
-      fill: a ? "rgba(216,90,48,0.18)" : "transparent", roughness: 1.1, seed: 1,
-    });
-    rc.circle(30, bY, 8, {
-      stroke: b ? accent : fg, strokeWidth: b ? 2 : 1.5,
-      fill: b ? "rgba(216,90,48,0.18)" : "transparent", roughness: 1.1, seed: 2,
-    });
-
-    // Output nodes
-    rc.circle(340, xorMidY, 8, {
-      stroke: sum ? accent : fg, strokeWidth: sum ? 2.2 : 1.5,
-      fill: sum ? "rgba(216,90,48,0.18)" : "transparent", roughness: 1.1, seed: 3,
-    });
-    rc.circle(340, andMidY, 8, {
-      stroke: carry ? accent : fg, strokeWidth: carry ? 2.2 : 1.5,
-      fill: carry ? "rgba(216,90,48,0.18)" : "transparent", roughness: 1.1, seed: 4,
-    });
-
-    // Output labels
-    ctx.font = "600 11px var(--font-sans, sans-serif)";
-    ctx.fillStyle = fg;
-    ctx.globalAlpha = 0.4;
-    ctx.textAlign = "left";
-    ctx.fillText("Sum", 352, xorMidY + 4);
-    ctx.fillText("Carry", 352, andMidY + 4);
-    ctx.globalAlpha = 1;
-
-  }, [a, b, sum, carry]);
-
-  return <canvas ref={canvasRef} aria-hidden style={{ width: 380, height: 220 }} />;
+function LeverSwitch({ cx, cy, on, accent }: { cx: number; cy: number; on: boolean; accent: string }) {
+  const color = on ? accent : "var(--foreground)";
+  const opacity = on ? 1 : 0.55;
+  const tipX = on ? cx + 44 : cx + 22;
+  const tipY = on ? cy : cy - 28;
+  return (
+    <g strokeLinecap="round" strokeLinejoin="round" opacity={opacity}>
+      {/* Left wire stub */}
+      <line x1={cx - 24} y1={cy} x2={cx - 8} y2={cy} stroke={color} strokeWidth="2.2" />
+      {/* Left post */}
+      <line x1={cx - 8} y1={cy - 12} x2={cx - 8} y2={cy + 12} stroke={color} strokeWidth="2.2" />
+      {/* Pivot dot */}
+      <circle cx={cx - 8} cy={cy} r="4" fill={color} stroke="none" />
+      {/* Lever */}
+      <line x1={cx - 8} y1={cy} x2={tipX} y2={tipY} stroke={color} strokeWidth="2.8" />
+      {/* Lever tip */}
+      <circle cx={tipX} cy={tipY} r="4" fill="none" stroke={color} strokeWidth="2.2" />
+      {/* Right post */}
+      <line x1={cx + 44} y1={cy - 12} x2={cx + 44} y2={cy + 12} stroke={color} strokeWidth="2.2" />
+    </g>
+  );
 }
 
 export function HalfAdderDemo() {
   const [a, setA] = useState(false);
   const [b, setB] = useState(false);
-  const { sum, carry } = evaluate(a, b);
+  const sum = a !== b;
+  const carry = a && b;
   const decimal = (carry ? 2 : 0) + (sum ? 1 : 0);
+  const accent = getAccent();
+
+  // Branch point x for wires splitting to both gates
+  const branchX = 140;
 
   return (
     <div className="flex w-full flex-col gap-6">
-      {/* Circuit */}
       <div
-        className="flex flex-wrap items-center justify-between gap-4 rounded-surface border border-foreground/10 p-4"
+        className="w-full overflow-x-auto rounded-surface border border-foreground/10 p-4"
         style={{ background: "color-mix(in srgb, var(--foreground) 2%, var(--background))" }}
       >
-        <div className="flex flex-col gap-4">
-          <Toggle on={a} label="A" onToggle={() => setA((v) => !v)} />
-          <Toggle on={b} label="B" onToggle={() => setB((v) => !v)} />
-        </div>
+        <svg
+          viewBox="0 0 460 290"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full max-w-[460px]"
+        >
+          <defs>
+            <filter id="ha-roughen" x="-4%" y="-4%" width="108%" height="108%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="7" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
 
-        <div className="overflow-x-auto">
-          <AdderCanvas a={a} b={b} sum={sum} carry={carry} />
-        </div>
+          {/* Roughened visuals */}
+          <g filter="url(#ha-roughen)">
+            <LeverSwitch cx={40} cy={AY} on={a} accent={accent} />
+            <LeverSwitch cx={40} cy={BY} on={b} accent={accent} />
 
-        <div className="flex flex-col gap-4">
-          <OutputNode on={sum} label="Sum" />
-          <OutputNode on={carry} label="Carry" />
-        </div>
+            <text x="16" y={AY - 22} textAnchor="middle" fontFamily="var(--font-mono, monospace)" fontSize="12" fontWeight="700" fill="var(--foreground)" fillOpacity={a ? 1 : 0.4}>A</text>
+            <text x="16" y={BY - 22} textAnchor="middle" fontFamily="var(--font-mono, monospace)" fontSize="12" fontWeight="700" fill="var(--foreground)" fillOpacity={b ? 1 : 0.4}>B</text>
+
+            {wire(84, AY, branchX, AY, a, accent)}
+            {wire(84, BY, branchX, BY, b, accent)}
+
+            {wire(branchX, AY, branchX, XOR_MID, a, accent)}
+            {wire(branchX, XOR_MID, GATE_X, XOR_MID, a, accent)}
+            {wire(branchX, AY, branchX, AND_MID - 8, a, accent)}
+            {wire(branchX, AND_MID - 8, GATE_X, AND_MID - 8, a, accent)}
+
+            {wire(branchX + 16, BY, branchX + 16, XOR_MID + 8, b, accent)}
+            {wire(branchX + 16, XOR_MID + 8, GATE_X, XOR_MID + 8, b, accent)}
+            {wire(branchX + 16, BY, branchX + 16, AND_MID, b, accent)}
+            {wire(branchX + 16, AND_MID, GATE_X, AND_MID, b, accent)}
+
+            <GateBox x={GATE_X} y={XOR_Y} w={GATE_W} h={GATE_H} label="XOR" active={sum} accent={accent} />
+            <GateBox x={GATE_X} y={AND_Y} w={GATE_W} h={GATE_H} label="AND" active={carry} accent={accent} />
+
+            {wire(GATE_X + GATE_W, XOR_MID, OUT_X, XOR_MID, sum, accent)}
+            {wire(GATE_X + GATE_W, AND_MID, OUT_X, AND_MID, carry, accent)}
+
+            <OutputNode x={OUT_X} y={XOR_MID} label="sum" active={sum} accent={accent} />
+            <OutputNode x={OUT_X} y={AND_MID} label="carry" active={carry} accent={accent} />
+          </g>
+
+          {/* Transparent hit targets outside filter so they're not displaced */}
+          <rect x="0" y={AY - 36} width="100" height="56" fill="transparent" style={{ cursor: "pointer" }} onClick={() => setA((v) => !v)} />
+          <rect x="0" y={BY - 36} width="100" height="56" fill="transparent" style={{ cursor: "pointer" }} onClick={() => setB((v) => !v)} />
+        </svg>
       </div>
 
       {/* Readout */}
-      <div className="rounded-surface border border-foreground/10 p-4">
-        <motion.div
-          key={`${a}-${b}`}
-          initial={{ opacity: 0.5, y: 2 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.15 }}
-          className="flex flex-wrap items-baseline gap-3"
-        >
-          <span className="font-mono text-2xl font-bold" style={{ color: "var(--foreground)" }}>
-            {a ? "1" : "0"} + {b ? "1" : "0"}
-          </span>
-          <span className="font-mono text-2xl text-foreground/40">=</span>
-          <span className="font-mono text-2xl font-bold" style={{ color: sum || carry ? "var(--accent)" : "var(--foreground)", opacity: sum || carry ? 1 : 0.6 }}>
-            {carry ? "1" : "0"}{sum ? "1" : "0"}
-          </span>
-          <span className="text-sm text-foreground/40">(binary)</span>
-          <span className="ml-2 font-mono text-xl text-foreground/50">= {decimal} decimal</span>
-        </motion.div>
-
-        <div className="mt-3 flex gap-6 text-sm text-foreground/50">
-          <span>
-            <span className="font-mono font-semibold" style={{ color: sum ? "var(--accent)" : undefined }}>Sum bit</span>
-            {" "}= {sum ? "1" : "0"}
-          </span>
-          <span>
-            <span className="font-mono font-semibold" style={{ color: carry ? "var(--accent)" : undefined }}>Carry bit</span>
-            {" "}= {carry ? "1" : "0"} (worth 2)
-          </span>
-        </div>
-      </div>
+      <motion.div
+        key={`${a}-${b}`}
+        initial={{ opacity: 0.5, y: 2 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        className="flex flex-wrap items-end gap-x-5 gap-y-6 px-1 pb-5"
+      >
+        <span className="font-mono text-3xl font-bold leading-none" style={{ color: "var(--foreground)" }}>
+          {a ? "1" : "0"} + {b ? "1" : "0"} =
+        </span>
+        <span className="inline-flex items-end gap-1" aria-label={`binary result ${carry ? "1" : "0"}${sum ? "1" : "0"}, carry ${carry ? "1" : "0"}, sum ${sum ? "1" : "0"}`}>
+          <BinaryDigit value={carry ? "1" : "0"} label="carry" active={carry} accent={accent} />
+          <BinaryDigit value={sum ? "1" : "0"} label="sum" active={sum} accent={accent} />
+        </span>
+        <span className="font-mono text-lg leading-7 text-foreground/42">
+          (same as {decimal})
+        </span>
+      </motion.div>
     </div>
   );
 }
