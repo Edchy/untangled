@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Home, Link2, Mail, MoreHorizontal, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Home, Link2, Mail, MoreHorizontal, X } from "lucide-react";
 import { Button, LinkButton } from "@/components/ui/button";
 import { Bluesky, Facebook, LinkedIn, Messenger, Reddit, XformerlyTwitter } from "@/components/icons/social";
 
@@ -37,9 +37,10 @@ type ChapterEndNavProps = {
         kind: "complete";
       };
   shareHref?: string;
+  sourcesHref?: string;
 };
 
-export function ChapterEndNav({ previousHref, nextDestination, shareHref = "/" }: ChapterEndNavProps) {
+export function ChapterEndNav({ previousHref, nextDestination, shareHref = "/", sourcesHref }: ChapterEndNavProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -129,6 +130,18 @@ export function ChapterEndNav({ previousHref, nextDestination, shareHref = "/" }
                 <ArrowRight size={14} />
               </LinkButton>
             )}
+            {sourcesHref ? (
+              <LinkButton
+                href={sourcesHref}
+                transitionTypes={["nav-forward"]}
+                variant="subtle"
+                size="md"
+                className="gap-2 px-4"
+              >
+                <BookOpen size={14} />
+                Sources
+              </LinkButton>
+            ) : null}
             <Button
               variant="quiet"
               size="md"

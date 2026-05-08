@@ -87,6 +87,10 @@ export default async function SlidePage({ params }: SlidePageProps) {
   const interactiveProps: Record<string, unknown> = {};
   if (current.componentVariant) interactiveProps.variant = current.componentVariant;
   if (current.questionId) interactiveProps.questionId = current.questionId;
+  if (current.component === "chapter-sources") {
+    interactiveProps.moduleSlug = current.moduleSlug;
+    interactiveProps.conceptSlug = current.conceptSlug;
+  }
   if (next) interactiveProps.nextHref = next.href;
   if (current.component === "free-form-question") interactiveProps.bodyHtml = current.html;
   if (current.isLastQuestion) interactiveProps.isLastQuestion = true;

@@ -52,6 +52,7 @@ import { GateChainDemo } from "@/components/interactive/gate-chain-demo";
 import { GateBuilder } from "@/components/interactive/gate-builder";
 import { GateFieldIllustration } from "@/components/interactive/gate-field-illustration";
 import { ComparisonCircuitIllustration } from "@/components/interactive/comparison-circuit-illustration";
+import { ChapterSources } from "@/components/interactive/chapter-sources";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const slideComponents: Record<string, ComponentType<any>> = {
@@ -112,4 +113,5 @@ export const interactiveComponents: Record<string, ComponentType<any>> = {
   "gate-builder": GateBuilder,
   "gate-field-illustration": GateFieldIllustration,
   "comparison-circuit-illustration": ComparisonCircuitIllustration,
+  "chapter-sources": ChapterSources,
 };

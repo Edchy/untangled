@@ -17,27 +17,31 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   const isQuizResponse = current?.component === "question-response";
   const showKeyboardHint = current?.key === "01-the-machine/01-the-foundation/01-try-it";
 
-  // A chapter-end slide is the last slide of its chapter: no next slide, or next is a different chapter
+  // A chapter-end slide is the last slide of its chapter: no next slide, or next is a different chapter.
+  // If the chapter has a sources slide, the original wrap-up slide should still show the chapter-end choices.
   const isChapterEnd = !!current && (!next || next.conceptSlug !== current.conceptSlug);
-  const isModuleEnd = !!current && isChapterEnd && !!next && next.moduleSlug !== current.moduleSlug;
-  const nextModule = isModuleEnd ? modules.find((item) => item.slug === next.moduleSlug) : undefined;
-  const nextChapter = next
-    ? slides.find((item) => item.moduleSlug === next.moduleSlug && item.conceptSlug === next.conceptSlug && item.type === "cover")
+  const sourcesSlide = current && next?.type === "sources" ? next : undefined;
+  const destinationSlide = sourcesSlide ? getAdjacentSlides(sourcesSlide).next : next;
+  const showChapterEndNav = isChapterEnd || !!sourcesSlide;
+  const isModuleEnd = !!current && showChapterEndNav && !!destinationSlide && destinationSlide.moduleSlug !== current.moduleSlug;
+  const nextModule = isModuleEnd ? modules.find((item) => item.slug === destinationSlide.moduleSlug) : undefined;
+  const nextChapter = destinationSlide
+    ? slides.find((item) => item.moduleSlug === destinationSlide.moduleSlug && item.conceptSlug === destinationSlide.conceptSlug && item.type === "cover")
     : undefined;
-  const nextDestination = !next
+  const nextDestination = !destinationSlide
     ? { kind: "complete" as const }
     : isModuleEnd
       ? {
           kind: "module" as const,
-          href: next.href,
-          moduleTitle: nextModule?.title ?? next.module,
+          href: destinationSlide.href,
+          moduleTitle: nextModule?.title ?? destinationSlide.module,
           moduleNumber: nextModule?.number,
-          chapterTitle: nextChapter?.title ?? next.concept,
+          chapterTitle: nextChapter?.title ?? destinationSlide.concept,
         }
       : {
           kind: "chapter" as const,
-          href: next.href,
-          chapterTitle: nextChapter?.title ?? next.concept,
+          href: destinationSlide.href,
+          chapterTitle: nextChapter?.title ?? destinationSlide.concept,
         };
 
   const nextHref = isQuizQuestion
@@ -71,11 +75,16 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
       {children}
       <SlideGestures
         previousHref={previousHref}
-        nextHref={isChapterEnd ? undefined : nextHref}
-        disableNext={!isChapterEnd && !isQuizQuestion && !isQuizResponse && current?.hideNavNext && !!current?.skipHref}
+        nextHref={showChapterEndNav ? undefined : nextHref}
+        disableNext={!showChapterEndNav && !isQuizQuestion && !isQuizResponse && current?.hideNavNext && !!current?.skipHref}
       />
-      {isChapterEnd ? (
-        <ChapterEndNav previousHref={previousHref} nextDestination={nextDestination} shareHref={chapterStartHref} />
+      {showChapterEndNav ? (
+        <ChapterEndNav
+          previousHref={previousHref}
+          nextDestination={nextDestination}
+          shareHref={chapterStartHref}
+          sourcesHref={sourcesSlide?.href}
+        />
       ) : (
         <SlideNav
           previousHref={previousHref}

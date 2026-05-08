@@ -89,12 +89,15 @@ module: the-machine
 concept: what-is-a-computer
 order: 1
 type: text          # text | interactive | visual
+sources:
+  - "https://example.com/source-used-on-this-slide"
 ---
 
 Content here...
 ```
 
 The `order` field — not the filename — drives linear progression. This allows inserting slides without renaming files.
+The optional `sources` field stores source URLs close to the slide they support.
 
 ### Interactive components
 

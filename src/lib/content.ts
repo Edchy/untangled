@@ -3,7 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { slideComponents, interactiveComponents } from "@/lib/slide-components";
 
-export type SlideType = "text" | "interactive" | "visual" | "cover";
+export type SlideType = "text" | "interactive" | "visual" | "cover" | "sources";
 
 export type Slide = {
   title: string;
@@ -22,6 +22,7 @@ export type Slide = {
   skipHref: string | null;
   backHref: string | null;
   redirectHref: string | null;
+  sourceUrls: string[];
   plainText: string;
   html: string;
   moduleSlug: string;
@@ -166,6 +167,17 @@ function renderInlineMarkdown(text: string): string {
     .replace(/\*([^*]+)\*/g, "<em>$1</em>");
 }
 
+function toSourceUrls(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function toSlide(filePath: string): Slide {
   const source = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(source);
@@ -199,6 +211,7 @@ function toSlide(filePath: string): Slide {
     skipHref: data.skip_href ? String(data.skip_href) : null,
     backHref: data.back_href ? String(data.back_href) : null,
     redirectHref: data.redirect_href ? String(data.redirect_href) : null,
+    sourceUrls: toSourceUrls(data.sources),
     plainText: extractPlainText(content),
     html: toHtml(content),
     moduleSlug,
