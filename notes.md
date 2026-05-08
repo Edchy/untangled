@@ -1,3 +1,5 @@
+Chapter 2 two. in this chapter we take a step up from the nitty-gritty of how computers work and start to explore how they can learn and do things that look like thinking. more of a philosophical chapter, but still grounded in the technical details of how machine learning works. we can talk about the similarities and differences between human cognition and machine learning, and how understanding one can help us understand the other. we can also talk about the limitations of current AI technology and what it can and cannot do, and how that relates to our own understanding of intelligence and consciousness. how the neutral network in llms resemble the neural networks in our brains, and how the way they learn and process information is similar in some ways but also very different in others. we can also talk about the ethical implications of AI and how it relates to our own values and beliefs about what it means to be human.
+
 
 end each chapter witn an interactive quiz to reinforce learning. something that makes them apply the concepts they just learned in a fun way. maybe a mini-game, a quiz or a puzzle.
 
@@ -7,12 +9,11 @@ add users last chapter to localstorage so that they can pick up where they left 
 
 permanent knowledge USP. this will never get outdated. the core concepts of how computers work, how AI works, how the internet works, etc. will always be relevant and useful to understand. even as technology evolves, these fundamental ideas will still be the foundation of everything else.
 
-view-transitions?
-scroll animations?
+
 
 i18n? yes please.
 
-Name: Claire Obscure - we wanna shed light to the abstractions. we work alot with light and dark. the lightswitch. etc. 
+
 
 CAN machines think?? we are not going to go philosophize about that. we are going to talk about how machines learn, and how they can do things that look like thinking, but are really just pattern recognition on a massive scale. 
 they do something that resembles thinking. bla bla. but there is no consciousness, no understanding, no intent. they are just machines that process data and produce outputs based on patterns they've learned from that data. but is it really? this is where it gets interesting and where we can start to explore the details of how these machines work and how are own brainds and minds work. we can talk about the similarities and differences between human cognition and machine learning, and how understanding one can help us understand the other. we can also talk about the limitations of current AI technology and what it can and cannot do, and how that relates to our own understanding of intelligence and consciousness. how the neutral network in llms resemble the neural networks in our brains, and how the way they learn and process information is similar in some ways but also very different in others. we can also talk about the ethical implications of AI and how it relates to our own values and beliefs about what it means to be human. find sources: (kan ai tänka? gärdenfors. the emergent mind, mcclelland)
