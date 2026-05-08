@@ -33,7 +33,7 @@ export function QuestionResponse({ redirectHref }: Props) {
 
       {feedbackState === "error" && (
         <div className="flex flex-col gap-4">
-          <p className="text-body text-foreground/48">{feedback}</p>
+          <p className="font-body text-body text-foreground/48">{feedback}</p>
           <Button variant="subtle" size="sm" onClick={retrySubmit}>
             Try again
           </Button>
@@ -43,10 +43,10 @@ export function QuestionResponse({ redirectHref }: Props) {
       {(feedbackState === "streaming" || feedbackState === "done") && feedback && (
         <div className="relative">
           {/* Ghost holds the full final text — reserves exact height so streaming never reflows */}
-          <p className="max-w-[70ch] text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] whitespace-pre-line opacity-0 select-none" aria-hidden>
+          <p className="max-w-[70ch] font-body text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] whitespace-pre-line opacity-0 select-none" aria-hidden>
             {fullFeedback || feedback}
           </p>
-          <p className="absolute inset-0 max-w-[70ch] text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] whitespace-pre-line">
+          <p className="absolute inset-0 max-w-[70ch] font-body text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] whitespace-pre-line">
             {feedback}
             {feedbackState === "streaming" && (
               <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[1px] animate-pulse bg-foreground/36" />

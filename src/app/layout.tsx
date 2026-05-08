@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     images: ["/un.png"],
   },
   icons: {
-    icon: [{ url: "/un.svg", type: "image/svg+xml", sizes: "any" }],
+    icon: [{ url: "/un-favicon.svg", type: "image/svg+xml", sizes: "any" }],
   },
 };
 

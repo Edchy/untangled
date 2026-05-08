@@ -1,3 +1,5 @@
+import { existsSync } from "fs";
+import { join } from "path";
 import { notFound } from "next/navigation";
 import { createElement } from "react";
 import { BookSidebar } from "@/components/ui/book-sidebar";
@@ -110,16 +112,22 @@ export default async function SlidePage({ params }: SlidePageProps) {
       ? <div dangerouslySetInnerHTML={{ __html: ulHtml }} />
       : null;
 
+    const audioSlug = current.conceptSlug.replace(/^\d+-/, "");
+    const audioFile = join(process.cwd(), "public", "audio", `${audioSlug}.mp3`);
+    const voiceoverSrc = existsSync(audioFile) ? `/audio/${audioSlug}.mp3` : undefined;
+
     return (
       <SlideShell>
         <BookSidebar modules={modules} currentSlideKey={current.key} />
         <SlideTransition>
           <ChapterCoverSlide
             eyebrow={eyebrow}
+            moduleNumber={ROMAN_NUMERALS[Number(moduleInfo?.number ?? 0)] ?? moduleInfo?.number}
             chapterLabel={chapterLabel}
             title={current.title}
             prose={coverProse}
             outline={coverOutline}
+            voiceoverSrc={voiceoverSrc}
           />
         </SlideTransition>
         <SlideProgressMarker slideKey={current.key} />

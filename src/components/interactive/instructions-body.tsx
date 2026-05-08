@@ -24,7 +24,7 @@ export function InstructionsBody() {
         Let electricity through, or don&apos;t.
       </p>
 
-      <div className="mt-prose-block flex max-w-[60ch] flex-wrap items-center gap-3 py-2 text-body leading-[var(--ds-leading-body)] text-foreground/68">
+      <div className="mt-prose-block flex max-w-[60ch] flex-wrap items-center gap-3 py-2 font-body text-body leading-[var(--ds-leading-body)] text-foreground/68">
         <Button
           variant="toggle"
           size="sm"

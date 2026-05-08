@@ -20,11 +20,26 @@ async function copyShareText(shareUrl: string) {
 
 type ChapterEndNavProps = {
   previousHref?: string;
-  nextChapterHref?: string;
+  nextDestination:
+    | {
+        kind: "chapter";
+        href: string;
+        chapterTitle?: string;
+      }
+    | {
+        kind: "module";
+        href: string;
+        moduleTitle?: string;
+        moduleNumber?: string;
+        chapterTitle?: string;
+      }
+    | {
+        kind: "complete";
+      };
   shareHref?: string;
 };
 
-export function ChapterEndNav({ previousHref, nextChapterHref, shareHref = "/" }: ChapterEndNavProps) {
+export function ChapterEndNav({ previousHref, nextDestination, shareHref = "/" }: ChapterEndNavProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -53,54 +68,76 @@ export function ChapterEndNav({ previousHref, nextChapterHref, shareHref = "/" }
     setTimeout(() => setCopied(false), 2200);
   }
 
+  const isMilestone = nextDestination.kind !== "chapter";
+  const nextCtaLabel =
+    nextDestination.kind === "module"
+      ? `Start module ${nextDestination.moduleNumber ?? ""}`.trim()
+      : nextDestination.kind === "chapter"
+        ? "Next chapter"
+        : undefined;
+
   return (
     <>
       <nav
         aria-label="Slide navigation"
-        className="fixed inset-x-0 bottom-0 z-40 bg-background px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6"
+        className="fixed inset-x-0 bottom-0 z-40 bg-background px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-5"
       >
-        <div className="relative mx-auto flex w-full max-w-2xl items-center justify-center gap-3">
-          {previousHref ? (
+        <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center gap-4">
+          {isMilestone ? (
+            <div className="flex max-w-[min(100%,42rem)] flex-col items-center gap-1 text-center">
+              <p className="font-sans text-label font-semibold uppercase leading-[var(--ds-leading-label)] tracking-[var(--ds-tracking-label)] text-accent">
+                {nextDestination.kind === "module" ? "Module complete" : "Journey complete"}
+              </p>
+              <p className="font-body text-sm leading-6 text-foreground/58 [text-wrap:balance]">
+                {nextDestination.kind === "module"
+                  ? `Next: ${nextDestination.moduleTitle ?? "the next module"}`
+                  : "You have reached the end of Untangled."}
+              </p>
+            </div>
+          ) : null}
+          <div className="flex w-full flex-wrap items-center justify-center gap-3">
+            {previousHref ? (
+              <Link
+                href={previousHref}
+                transitionTypes={["nav-back"]}
+                aria-label="Previous slide"
+                className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm !text-foreground/50 transition-colors duration-150 hover:border-foreground/24 hover:!text-foreground"
+              >
+                <ArrowLeft size={14} />
+                Back
+              </Link>
+            ) : (
+              <div />
+            )}
             <Link
-              href={previousHref}
-              transitionTypes={["nav-back"]}
-              aria-label="Previous slide"
+              href="/"
+              aria-label="Home"
               className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm !text-foreground/50 transition-colors duration-150 hover:border-foreground/24 hover:!text-foreground"
             >
-              <ArrowLeft size={14} />
-              Back
+              <Home size={14} />
+              Home
             </Link>
-          ) : (
-            <div />
-          )}
-          <Link
-            href="/"
-            aria-label="Home"
-            className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm !text-foreground/50 transition-colors duration-150 hover:border-foreground/24 hover:!text-foreground"
-          >
-            <Home size={14} />
-            Home
-          </Link>
-          {nextChapterHref && (
-            <LinkButton
-              href={nextChapterHref}
-              transitionTypes={["nav-forward"]}
-              variant="ember"
+            {nextDestination.kind !== "complete" && (
+              <LinkButton
+                href={nextDestination.href}
+                transitionTypes={["nav-forward"]}
+                variant="ember"
+                size={isMilestone ? "lg" : "md"}
+                className="gap-2 px-5"
+              >
+                {nextCtaLabel}
+                <ArrowRight size={14} />
+              </LinkButton>
+            )}
+            <Button
+              variant="quiet"
               size="md"
-              className="gap-2 px-5"
+              onClick={() => setOpen(true)}
+              className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm"
             >
-              Next chapter
-              <ArrowRight size={14} />
-            </LinkButton>
-          )}
-          <Button
-            variant="quiet"
-            size="md"
-            onClick={() => setOpen(true)}
-            className="flex h-11 items-center gap-2 rounded-control border border-foreground/12 px-4 text-sm"
-          >
-            Share
-          </Button>
+              Share
+            </Button>
+          </div>
         </div>
       </nav>
 

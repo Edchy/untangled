@@ -53,7 +53,6 @@ export function SlideNav({
   function handleSkipClick(event: MouseEvent<HTMLAnchorElement>) {
     if (!resolvedNextHref || !skipQuestionId) return;
     event.preventDefault();
-    saveAnswer(skipQuestionId, "");
     router.push(resolvedNextHref, { transitionTypes: ["nav-forward"] });
   }
 
@@ -107,7 +106,7 @@ export function SlideNav({
             <Link
               href={resolvedNextHref}
               onClick={skipQuestionId ? handleSkipClick : undefined}
-              transitionTypes={["nav-forward"]}
+              transitionTypes={skipQuestionId ? undefined : ["nav-forward"]}
               aria-label="Next slide"
               className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
             >

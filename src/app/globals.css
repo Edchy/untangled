@@ -5,8 +5,8 @@
   --ds-color-paper: #fafafa;
   --ds-color-ink: #0a0a0a;
   --ds-color-muted: #737373;
-  --ds-color-ember: oklch(0.5824 0.1357 180);
-  /*--ds-color-ember: oklch(0.666 0.2097 42.35);*/
+  /*--ds-color-ember: oklch(0.5824 0.1357 180);*/
+  --ds-color-ember: oklch(0.666 0.2097 42.35);
   --ds-color-lime: oklch(0.666 0.2146 133.41);
   --ds-color-blue: oklch(0.666 0.1949 244.59);
   --ds-color-haze: oklch(0.666 0.2121 295.41);
@@ -66,8 +66,8 @@
   --ds-space-prose-block: var(--ds-space-5);
   --ds-space-heading-after: var(--ds-space-8);
 
-  --ds-radius-control: 8px;
-  --ds-radius-surface: 8px;
+  --ds-radius-control: 4px;
+  --ds-radius-surface: 4px;
   --ds-radius-pill: 999px;
 
   --ds-border-width: 1px;

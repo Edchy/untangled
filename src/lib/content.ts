@@ -150,7 +150,7 @@ function toHtml(mdxBody: string): string {
       }
 
       const escaped = para.split("\n").map(renderInlineMarkdown).join("<br>");
-      return `<p class="mt-prose-block max-w-[60ch] text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
+      return `<p class="mt-prose-block max-w-[60ch] font-body text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty] first:mt-0">${escaped}</p>`;
     })
     .join("\n");
 }

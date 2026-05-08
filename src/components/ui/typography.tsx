@@ -5,8 +5,8 @@ type TextVariant = "body" | "muted" | "label" | "caption";
 type HeadingVariant = "display" | "headline" | "title";
 
 const textClassNames: Record<TextVariant, string> = {
-  body: "max-w-[60ch] text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty]",
-  muted: "max-w-[60ch] text-body leading-[var(--ds-leading-body)] text-foreground/52 [text-wrap:pretty]",
+  body: "max-w-[60ch] font-body text-body leading-[var(--ds-leading-body)] text-foreground/68 [text-wrap:pretty]",
+  muted: "max-w-[60ch] font-body text-body leading-[var(--ds-leading-body)] text-foreground/52 [text-wrap:pretty]",
   label:
     "text-label font-semibold uppercase leading-[var(--ds-leading-label)] tracking-[var(--ds-tracking-label)] text-accent",
   caption: "text-xs leading-5 text-foreground/52",

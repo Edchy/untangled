@@ -1,5 +1,6 @@
 Chapter 2 two. in this chapter we take a step up from the nitty-gritty of how computers work and start to explore how they can learn and do things that look like thinking. more of a philosophical chapter, but still grounded in the technical details of how machine learning works. we can talk about the similarities and differences between human cognition and machine learning, and how understanding one can help us understand the other. we can also talk about the limitations of current AI technology and what it can and cannot do, and how that relates to our own understanding of intelligence and consciousness. how the neutral network in llms resemble the neural networks in our brains, and how the way they learn and process information is similar in some ways but also very different in others. we can also talk about the ethical implications of AI and how it relates to our own values and beliefs about what it means to be human.
 
+add a search function to the start page so that users can easily find specific topics or concepts they want to learn about. this will make it easier for them to navigate the content and find what they're looking for.
 
 end each chapter witn an interactive quiz to reinforce learning. something that makes them apply the concepts they just learned in a fun way. maybe a mini-game, a quiz or a puzzle.
 
