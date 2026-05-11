@@ -98,6 +98,7 @@ Content here...
 
 The `order` field — not the filename — drives linear progression. This allows inserting slides without renaming files.
 The optional `sources` field stores source URLs close to the slide they support.
+Chapter-level source lists are reserved for broader further reading and useful extras.
 
 ### Interactive components
 

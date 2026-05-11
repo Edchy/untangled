@@ -15,7 +15,8 @@
       "Bash(grep -rn \"#[0-9a-fA-F]\\\\{3,6\\\\}\\\\|rgb\\(\" /Users/eddietovebeppearonelsa/dev/wip/untangled/src/components/interactive/ --include=\"*.tsx\")",
       "Bash(sort -t: -k2 -n)",
       "Bash(npx tsc *)",
-      "Bash(xargs sed -i '' 's|what-is-a-computer|the-foundation|g; s|logic-and-circuits|the-logic|g')"
+      "Bash(xargs sed -i '' 's|what-is-a-computer|the-foundation|g; s|logic-and-circuits|the-logic|g')",
+      "WebSearch"
     ]
   }
 }

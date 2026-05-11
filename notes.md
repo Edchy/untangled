@@ -1,4 +1,24 @@
+TOKENIZ.IN
+DISTLL
+UNRAVL
+unravel.gg
+nrvl
+UNTANGL
+
+last chapter: agents: show how howw llms are just smart brains sitting somewhere else on another computer "cloud". and how requests flow up there and back to our computer where the agent "takes over" and does things for us.
+
+find fun sources for each chapter. videos, articles, books, podcasts, interactive "games" etc. that go deeper into the topics covered in the chapter. this will allow users to continue learning and exploring on their own.
+
 Chapter 2 two. in this chapter we take a step up from the nitty-gritty of how computers work and start to explore how they can learn and do things that look like thinking. more of a philosophical chapter, but still grounded in the technical details of how machine learning works. we can talk about the similarities and differences between human cognition and machine learning, and how understanding one can help us understand the other. we can also talk about the limitations of current AI technology and what it can and cannot do, and how that relates to our own understanding of intelligence and consciousness. how the neutral network in llms resemble the neural networks in our brains, and how the way they learn and process information is similar in some ways but also very different in others. we can also talk about the ethical implications of AI and how it relates to our own values and beliefs about what it means to be human.
+
+"What I cannot create, I do not understand" - feynman. this is a great quote to keep in mind as we explore these concepts. the goal is not just to understand how these machines work, but to be able to create them ourselves. to be able to build our own neural networks, to train our own models, to experiment with different architectures and algorithms. this hands-on approach will help us really internalize the concepts and see how they all fit together.
+
+EMERGENCE (from book emergent mind)
+this keeps reappearing. GPUS, ants, neurons (humans and LLMs), switches.
+other animals. find more examples of emergence in nature and technology.
+many small things can come together to create something that looks and feels like a single thing. the whole is greater than the sum of its parts. this is a key idea in understanding how complex systems like computers and AI work. we can talk about how billions of tiny transistors can come together to create a machine that can do things that seem almost magical, and how billions of tiny parameters in a neural network can come together to create something that seems almost intelligent. this idea of emergence is also important for understanding how our own minds work, and how consciousness and intelligence can arise from the interactions of many simple neurons in our brains.
+Birds, bees, insects - some sense standing on the shoulders of giants.
+
 
 add a search function to the start page so that users can easily find specific topics or concepts they want to learn about. this will make it easier for them to navigate the content and find what they're looking for.
 

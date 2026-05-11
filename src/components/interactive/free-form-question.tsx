@@ -101,7 +101,7 @@ export function FreeFormQuestion({ questionId, nextHref, bodyHtml, isLastQuestio
           <Button
             onClick={handleSubmit}
             disabled={!isReady}
-            variant={isLast ? "primary" : "subtle"}
+            variant="ember"
             size="md"
             className="gap-2 tracking-wide"
           >

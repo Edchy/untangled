@@ -7,6 +7,7 @@ const crimsonProBody = Crimson_Pro({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const crimsonProDisplay = Crimson_Pro({

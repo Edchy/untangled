@@ -64,6 +64,7 @@ sources:
 
 The `order` field drives progression rather than filenames, so slides can be inserted without renaming existing files.
 The optional `sources` field stores source URLs close to the slide they support.
+Chapter-level source lists are reserved for broader further reading and useful extras.
 
 ## User Stories
 

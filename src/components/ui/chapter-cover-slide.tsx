@@ -46,7 +46,7 @@ export function ChapterCoverSlide({
             <p className="mb-ds-4 font-sans text-xs font-semibold uppercase tracking-[var(--ds-tracking-label)] text-foreground/28">
               In this chapter
             </p>
-            <div className="[&_ul]:flex [&_ul]:flex-col [&_ul]:gap-3 [&_li]:font-serif [&_li]:leading-7 [&_.outline-item-label]:text-foreground/72 [&_.outline-item-label]:after:mr-1 [&_.outline-item-label]:after:content-[':'] [&_.outline-item-desc]:text-foreground/36">
+            <div className="[&_ul]:flex [&_ul]:flex-col [&_ul]:gap-3 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-6 [&_.outline-item-label]:text-foreground/72 [&_.outline-item-label]:after:mr-1 [&_.outline-item-label]:after:content-[':'] [&_.outline-item-desc]:text-foreground/36">
               {outline}
             </div>
           </aside>

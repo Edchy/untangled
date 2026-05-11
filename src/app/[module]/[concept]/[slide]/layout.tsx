@@ -1,6 +1,7 @@
 import { SlideNav } from "@/components/ui/slide-nav";
 import { SlideGestures } from "@/components/ui/slide-gestures";
 import { ChapterEndNav } from "@/components/interactive/chapter-end-nav";
+import { getChapterSources } from "@/lib/chapter-sources";
 import { getAdjacentSlides, getSlide, getSlides, modules } from "@/lib/content";
 
 type SlideLayoutProps = {
@@ -69,6 +70,9 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
   const chapterStartHref = current
     ? slides.find((item) => item.moduleSlug === current.moduleSlug && item.conceptSlug === current.conceptSlug)?.href
     : undefined;
+  const sourceGroups = current && sourcesSlide
+    ? getChapterSources(current.moduleSlug, current.conceptSlug)
+    : [];
 
   return (
     <>
@@ -84,6 +88,9 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
           nextDestination={nextDestination}
           shareHref={chapterStartHref}
           sourcesHref={sourcesSlide?.href}
+          sourceGroups={sourceGroups}
+          sourceModuleSlug={current?.moduleSlug}
+          sourceConceptSlug={current?.conceptSlug}
         />
       ) : (
         <SlideNav
@@ -93,6 +100,7 @@ export default async function SlideLayout({ children, params }: SlideLayoutProps
           nextSubmitQuestionId={isQuizQuestion && current?.isLastQuestion ? current.questionId ?? undefined : undefined}
           skipQuestionId={isQuizQuestion ? current.questionId ?? undefined : undefined}
           noAnswerSkipHref={noAnswerSkipHref}
+          nextIsPrimary={!isQuizQuestion}
           showKeyboardHint={showKeyboardHint}
         />
       )}

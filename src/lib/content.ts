@@ -164,7 +164,8 @@ function renderInlineMarkdown(text: string): string {
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong class=\"font-semibold text-foreground/90\">$1</strong>")
     .replace(/__([^_]+)__/g, "<strong class=\"font-semibold text-foreground/90\">$1</strong>")
-    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/~([^~]+)~/g, "<span class=\"text-accent\">$1</span>");
 }
 
 function toSourceUrls(value: unknown): string[] {

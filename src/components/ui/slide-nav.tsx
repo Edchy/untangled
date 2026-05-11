@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { MouseEvent } from "react";
 import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useChapterAnswers } from "@/components/interactive/chapter-answers-context";
+import { cn } from "@/lib/ui";
 
 type SlideNavProps = {
   previousHref?: string;
@@ -13,6 +14,7 @@ type SlideNavProps = {
   nextSubmitQuestionId?: string;
   skipQuestionId?: string;
   noAnswerSkipHref?: string;
+  nextIsPrimary?: boolean;
   showKeyboardHint?: boolean;
 };
 
@@ -31,6 +33,7 @@ export function SlideNav({
   nextSubmitQuestionId,
   skipQuestionId,
   noAnswerSkipHref,
+  nextIsPrimary = true,
   showKeyboardHint,
 }: SlideNavProps) {
   const router = useRouter();
@@ -97,7 +100,12 @@ export function SlideNav({
               href={resolvedNextHref}
               onClick={handleNextClick}
               aria-label="Next slide"
-              className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
+              className={cn(
+                "flex h-11 items-center gap-2 rounded-control border px-5 text-sm font-medium transition-colors duration-150",
+                nextIsPrimary
+                  ? "border-accent/40 !text-accent hover:border-accent hover:!text-accent"
+                  : "border-foreground/12 !text-foreground/50 hover:border-foreground/24 hover:!text-foreground",
+              )}
             >
               {resolvedNextLabel ?? "Next"}
               <ArrowRight size={14} />
@@ -108,7 +116,12 @@ export function SlideNav({
               onClick={skipQuestionId ? handleSkipClick : undefined}
               transitionTypes={skipQuestionId ? undefined : ["nav-forward"]}
               aria-label="Next slide"
-              className="flex h-11 items-center gap-2 rounded-control border border-accent/40 px-5 text-sm font-medium !text-accent transition-colors duration-150 hover:border-accent hover:!text-accent"
+              className={cn(
+                "flex h-11 items-center gap-2 rounded-control border px-5 text-sm font-medium transition-colors duration-150",
+                nextIsPrimary
+                  ? "border-accent/40 !text-accent hover:border-accent hover:!text-accent"
+                  : "border-foreground/12 !text-foreground/50 hover:border-foreground/24 hover:!text-foreground",
+              )}
             >
               {resolvedNextLabel ?? "Next"}
               <ArrowRight size={14} />
